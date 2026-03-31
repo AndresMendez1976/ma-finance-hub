@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.env*
+keys/
+.claude/
+docs/
+test/
+coverage/
+*.md
+.eslintrc.js
+.prettierrc
+jest.config.ts

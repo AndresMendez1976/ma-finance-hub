@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ma_finance_hub
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ma_finance_hub"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+
+    env:
+      NODE_ENV: development
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: ma_finance_hub
+      DB_USER: app_user
+      DB_PASSWORD: app_password_dev
+      DB_SSL: false
+      DB_MIGRATION_USER: migration_user
+      DB_MIGRATION_PASSWORD: migration_password_dev
+      JWT_DEV_PUBLIC_KEY_PATH: ./keys/dev-public.pem
+      JWT_DEV_PRIVATE_KEY_PATH: ./keys/dev-private.pem
+      JWT_AUDIENCE: ma-finance-hub
+      JWT_ISSUER_WHITELIST: ma-finance-hub-dev
+      SWAGGER_ENABLED: false
+      INTERNAL_API_KEY: ci-test-key
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Setup DB roles
+        run: psql -U postgres -d ma_finance_hub -f db/init/00-create-roles.sql
+        env:
+          PGPASSWORD: postgres_dev
+
+      - name: Generate dev keys
+        run: node scripts/generate-dev-keys.js
+
+      - name: Build
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run migrations
+        run: npm run migrate:latest
+
+      - name: Migration status
+        run: npm run migrate:status
+
+      - name: Integration tests
+        run: npm run test:integration
+
+      - name: Verify no .env in dist
+        run: |
+          test ! -f dist/.env && test ! -f dist/.env.development && echo "No env files in dist ✓"
+
+  docker-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t ma-finance-hub:ci .
+      - name: Verify non-root user
+        run: |
+          docker run --rm ma-finance-hub:ci whoami | grep -q appuser && echo "Non-root ✓"

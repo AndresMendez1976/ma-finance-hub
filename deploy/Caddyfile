@@ -1,0 +1,38 @@
+{
+	email {$TLS_EMAIL:admin@maishq.com}
+}
+
+maishq.com, www.maishq.com {
+	# www -> apex redirect
+	@www host www.maishq.com
+	redir @www https://maishq.com{uri} permanent
+
+	# API + health -> backend
+	handle /api/* {
+		reverse_proxy backend:3000
+	}
+	handle /health {
+		reverse_proxy backend:3000
+	}
+	handle /ready {
+		reverse_proxy backend:3000
+	}
+
+	# Everything else -> frontend
+	handle {
+		reverse_proxy frontend:4000
+	}
+
+	header {
+		X-Frame-Options DENY
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	encode gzip zstd
+	log {
+		output stdout
+		format console
+	}
+}

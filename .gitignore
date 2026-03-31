@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Environment
+.env
+.env.development
+.env.production
+.env.test
+
+# Keys (dev JWT signing keys)
+keys/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Coverage
+coverage/
+
+# Temp
+tmp/
+temp/
+
+# Staging / VM
+.env.staging
+.env.vm
+backups/
+frontend/.next/
+frontend/node_modules/
