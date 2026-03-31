@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
-import { Plus, DollarSign, Eye } from 'lucide-react';
+import { Plus, DollarSign, Eye, AlertTriangle } from 'lucide-react';
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-[#B4D4E7] text-[#5C4033]',
@@ -47,6 +47,12 @@ export default function PayrollPage() {
 
   return (
     <Shell>
+      <div className="mb-4 flex items-center gap-3 rounded-lg border border-[#D4A854] bg-[#D4A854]/10 p-3">
+        <AlertTriangle className="h-5 w-5 flex-shrink-0 text-[#D4A854]" />
+        <p className="text-sm text-[#5C4033]">
+          <span className="font-semibold">Tax Disclaimer:</span> Payroll tax calculations are estimates based on simplified federal and state tax tables. These calculations may not reflect your exact tax liability. Consult a licensed tax professional or CPA before filing.
+        </p>
+      </div>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[#5C4033]">Payroll Runs</h1>
         <Link href="/payroll/new">

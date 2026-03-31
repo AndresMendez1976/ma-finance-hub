@@ -4,6 +4,7 @@ export interface ResolvedIdentity {
     externalSubject: string;
     displayName: string;
     email: string | null;
+    mfaEnabled: boolean;
   };
   membership: {
     id: string;

@@ -92,6 +92,9 @@ export default function IncomeStatementPage() {
         </Card>
       )}
       {!data && !loading && <p className="text-[#8B7355]">Select a date range and click Generate.</p>}
+      <p className="mt-6 text-center text-xs text-[#8B7355]">
+        Financial reports are generated based on data entered by the user. These reports have not been audited by a CPA.
+      </p>
     </Shell>
   );
 }

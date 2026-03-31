@@ -9,7 +9,7 @@ export class MembershipService {
     // visible through the user_tenant_member_select RLS policy.
     const user = await trx('users')
       .whereRaw("external_subject = current_setting('app.current_subject', true)")
-      .select('id', 'external_subject', 'display_name', 'email')
+      .select('id', 'external_subject', 'display_name', 'email', 'mfa_enabled')
       .first() as Record<string, unknown> | undefined;
 
     if (!user) {
@@ -35,6 +35,7 @@ export class MembershipService {
         externalSubject: String(user.external_subject),
         displayName: String(user.display_name),
         email: user.email != null ? String(user.email) : null,
+        mfaEnabled: Boolean(user.mfa_enabled),
       },
       membership: {
         id: String(membership.id),

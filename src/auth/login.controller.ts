@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsInt, IsEmail, Min, MaxLength, MinLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, IsEmail, Min, MaxLength, MinLength, IsOptional } from 'class-validator';
 import { LoginService } from './login.service';
 
 class LoginDto {
@@ -18,6 +18,20 @@ class LoginDto {
   tenant_id!: number;
 }
 
+class MfaValidateDto {
+  @IsString()
+  @IsNotEmpty()
+  mfa_session_token!: string;
+
+  @IsOptional()
+  @IsString()
+  token?: string;
+
+  @IsOptional()
+  @IsString()
+  backup_code?: string;
+}
+
 @ApiTags('Auth')
 @Controller('auth')
 export class LoginController {
@@ -26,5 +40,10 @@ export class LoginController {
   @Post('login')
   async login(@Body() dto: LoginDto) {
     return this.loginService.login(dto.email, dto.password, dto.tenant_id);
+  }
+
+  @Post('mfa/validate')
+  async validateMfa(@Body() dto: MfaValidateDto) {
+    return this.loginService.validateMfa(dto.mfa_session_token, dto.token, dto.backup_code);
   }
 }
