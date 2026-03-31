@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Approved</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F5F0E8;font-family:Arial,Helvetica,sans-serif;color:#5C4033;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;">
+    <tr>
+      <td style="background-color:#1B4332;padding:24px;text-align:center;">
+        <img src="{{logo_url}}" alt="MAiSHQ" style="max-height:40px;" />
+        <h1 style="color:#ffffff;margin:8px 0 0;font-size:20px;">Expense Approved</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:#ffffff;padding:32px 24px;">
+        <p style="margin:0 0 16px;">Hi {{user_name}},</p>
+        <p style="margin:0 0 16px;">Your expense report has been approved:</p>
+        <table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0d6cb;border-radius:4px;margin-bottom:24px;">
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Expense #</td>
+            <td>{{expense_number}}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:bold;">Category</td>
+            <td>{{category}}</td>
+          </tr>
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Vendor</td>
+            <td>{{vendor_name}}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:bold;">Amount</td>
+            <td style="font-size:18px;font-weight:bold;color:#1B4332;">{{currency}} {{amount}}</td>
+          </tr>
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Approved By</td>
+            <td>{{approver_name}}</td>
+          </tr>
+        </table>
+        <p style="margin:0 0 16px;">The expense will be posted to the general ledger shortly.</p>
+        <p style="text-align:center;">
+          <a href="{{expense_url}}" style="display:inline-block;background-color:#2D6A4F;color:#ffffff;padding:12px 32px;text-decoration:none;border-radius:4px;font-weight:bold;">View Expense</a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:16px 24px;text-align:center;font-size:12px;color:#8b7d6b;">
+        <p style="margin:0;">{{company_name}} &mdash; Powered by MAiSHQ</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to MAiSHQ</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F5F0E8;font-family:Arial,Helvetica,sans-serif;color:#5C4033;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;">
+    <tr>
+      <td style="background-color:#1B4332;padding:32px 24px;text-align:center;">
+        <img src="{{logo_url}}" alt="MAiSHQ" style="max-height:48px;" />
+        <h1 style="color:#ffffff;margin:12px 0 0;font-size:24px;">Welcome to MAiSHQ</h1>
+        <p style="color:#a8d5ba;margin:8px 0 0;font-size:14px;">Your finance hub is ready</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:#ffffff;padding:32px 24px;">
+        <p style="margin:0 0 16px;">Hi {{user_name}},</p>
+        <p style="margin:0 0 16px;">Welcome to {{company_name}} on MAiSHQ Finance Hub. Your account has been created and you are ready to get started.</p>
+        <p style="margin:0 0 8px;font-weight:bold;">Your account details:</p>
+        <table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0d6cb;border-radius:4px;margin-bottom:24px;">
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Email</td>
+            <td>{{user_email}}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:bold;">Role</td>
+            <td>{{user_role}}</td>
+          </tr>
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Company</td>
+            <td>{{company_name}}</td>
+          </tr>
+        </table>
+        <p style="margin:0 0 16px;">We recommend setting up your chart of accounts and company settings first.</p>
+        <p style="text-align:center;">
+          <a href="{{dashboard_url}}" style="display:inline-block;background-color:#2D6A4F;color:#ffffff;padding:12px 32px;text-decoration:none;border-radius:4px;font-weight:bold;">Go to Dashboard</a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:16px 24px;text-align:center;font-size:12px;color:#8b7d6b;">
+        <p style="margin:0;">MAiSHQ Finance Hub &mdash; maishq.com</p>
+        <p style="margin:4px 0 0;">Need help? Contact us at {{support_email}}</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

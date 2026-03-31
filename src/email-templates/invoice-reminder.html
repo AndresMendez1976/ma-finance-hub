@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Reminder</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F5F0E8;font-family:Arial,Helvetica,sans-serif;color:#5C4033;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;">
+    <tr>
+      <td style="background-color:#1B4332;padding:24px;text-align:center;">
+        <img src="{{logo_url}}" alt="MAiSHQ" style="max-height:40px;" />
+        <h1 style="color:#ffffff;margin:8px 0 0;font-size:20px;">Payment Reminder</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:#ffffff;padding:32px 24px;">
+        <p style="margin:0 0 16px;">Hi {{contact_name}},</p>
+        <p style="margin:0 0 16px;">This is a friendly reminder that the following invoice is approaching its due date:</p>
+        <table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0d6cb;border-radius:4px;margin-bottom:24px;">
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Invoice #</td>
+            <td>{{invoice_number}}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:bold;">Due Date</td>
+            <td>{{due_date}}</td>
+          </tr>
+          <tr style="background-color:#F5F0E8;">
+            <td style="font-weight:bold;">Amount Due</td>
+            <td style="font-size:18px;font-weight:bold;color:#1B4332;">{{currency}} {{amount_due}}</td>
+          </tr>
+          <tr>
+            <td style="font-weight:bold;">Days Until Due</td>
+            <td>{{days_until_due}}</td>
+          </tr>
+        </table>
+        <p style="margin:0 0 16px;">Please arrange payment at your earliest convenience to avoid any late fees.</p>
+        <p style="text-align:center;">
+          <a href="{{invoice_url}}" style="display:inline-block;background-color:#2D6A4F;color:#ffffff;padding:12px 32px;text-decoration:none;border-radius:4px;font-weight:bold;">Pay Now</a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:16px 24px;text-align:center;font-size:12px;color:#8b7d6b;">
+        <p style="margin:0;">{{company_name}} &mdash; Powered by MAiSHQ</p>
+        <p style="margin:4px 0 0;">{{company_address}}</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -19,6 +19,19 @@ import { ExpensesModule } from './expenses';
 import { SettingsModule } from './settings';
 import { BankingModule } from './banking';
 import { ContactsModule } from './contacts';
+import { PurchaseOrdersModule } from './purchase-orders';
+import { InventoryModule } from './inventory';
+import { ManufacturingModule } from './manufacturing';
+import { PayrollModule } from './payroll';
+import { FixedAssetsModule } from './fixed-assets';
+import { CurrenciesModule } from './currencies';
+import { TaxModule } from './tax';
+import { BudgetsModule } from './budgets';
+import { CrmModule } from './crm';
+import { ApiKeysModule } from './api-keys';
+import { WebhooksModule } from './webhooks';
+import { NotificationsModule } from './notifications';
+import { DataExportModule } from './data-export';
 import { RequestIdMiddleware } from './common/request-id.middleware';
 import { RequestLoggerMiddleware } from './common/request-logger.middleware';
 import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
@@ -43,6 +56,19 @@ import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
     SettingsModule,
     BankingModule,
     ContactsModule,
+    PurchaseOrdersModule,
+    InventoryModule,
+    ManufacturingModule,
+    PayrollModule,
+    FixedAssetsModule,
+    CurrenciesModule,
+    TaxModule,
+    BudgetsModule,
+    CrmModule,
+    ApiKeysModule,
+    WebhooksModule,
+    NotificationsModule,
+    DataExportModule,
   ],
   providers: [
     RedisThrottlerStorage,
