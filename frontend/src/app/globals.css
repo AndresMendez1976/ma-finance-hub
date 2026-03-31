@@ -2,4 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body { @apply bg-background text-foreground antialiased; }
+body {
+  @apply bg-background text-foreground antialiased;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Focus ring style */
+*:focus-visible {
+  outline: 2px solid #2D6A4F;
+  outline-offset: 2px;
+}

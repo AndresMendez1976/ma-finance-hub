@@ -3,14 +3,14 @@ import { Knex } from 'knex';
 
 @Injectable()
 export class AccountsService {
-  async findAll(trx: Knex.Transaction, chartId?: number) {
+  async findAll(trx: Knex.Transaction, chartId?: number): Promise<Record<string, unknown>[]> {
     const query = trx('accounts').select('*');
-    if (chartId) query.where({ chart_id: chartId });
-    return query;
+    if (chartId) await query.where({ chart_id: chartId });
+    return await query as Record<string, unknown>[];
   }
 
-  async findOne(trx: Knex.Transaction, id: number) {
-    return trx('accounts').where({ id }).first();
+  async findOne(trx: Knex.Transaction, id: number): Promise<Record<string, unknown> | undefined> {
+    return await trx('accounts').where({ id }).first() as Record<string, unknown> | undefined;
   }
 
   async create(trx: Knex.Transaction, data: {
@@ -20,8 +20,8 @@ export class AccountsService {
     name: string;
     account_type: string;
     parent_account_id?: number;
-  }) {
-    const [row] = await trx('accounts').insert(data).returning('*');
+  }): Promise<Record<string, unknown>> {
+    const [row] = await trx('accounts').insert(data).returning('*') as Record<string, unknown>[];
     return row;
   }
 
@@ -29,8 +29,8 @@ export class AccountsService {
     name?: string;
     is_active?: boolean;
     parent_account_id?: number | null;
-  }) {
-    const [row] = await trx('accounts').where({ id }).update(data).returning('*');
+  }): Promise<Record<string, unknown> | undefined> {
+    const [row] = await trx('accounts').where({ id }).update(data).returning('*') as Record<string, unknown>[];
     return row;
   }
 }

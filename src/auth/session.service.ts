@@ -24,7 +24,7 @@ export class SessionService {
       const revoked = await trx('active_sessions')
         .where({ tenant_id: params.tenantId, jti: params.jti })
         .whereNotNull('revoked_at')
-        .first();
+        .first() as Record<string, unknown> | undefined;
 
       if (revoked) {
         throw new UnauthorizedException('Session has been revoked');
@@ -35,10 +35,10 @@ export class SessionService {
         .where({ tenant_id: params.tenantId, jti: params.jti })
         .whereNull('revoked_at')
         .where('expires_at', '>', new Date())
-        .first();
+        .first() as Record<string, unknown> | undefined;
 
       if (existing) {
-        await trx('active_sessions').where({ id: existing.id }).update({ last_seen_at: new Date() });
+        await trx('active_sessions').where({ id: existing.id as number }).update({ last_seen_at: new Date() });
         return;
       }
 
@@ -46,7 +46,7 @@ export class SessionService {
       await trx('active_sessions')
         .where({ tenant_id: params.tenantId })
         .where(function () {
-          this.where('expires_at', '<=', new Date()).orWhereNotNull('revoked_at');
+          void this.where('expires_at', '<=', new Date()).orWhereNotNull('revoked_at');
         })
         .del();
 
@@ -98,7 +98,7 @@ export class SessionService {
     return result ?? 0;
   }
 
-  async cleanupExpired(): Promise<number> {
+  cleanupExpired(): number {
     // Runs as app_user without tenant context — deletes globally expired/revoked sessions
     // This is safe because DELETE on active_sessions requires tenant_id match (RLS)
     // For cleanup, we use migration_user-level access or iterate per tenant.

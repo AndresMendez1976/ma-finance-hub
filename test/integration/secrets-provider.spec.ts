@@ -9,14 +9,15 @@ class MockAwsProvider implements SecretProvider {
   private cache: Record<string, string> = {};
   private loaded = false;
 
-  async load(secretJson: Record<string, string>): Promise<void> {
+  load(secretJson: Record<string, string>): Promise<void> {
     this.cache = { ...secretJson };
     this.loaded = true;
+    return Promise.resolve();
   }
 
-  async get(key: string): Promise<string | undefined> {
-    if (!this.loaded) return undefined; // fail closed
-    return this.cache[key] ?? process.env[key];
+  get(key: string): Promise<string | undefined> {
+    if (!this.loaded) return Promise.resolve(undefined); // fail closed
+    return Promise.resolve(this.cache[key] ?? process.env[key]);
   }
 }
 
@@ -26,7 +27,7 @@ describe('Secret Provider', () => {
   afterEach(() => {
     process.env.NODE_ENV = originalEnv;
     // Reset to env provider
-    setSecretProvider({ get: async (k) => process.env[k] });
+    setSecretProvider({ get: (k) => Promise.resolve(process.env[k]) });
   });
 
   it('reads from mock AWS provider after load', async () => {

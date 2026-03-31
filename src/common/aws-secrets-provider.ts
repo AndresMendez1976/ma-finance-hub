@@ -41,12 +41,12 @@ export class AwsSecretsProvider implements SecretProvider {
     }
   }
 
-  async get(key: string): Promise<string | undefined> {
+  get(key: string): Promise<string | undefined> {
     if (!this.loaded) {
       this.logger.error('AwsSecretsProvider not loaded — call load() first');
-      return undefined;
+      return Promise.resolve(undefined);
     }
     // AWS secret value takes precedence, fall back to env
-    return this.cache[key] ?? process.env[key];
+    return Promise.resolve(this.cache[key] ?? process.env[key]);
   }
 }

@@ -54,10 +54,10 @@ export class AdminController {
       const user = await trx('users')
         .where({ external_subject: dto.external_subject })
         .select('id', 'external_subject', 'display_name', 'email', 'is_active')
-        .first();
+        .first() as Record<string, unknown> | undefined;
       // Restore caller subject for audit
       await trx.raw("SELECT set_config('app.current_subject', ?, true)", [p.sub]);
-      await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'create', entity: 'users', entity_id: String(user.id) });
+      await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'create', entity: 'users', entity_id: String(user!.id) });
       return user;
     });
   }
@@ -79,7 +79,7 @@ export class AdminController {
         }
       }
 
-      const membership = await this.service.createMembership(trx, { tenant_id: p.tenantId, user_id: dto.user_id, role: dto.role });
+      const membership: Record<string, unknown> = await this.service.createMembership(trx, { tenant_id: p.tenantId, user_id: dto.user_id, role: dto.role });
       await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'create', entity: 'tenant_memberships', entity_id: String(membership.id), metadata: { user_id: dto.user_id, role: dto.role } });
       return membership;
     });
@@ -92,7 +92,7 @@ export class AdminController {
     @Body() dto: UpdateMembershipDto,
   ) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const membership = await this.service.updateMembership(trx, id, dto);
+      const membership: Record<string, unknown> = await this.service.updateMembership(trx, id, dto);
       await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'update', entity: 'tenant_memberships', entity_id: String(membership.id), metadata: dto });
       return membership;
     });
@@ -101,8 +101,8 @@ export class AdminController {
   @Get('lock-date')
   async getLockDate(@CurrentPrincipal() p: AuthenticatedPrincipal) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const tenant = await trx('tenants').where({ id: p.tenantId }).select('lock_date').first();
-      return { lock_date: tenant?.lock_date ?? null };
+      const tenant = await trx('tenants').where({ id: p.tenantId }).select('lock_date').first() as Record<string, unknown> | undefined;
+      return { lock_date: (tenant?.lock_date as string | null) ?? null };
     });
   }
 
@@ -110,11 +110,12 @@ export class AdminController {
   @Roles('owner')
   async setLockDate(@CurrentPrincipal() p: AuthenticatedPrincipal, @Body() dto: SetLockDateDto) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const current = await trx('tenants').where({ id: p.tenantId }).select('lock_date').first();
+      const current = await trx('tenants').where({ id: p.tenantId }).select('lock_date').first() as Record<string, unknown> | undefined;
       const newDate = dto.lock_date;
+      const currentLockDate = current?.lock_date as string | null | undefined;
 
       // Lock date can only move forward, never backward (except to null by explicit clear)
-      if (current?.lock_date && newDate && new Date(newDate) < new Date(current.lock_date)) {
+      if (currentLockDate && newDate && new Date(newDate) < new Date(currentLockDate)) {
         throw new ForbiddenException('Lock date can only be moved forward');
       }
 
@@ -125,7 +126,7 @@ export class AdminController {
         action: 'set_lock_date',
         entity: 'tenants',
         entity_id: String(p.tenantId),
-        metadata: { previous: current?.lock_date ?? null, new: newDate },
+        metadata: { previous: currentLockDate ?? null, new: newDate },
       });
 
       return { lock_date: newDate };

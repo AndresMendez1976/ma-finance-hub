@@ -5,6 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import { KNEX_CONNECTION } from '../database';
 
 @Injectable()
@@ -33,22 +34,22 @@ export class LoginService {
   }
 
   async login(email: string, password: string, tenantId: number): Promise<{ token: string }> {
-    const userResult = await this.db.raw('SELECT * FROM find_user_for_login(?)', [email]);
+    const userResult: { rows: Record<string, unknown>[] } = await this.db.raw('SELECT * FROM find_user_for_login(?)', [email]);
     const user = userResult.rows[0];
     if (!user) throw new UnauthorizedException('Invalid credentials');
     if (!user.is_active) throw new UnauthorizedException('Invalid credentials');
 
-    const valid = await bcrypt.compare(password, user.password_hash);
+    const valid = await bcrypt.compare(password, String(user.password_hash));
     if (!valid) throw new UnauthorizedException('Invalid credentials');
 
-    const memberResult = await this.db.raw('SELECT * FROM find_membership_for_login(?, ?)', [user.id, tenantId]);
+    const memberResult: { rows: Record<string, unknown>[] } = await this.db.raw('SELECT * FROM find_membership_for_login(?, ?)', [user.id as number, tenantId]);
     const membership = memberResult.rows[0];
     if (!membership || !membership.is_active) throw new UnauthorizedException('Invalid credentials');
 
     const token = jwt.sign(
-      { sub: user.external_subject, tenant_id: tenantId, roles: [membership.role] },
+      { sub: user.external_subject as string, tenant_id: tenantId, roles: [membership.role as string] },
       this.privateKey,
-      { algorithm: 'RS256', expiresIn: '8h', issuer: this.issuer, audience: this.audience, keyid: this.keyId, jwtid: require('crypto').randomUUID() },
+      { algorithm: 'RS256', expiresIn: '8h', issuer: this.issuer, audience: this.audience, keyid: this.keyId, jwtid: crypto.randomUUID() },
     );
 
     return { token };

@@ -39,7 +39,7 @@ export class JournalController {
   async exportJson(@CurrentPrincipal() p: AuthenticatedPrincipal, @Res() res: Response) {
     const data = await this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
       const entries = await this.service.findAll(trx);
-      return Promise.all(entries.map((e: { id: number }) => this.service.findOne(trx, e.id)));
+      return Promise.all(entries.map((e) => this.service.findOne(trx, Number(e.id))));
     });
     await this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
       this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'export', entity: 'journal_entries', metadata: { count: data.length } }),
@@ -53,7 +53,7 @@ export class JournalController {
   @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
   async findOne(@CurrentPrincipal() p: AuthenticatedPrincipal, @Param('id', ParseIntPipe) id: number) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const row = await this.service.findOne(trx, id);
+      const row: Record<string, unknown> | null = await this.service.findOne(trx, id);
       if (!row) throw new NotFoundException();
       return row;
     });
@@ -63,8 +63,8 @@ export class JournalController {
   @Roles('owner', 'admin', 'manager')
   async create(@CurrentPrincipal() p: AuthenticatedPrincipal, @Body() dto: CreateJournalEntryDto) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const entry = await this.service.create(trx, { tenant_id: p.tenantId, ...dto });
-      await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'create', entity: 'journal_entries', entity_id: String(entry.id), metadata: { entry_number: entry.entry_number, lines: entry.lines?.length } });
+      const entry: Record<string, unknown> = await this.service.create(trx, { tenant_id: p.tenantId, ...dto });
+      await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'create', entity: 'journal_entries', entity_id: String(entry.id), metadata: { entry_number: entry.entry_number as number, lines: (entry.lines as unknown[])?.length } });
       return entry;
     });
   }
@@ -73,7 +73,7 @@ export class JournalController {
   @Roles('owner', 'admin', 'manager')
   async postEntry(@CurrentPrincipal() p: AuthenticatedPrincipal, @Param('id', ParseIntPipe) id: number) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const row = await this.service.post(trx, id);
+      const row: Record<string, unknown> | null = await this.service.post(trx, id);
       if (!row) throw new NotFoundException();
       await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'post', entity: 'journal_entries', entity_id: String(row.id) });
       return row;

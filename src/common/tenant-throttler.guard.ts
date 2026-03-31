@@ -9,7 +9,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
  */
 @Injectable()
 export class TenantThrottlerGuard extends ThrottlerGuard {
-  protected async getTracker(req: Record<string, unknown>): Promise<string> {
+  protected getTracker(req: Record<string, unknown>): Promise<string> {
     const request = req as { headers?: Record<string, string>; ip?: string };
     const authHeader = request.headers?.authorization;
 
@@ -18,9 +18,9 @@ export class TenantThrottlerGuard extends ThrottlerGuard {
         const token = authHeader.substring(7);
         const payloadB64 = token.split('.')[1];
         if (payloadB64) {
-          const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString());
+          const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString()) as Record<string, unknown>;
           if (typeof payload.tenant_id === 'number' && payload.tenant_id > 0) {
-            return `tenant:${payload.tenant_id}`;
+            return Promise.resolve(`tenant:${payload.tenant_id}`);
           }
         }
       } catch {
@@ -28,6 +28,6 @@ export class TenantThrottlerGuard extends ThrottlerGuard {
       }
     }
 
-    return `ip:${request.ip || 'unknown'}`;
+    return Promise.resolve(`ip:${request.ip || 'unknown'}`);
   }
 }

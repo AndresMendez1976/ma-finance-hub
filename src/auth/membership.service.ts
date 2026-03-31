@@ -10,16 +10,16 @@ export class MembershipService {
     const user = await trx('users')
       .whereRaw("external_subject = current_setting('app.current_subject', true)")
       .select('id', 'external_subject', 'display_name', 'email')
-      .first();
+      .first() as Record<string, unknown> | undefined;
 
     if (!user) {
       throw new ForbiddenException('User not found');
     }
 
     const membership = await trx('tenant_memberships')
-      .where({ user_id: user.id })
+      .where({ user_id: user.id as number })
       .select('id', 'role', 'is_active')
-      .first();
+      .first() as Record<string, unknown> | undefined;
 
     if (!membership) {
       throw new ForbiddenException('No membership for this tenant');
@@ -32,14 +32,14 @@ export class MembershipService {
     return {
       user: {
         id: String(user.id),
-        externalSubject: user.external_subject,
-        displayName: user.display_name,
-        email: user.email,
+        externalSubject: String(user.external_subject),
+        displayName: String(user.display_name),
+        email: user.email != null ? String(user.email) : null,
       },
       membership: {
         id: String(membership.id),
-        role: membership.role,
-        isActive: membership.is_active,
+        role: String(membership.role),
+        isActive: Boolean(membership.is_active),
       },
     };
   }

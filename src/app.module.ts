@@ -13,6 +13,9 @@ import { JournalModule } from './journal';
 import { AdminModule } from './admin';
 import { EntitlementsModule } from './entitlements';
 import { PostingRulesModule } from './posting-rules';
+import { ReportsModule } from './reports';
+import { InvoicesModule } from './invoices';
+import { ExpensesModule } from './expenses';
 import { RequestIdMiddleware } from './common/request-id.middleware';
 import { RequestLoggerMiddleware } from './common/request-logger.middleware';
 import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
@@ -31,6 +34,9 @@ import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
     AdminModule,
     EntitlementsModule,
     PostingRulesModule,
+    ReportsModule,
+    InvoicesModule,
+    ExpensesModule,
   ],
   providers: [
     RedisThrottlerStorage,

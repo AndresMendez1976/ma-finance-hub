@@ -22,7 +22,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <Topbar />
         <main className="flex-1 overflow-auto p-6">{children}</main>
-        <footer className="border-t px-6 py-2 text-center text-xs text-muted-foreground">
+        <footer className="border-t border-[#E8DCC8] px-6 py-2 text-center text-xs" style={{ color: '#8B7355' }}>
           MA Finance Hub &mdash; Powered by MAiSHQ
         </footer>
       </div>

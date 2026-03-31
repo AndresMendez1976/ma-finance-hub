@@ -31,7 +31,7 @@ export class ChartOfAccountsController {
   @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
   async findOne(@CurrentPrincipal() p: AuthenticatedPrincipal, @Param('id', ParseIntPipe) id: number) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const row = await this.service.findOne(trx, id);
+      const row: Record<string, unknown> | undefined = await this.service.findOne(trx, id);
       if (!row) throw new NotFoundException();
       return row;
     });
@@ -41,7 +41,7 @@ export class ChartOfAccountsController {
   @Roles('owner', 'admin')
   async create(@CurrentPrincipal() p: AuthenticatedPrincipal, @Body() dto: CreateChartDto) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const row = await this.service.create(trx, { tenant_id: p.tenantId, name: dto.name, description: dto.description });
+      const row: Record<string, unknown> = await this.service.create(trx, { tenant_id: p.tenantId, name: dto.name, description: dto.description });
       await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'create', entity: 'chart_of_accounts', entity_id: String(row.id) });
       return row;
     });
@@ -51,7 +51,7 @@ export class ChartOfAccountsController {
   @Roles('owner', 'admin')
   async update(@CurrentPrincipal() p: AuthenticatedPrincipal, @Param('id', ParseIntPipe) id: number, @Body() dto: UpdateChartDto) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
-      const row = await this.service.update(trx, id, dto);
+      const row: Record<string, unknown> | undefined = await this.service.update(trx, id, dto);
       if (!row) throw new NotFoundException();
       await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'update', entity: 'chart_of_accounts', entity_id: String(row.id), metadata: dto });
       return row;

@@ -20,25 +20,25 @@ export class PostingRulesService {
    * Runs inside a tenant-scoped transaction (RLS enforced).
    */
   async findMatchingRules(trx: Knex.Transaction, eventType: string): Promise<PostingRuleMatch[]> {
-    const rules = await trx('posting_rules')
+    const rules: Record<string, unknown>[] = await trx('posting_rules')
       .where({ event_type: eventType, is_active: true })
       .select('id', 'name');
 
     const result: PostingRuleMatch[] = [];
 
     for (const rule of rules) {
-      const lines = await trx('posting_rule_lines')
-        .where({ posting_rule_id: rule.id })
+      const lines: Record<string, unknown>[] = await trx('posting_rule_lines')
+        .where({ posting_rule_id: Number(rule.id) })
         .orderBy('line_order')
         .select('account_id', 'entry_type', 'amount_source');
 
       result.push({
         ruleId: Number(rule.id),
-        ruleName: rule.name,
+        ruleName: String(rule.name),
         lines: lines.map((l) => ({
           accountId: Number(l.account_id),
           entryType: l.entry_type as 'debit' | 'credit',
-          amountSource: l.amount_source,
+          amountSource: l.amount_source as string,
         })),
       });
     }

@@ -17,8 +17,8 @@ export interface SecretProvider {
 }
 
 class EnvSecretProvider implements SecretProvider {
-  async get(key: string): Promise<string | undefined> {
-    return process.env[key];
+  get(key: string): Promise<string | undefined> {
+    return Promise.resolve(process.env[key]);
   }
 }
 

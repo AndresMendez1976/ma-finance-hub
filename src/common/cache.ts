@@ -16,17 +16,17 @@ export class InMemoryCacheStore<T> implements CacheStore<T> {
     this.maxEntries = maxEntries;
   }
 
-  async get(key: string): Promise<T | null> {
+  get(key: string): Promise<T | null> {
     const entry = this.store.get(key);
-    if (!entry) return null;
+    if (!entry) return Promise.resolve(null);
     if (Date.now() > entry.expiresAt) {
       this.store.delete(key);
-      return null;
+      return Promise.resolve(null);
     }
-    return entry.value;
+    return Promise.resolve(entry.value);
   }
 
-  async set(key: string, value: T, ttlMs: number): Promise<void> {
+  set(key: string, value: T, ttlMs: number): Promise<void> {
     this.store.set(key, { value, expiresAt: Date.now() + ttlMs });
     if (this.store.size > this.maxEntries) {
       let oldest: string | null = null;
@@ -36,13 +36,16 @@ export class InMemoryCacheStore<T> implements CacheStore<T> {
       }
       if (oldest) this.store.delete(oldest);
     }
+    return Promise.resolve();
   }
 
-  async delete(key: string): Promise<void> {
+  delete(key: string): Promise<void> {
     this.store.delete(key);
+    return Promise.resolve();
   }
 
-  async clear(): Promise<void> {
+  clear(): Promise<void> {
     this.store.clear();
+    return Promise.resolve();
   }
 }

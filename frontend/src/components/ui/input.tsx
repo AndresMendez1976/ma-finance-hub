@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn';
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (
-    <input ref={ref} className={cn('flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50', className)} {...props} />
+    <input ref={ref} className={cn('flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033] ring-offset-background placeholder:text-[#8B7355]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D6A4F] focus-visible:border-[#2D6A4F] disabled:cursor-not-allowed disabled:opacity-50', className)} {...props} />
   ),
 );
 Input.displayName = 'Input';

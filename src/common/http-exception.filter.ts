@@ -31,7 +31,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
       code = this.statusToCode(status);
       // Log security events
-      if (status === 401 || status === 403) {
+      if (status === HttpStatus.UNAUTHORIZED || status === HttpStatus.FORBIDDEN) {
         this.logger.warn(`Security event: ${code} ${message} [${requestId}] ${request.method} ${request.originalUrl}`);
       }
     } else {

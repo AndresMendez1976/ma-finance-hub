@@ -5,14 +5,30 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        border: 'hsl(214.3 31.8% 91.4%)',
-        background: 'hsl(0 0% 100%)',
-        foreground: 'hsl(222.2 84% 4.9%)',
-        primary: { DEFAULT: 'hsl(222.2 47.4% 11.2%)', foreground: 'hsl(210 40% 98%)' },
-        muted: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(215.4 16.3% 46.9%)' },
-        destructive: { DEFAULT: 'hsl(0 84.2% 60.2%)', foreground: 'hsl(210 40% 98%)' },
-        accent: { DEFAULT: 'hsl(210 40% 96.1%)', foreground: 'hsl(222.2 47.4% 11.2%)' },
-        card: { DEFAULT: 'hsl(0 0% 100%)', foreground: 'hsl(222.2 84% 4.9%)' },
+        // Warm palette — MA Finance Hub identity
+        border: '#D4C4A8',
+        background: '#F5F0E8',
+        foreground: '#5C4033',
+        primary: { DEFAULT: '#2D6A4F', foreground: '#FFFFFF' },
+        secondary: { DEFAULT: '#8B7355', foreground: '#FFFFFF' },
+        muted: { DEFAULT: '#E8DCC8', foreground: '#8B7355' },
+        destructive: { DEFAULT: '#E07A5F', foreground: '#FFFFFF' },
+        accent: { DEFAULT: '#E8DCC8', foreground: '#5C4033' },
+        card: { DEFAULT: '#FFFFFF', foreground: '#5C4033' },
+        success: { DEFAULT: '#2D6A4F', foreground: '#FFFFFF' },
+        warning: { DEFAULT: '#D4A854', foreground: '#5C4033' },
+        info: { DEFAULT: '#B4D4E7', foreground: '#5C4033' },
+        // Sidebar-specific
+        sidebar: {
+          DEFAULT: '#1B4332',
+          foreground: '#FFFFFF',
+          muted: '#95D5B2',
+          hover: '#2D6A4F',
+          active: '#FFFFFF',
+        },
+        // Input styling
+        input: '#D4C4A8',
+        ring: '#2D6A4F',
       },
       borderRadius: { lg: '0.5rem', md: '0.375rem', sm: '0.25rem' },
     },

@@ -62,7 +62,7 @@ export class TierController {
   @ApiHeader({ name: 'x-internal-api-key', required: true })
   @UseGuards(InternalApiKeyGuard)
   async assignTier(@Body() dto: InternalAssignTierDto) {
-    const targetTier = await this.db('tiers').where({ id: dto.tier_id, is_active: true }).first();
+    const targetTier = await this.db('tiers').where({ id: dto.tier_id, is_active: true }).first() as Record<string, unknown> | undefined;
     if (!targetTier) throw new BadRequestException('Target tier not found or inactive');
 
     const targetEntitlements = await this.entitlementService.getEffectiveEntitlements(dto.tier_id);
@@ -80,7 +80,7 @@ export class TierController {
 
       const [row] = await trx('tenant_tiers')
         .insert({ tenant_id: dto.tenant_id, tier_id: dto.tier_id, is_active: true, starts_at: trx.fn.now() })
-        .returning('*');
+        .returning('*') as Record<string, unknown>[];
 
       await this.audit.log(trx, {
         tenant_id: dto.tenant_id,
@@ -102,12 +102,12 @@ export class TierController {
 
     const maxUsers = targetEntitlements.find((e) => e.key === 'limit.max_users');
     if (maxUsers?.limitValue !== null && maxUsers?.limitValue !== undefined) {
-      const res = await this.db.raw(
+      const res: { rows: Record<string, unknown>[] } = await this.db.raw(
         'SELECT count(*)::int as count FROM tenant_memberships WHERE tenant_id = ? AND is_active = true',
         [tenantId],
       );
       if (Number(res.rows[0]?.count ?? 0) > maxUsers.limitValue) {
-        violations.push(`Active users (${res.rows[0].count}) exceeds target limit (${maxUsers.limitValue})`);
+        violations.push(`Active users (${String(res.rows[0].count)}) exceeds target limit (${maxUsers.limitValue})`);
       }
     }
 

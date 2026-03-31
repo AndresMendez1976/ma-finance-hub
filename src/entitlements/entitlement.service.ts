@@ -45,16 +45,16 @@ export class EntitlementService {
         .where({ 'tt.tenant_id': tenantId, 'tt.is_active': true, 't.is_active': true })
         .whereRaw('tt.starts_at <= now()')
         .where(function () {
-          this.whereNull('tt.ends_at').orWhereRaw('tt.ends_at > now()');
+          void this.whereNull('tt.ends_at').orWhereRaw('tt.ends_at > now()');
         })
         .select('t.id as tier_id', 't.code as tier_code')
-        .first();
+        .first() as Record<string, unknown> | undefined;
 
       if (!row) return null;
 
       const tierId = Number(row.tier_id);
-      const tierCode = row.tier_code;
-      const entitlements = await this.getEffectiveEntitlementsRaw(tierId);
+      const tierCode = String(row.tier_code);
+      const entitlements: EffectiveEntitlement[] = await this.getEffectiveEntitlementsRaw(tierId);
 
       await this.cache.set(String(tenantId), { tierId, tierCode, entitlements }, CACHE_TTL_MS);
       return { tierId, tierCode };
@@ -67,15 +67,15 @@ export class EntitlementService {
   }
 
   private async getEffectiveEntitlementsRaw(tierId: number): Promise<EffectiveEntitlement[]> {
-    const rows = await this.db('tier_entitlements as te')
+    const rows: Record<string, unknown>[] = await this.db('tier_entitlements as te')
       .join('entitlement_definitions as ed', 'ed.id', 'te.entitlement_definition_id')
       .where({ 'te.tier_id': tierId, 'ed.is_active': true })
       .select('ed.key', 'ed.type', 'te.enabled', 'te.limit_value');
 
     return rows.map((r) => ({
-      key: r.key,
-      type: r.type,
-      enabled: r.enabled,
+      key: r.key as string,
+      type: r.type as 'boolean' | 'limit',
+      enabled: r.enabled as boolean | null,
       limitValue: r.limit_value !== null ? Number(r.limit_value) : null,
     }));
   }

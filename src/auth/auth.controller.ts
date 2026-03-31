@@ -85,8 +85,8 @@ export class AuthController {
       principal.tenantId,
       principal.sub,
       async (trx) => {
-        const tenantRow = await trx('tenants').select('id', 'name', 'slug').first();
-        const fpCount = await trx('fiscal_periods').count('id as count').first();
+        const tenantRow = await trx('tenants').select('id', 'name', 'slug').first() as Record<string, unknown> | undefined;
+        const fpCount = await trx('fiscal_periods').count('id as count').first() as Record<string, unknown> | undefined;
         return {
           authenticatedTenantId: principal.tenantId,
           dbTenant: tenantRow || null,

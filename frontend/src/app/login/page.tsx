@@ -47,14 +47,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30">
+    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#F5F0E8' }}>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-xl">MA Finance Hub</CardTitle>
-          <p className="text-sm text-muted-foreground">Powered by MAiSHQ</p>
+          <p className="text-sm" style={{ color: '#8B7355' }}>Powered by MAiSHQ</p>
         </CardHeader>
         <CardContent className="space-y-4">
-          {expired && <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">Session expired. Please sign in again.</div>}
+          {expired && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">Session expired. Please sign in again.</div>}
 
           <div className="flex gap-2">
             <Button size="sm" variant={mode === 'credentials' ? 'default' : 'outline'} onClick={() => setMode('credentials')}>Email & Password</Button>
@@ -64,16 +64,16 @@ function LoginForm() {
           {mode === 'credentials' ? (
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium">Email</label>
+                <label className="text-sm font-medium text-[#5C4033]">Email</label>
                 <Input type="email" placeholder="admin@demo.com" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div>
-                <label className="text-sm font-medium">Password</label>
+                <label className="text-sm font-medium text-[#5C4033]">Password</label>
                 <Input type="password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && loginWithCredentials()} />
               </div>
               <div>
-                <label className="text-sm font-medium">Tenant ID</label>
+                <label className="text-sm font-medium text-[#5C4033]">Tenant ID</label>
                 <Input type="number" placeholder="1" value={tenantId} onChange={(e) => setTenantId(e.target.value)} />
               </div>
               <Button className="w-full" onClick={loginWithCredentials} disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</Button>
@@ -81,16 +81,16 @@ function LoginForm() {
           ) : (
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium">JWT Token</label>
+                <label className="text-sm font-medium text-[#5C4033]">JWT Token</label>
                 <Input placeholder="Paste JWT token" value={token} onChange={(e) => setToken(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && loginWithToken()} />
-                <p className="mt-1 text-xs text-muted-foreground">node scripts/generate-test-jwt.js &lt;tenant_id&gt; ma-finance-hub-dev &lt;subject&gt;</p>
+                <p className="mt-1 text-xs" style={{ color: '#8B7355' }}>node scripts/generate-test-jwt.js &lt;tenant_id&gt; ma-finance-hub-dev &lt;subject&gt;</p>
               </div>
               <Button className="w-full" variant="outline" onClick={loginWithToken} disabled={loading}>{loading ? 'Verifying...' : 'Sign In with Token'}</Button>
             </div>
           )}
 
-          {error && <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+          {error && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
         </CardContent>
       </Card>
     </div>

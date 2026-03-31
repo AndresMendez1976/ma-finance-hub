@@ -63,9 +63,9 @@ export class PostingRulesController {
       if (dto.idempotency_key) {
         const existing = await trx('journal_entries')
           .where({ reference: dto.idempotency_key })
-          .first();
+          .first() as Record<string, unknown> | undefined;
         if (existing) {
-          const entry = await this.journalService.findOne(trx, existing.id);
+          const entry = await this.journalService.findOne(trx, Number(existing.id));
           return { processed: 0, duplicate: true, existingEntry: entry };
         }
       }

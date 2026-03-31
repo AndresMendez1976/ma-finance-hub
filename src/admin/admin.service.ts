@@ -23,10 +23,10 @@ export class AdminService {
     external_subject: string;
     display_name: string;
     email?: string;
-  }) {
-    const existing = await trx('users').where({ external_subject: data.external_subject }).first();
+  }): Promise<Record<string, unknown>> {
+    const existing = await trx('users').where({ external_subject: data.external_subject }).first() as Record<string, unknown> | undefined;
     if (existing) throw new ConflictException('User with this external_subject already exists');
-    const [user] = await trx('users').insert(data).returning('*');
+    const [user] = await trx('users').insert(data).returning('*') as Record<string, unknown>[];
     return user;
   }
 
@@ -34,22 +34,22 @@ export class AdminService {
     tenant_id: number;
     user_id: number;
     role: string;
-  }) {
+  }): Promise<Record<string, unknown>> {
     // Skip user existence check via RLS — the FK constraint on user_id will
     // reject invalid user IDs. Users table RLS restricts SELECT to own record only.
     const existing = await trx('tenant_memberships')
       .where({ tenant_id: data.tenant_id, user_id: data.user_id })
-      .first();
+      .first() as Record<string, unknown> | undefined;
     if (existing) throw new ConflictException('Membership already exists');
-    const [membership] = await trx('tenant_memberships').insert(data).returning('*');
+    const [membership] = await trx('tenant_memberships').insert(data).returning('*') as Record<string, unknown>[];
     return membership;
   }
 
   async updateMembership(trx: Knex.Transaction, membershipId: number, data: {
     role?: string;
     is_active?: boolean;
-  }) {
-    const [row] = await trx('tenant_memberships').where({ id: membershipId }).update(data).returning('*');
+  }): Promise<Record<string, unknown>> {
+    const [row] = await trx('tenant_memberships').where({ id: membershipId }).update(data).returning('*') as Record<string, unknown>[];
     if (!row) throw new NotFoundException('Membership not found');
     return row;
   }
