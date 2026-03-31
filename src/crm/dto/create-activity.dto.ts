@@ -1,37 +1,26 @@
-// DTO for creating a CRM activity
-import { IsString, IsOptional, IsNumber, IsDateString, IsIn, MaxLength, Min } from 'class-validator';
+// DTO for creating a CRM activity — matches crm_activities schema
+import { IsString, IsOptional, IsNumber, IsDateString, IsIn, IsBoolean, MaxLength } from 'class-validator';
 
 export class CreateActivityDto {
-  @IsOptional()
   @IsNumber()
-  opportunity_id?: number;
-
-  @IsOptional()
-  @IsNumber()
-  contact_id?: number;
+  opportunity_id!: number;
 
   @IsString()
-  @IsIn(['call', 'email', 'meeting', 'task', 'note', 'demo', 'follow_up'])
+  @IsIn(['note', 'call', 'email', 'meeting', 'task'])
   type!: string;
 
   @IsString()
   @MaxLength(255)
-  subject!: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
   description?: string;
 
   @IsDateString()
-  activity_date!: string;
+  date!: string;
 
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  duration_minutes?: number;
-
-  @IsOptional()
-  @IsString()
-  @IsIn(['planned', 'completed', 'cancelled'])
-  status?: string;
+  @IsBoolean()
+  completed?: boolean;
 }

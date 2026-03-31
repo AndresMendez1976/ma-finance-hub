@@ -404,6 +404,32 @@ export class InvoicesService {
     return updated;
   }
 
+  // Export all invoices as CSV string
+  async exportCsv(trx: Knex.Transaction): Promise<string> {
+    const invoices = await trx('invoices')
+      .select('*')
+      .orderBy('created_at', 'desc') as Record<string, unknown>[];
+
+    const headers = ['id', 'invoice_number', 'customer_name', 'customer_email', 'issue_date', 'due_date', 'status', 'subtotal', 'tax_rate', 'tax_amount', 'total', 'paid_amount', 'paid_date', 'notes'];
+    const lines = [headers.join(',')];
+
+    for (const inv of invoices) {
+      const row = headers.map((h) => {
+        const val = inv[h];
+        if (val === null || val === undefined) return '';
+        const str = String(val);
+        // Escape CSV values containing commas, quotes, or newlines
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+          return `"${str.replace(/"/g, '""')}"`;
+        }
+        return str;
+      });
+      lines.push(row.join(','));
+    }
+
+    return lines.join('\n');
+  }
+
   // Generate PDF as a Buffer
   async generatePdf(trx: Knex.Transaction, id: number): Promise<{ buffer: Buffer; filename: string }> {
     const result = await this.findOne(trx, id);

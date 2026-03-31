@@ -9,7 +9,8 @@ import {
   Wallet, Clock, ShoppingCart, Contact, Landmark, Settings, ClipboardList,
   Package, MapPin, ArrowLeftRight, Wrench, Factory, Hammer, HardHat,
   UserCheck, DollarSign, Building, CalendarClock, Target, Bell,
-  Box, Layers, SlidersHorizontal,
+  Box, Layers, SlidersHorizontal, RefreshCw, FileCheck, Briefcase, Timer,
+  Gavel, Globe,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -23,10 +24,21 @@ const nav: NavItem[] = [
   { href: '/chart-of-accounts', label: 'Charts', icon: BookOpen },
   { href: '/accounts', label: 'Accounts', icon: List },
   { href: '/journal', label: 'Journal', icon: FileText },
-  { href: '/invoices', label: 'Invoices', icon: Receipt },
+  {
+    label: 'Invoices', icon: Receipt, key: 'invoices', children: [
+      { href: '/invoices', label: 'All Invoices', icon: Receipt },
+      { href: '/estimates', label: 'Estimates', icon: FileCheck },
+      { href: '/recurring-invoices', label: 'Recurring', icon: RefreshCw },
+    ],
+  },
   { href: '/expenses', label: 'Expenses', icon: Wallet },
   { href: '/purchase-orders', label: 'Purchases', icon: ClipboardList },
-  { href: '/bank-accounts', label: 'Banking', icon: Landmark },
+  {
+    label: 'Banking', icon: Landmark, key: 'banking', children: [
+      { href: '/bank-accounts', label: 'Accounts', icon: Landmark },
+      { href: '/banking/rules', label: 'Rules', icon: Gavel },
+    ],
+  },
   {
     label: 'Inventory', icon: Package, key: 'inventory', children: [
       { href: '/products', label: 'Products', icon: Box },
@@ -60,6 +72,12 @@ const nav: NavItem[] = [
       { href: '/crm/dashboard', label: 'Dashboard', icon: BarChart3 },
     ],
   },
+  {
+    label: 'Projects', icon: Briefcase, key: 'projects', children: [
+      { href: '/projects', label: 'Projects', icon: Briefcase },
+      { href: '/time-tracking', label: 'Time Tracking', icon: Timer },
+    ],
+  },
   { href: '/budgets', label: 'Budgets', icon: HardHat },
   {
     label: 'Reports', icon: BarChart3, key: 'reports', children: [
@@ -77,6 +95,8 @@ const nav: NavItem[] = [
       { href: '/reports/bom-cost-analysis', label: 'BOM Analysis', icon: Layers },
       { href: '/reports/forecast', label: 'Forecast', icon: TrendingUp },
       { href: '/reports/sales-pipeline', label: 'Sales Pipeline', icon: Target },
+      { href: '/reports/project-profitability', label: 'Project Profit', icon: Briefcase },
+      { href: '/reports/time-summary', label: 'Time Summary', icon: Timer },
     ],
   },
   { href: '/notifications', label: 'Notifications', icon: Bell },

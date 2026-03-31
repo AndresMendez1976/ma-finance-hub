@@ -116,6 +116,17 @@ export class CrmController {
     });
   }
 
+  // Get default pipeline with stages + opportunities for Kanban view
+  @Get('crm/pipeline')
+  @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
+  async getDefaultPipeline(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.getDefaultPipeline(trx),
+    );
+  }
+
   // ─── Opportunities ───
 
   // List opportunities
@@ -177,7 +188,7 @@ export class CrmController {
         action: 'create',
         entity: 'crm_opportunities',
         entity_id: String(opp.id),
-        metadata: { name: String(opp.name) },
+        metadata: { title: String(opp.title) },
       });
       return opp;
     });
@@ -296,26 +307,20 @@ export class CrmController {
   @Get('crm/activities')
   @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
   @ApiQuery({ name: 'opportunity_id', required: false })
-  @ApiQuery({ name: 'contact_id', required: false })
   @ApiQuery({ name: 'type', required: false })
-  @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
   async findAllActivities(
     @CurrentPrincipal() p: AuthenticatedPrincipal,
     @Query('opportunity_id') opportunity_id?: string,
-    @Query('contact_id') contact_id?: string,
     @Query('type') type?: string,
-    @Query('status') status?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
       this.service.findAllActivities(trx, {
         opportunity_id: opportunity_id ? parseInt(opportunity_id, 10) : undefined,
-        contact_id: contact_id ? parseInt(contact_id, 10) : undefined,
         type,
-        status,
         page: page ? parseInt(page, 10) : undefined,
         limit: limit ? parseInt(limit, 10) : undefined,
       }),
@@ -337,7 +342,7 @@ export class CrmController {
         action: 'create',
         entity: 'crm_activities',
         entity_id: String(activity.id),
-        metadata: { subject: String(activity.subject) },
+        metadata: { title: String(activity.title) },
       });
       return activity;
     });

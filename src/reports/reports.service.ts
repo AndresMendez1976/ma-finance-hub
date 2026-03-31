@@ -321,6 +321,252 @@ export class ReportsService {
     };
   }
 
+  // Executive Dashboard — comprehensive KPIs and trends for executive overview
+  async getExecutiveDashboard(trx: Knex.Transaction, _tenantId: number) {
+    const now = new Date();
+    const yearStart = `${now.getFullYear()}-01-01`;
+    const today = now.toISOString().slice(0, 10);
+
+    // KPIs
+    let total_revenue_ytd = 0;
+    let total_expenses_ytd = 0;
+    let outstanding_receivables = 0;
+    let outstanding_payables = 0;
+    let cash_balance = 0;
+
+    // Revenue YTD: sum of credit from journal_lines joining accounts where type='revenue'
+    try {
+      const [row] = await trx('journal_lines as jl')
+        .join('journal_entries as je', 'je.id', 'jl.journal_entry_id')
+        .join('accounts as a', 'a.id', 'jl.account_id')
+        .where('je.status', 'posted')
+        .where('a.account_type', 'revenue')
+        .where('je.posted_at', '>=', `${yearStart}T00:00:00.000Z`)
+        .where('je.posted_at', '<=', `${today}T23:59:59.999Z`)
+        .sum('jl.credit as total') as Record<string, unknown>[];
+      total_revenue_ytd = Number(row?.total) || 0;
+    } catch { /* table may not exist */ }
+
+    // Expenses YTD: sum of debit from journal_lines joining accounts where type='expense'
+    try {
+      const [row] = await trx('journal_lines as jl')
+        .join('journal_entries as je', 'je.id', 'jl.journal_entry_id')
+        .join('accounts as a', 'a.id', 'jl.account_id')
+        .where('je.status', 'posted')
+        .where('a.account_type', 'expense')
+        .where('je.posted_at', '>=', `${yearStart}T00:00:00.000Z`)
+        .where('je.posted_at', '<=', `${today}T23:59:59.999Z`)
+        .sum('jl.debit as total') as Record<string, unknown>[];
+      total_expenses_ytd = Number(row?.total) || 0;
+    } catch { /* table may not exist */ }
+
+    const net_income = total_revenue_ytd - total_expenses_ytd;
+
+    // Outstanding receivables: sum total from invoices where status in ('sent','overdue')
+    try {
+      const [row] = await trx('invoices')
+        .whereIn('status', ['sent', 'overdue'])
+        .sum('total as amount') as Record<string, unknown>[];
+      outstanding_receivables = Number(row?.amount) || 0;
+    } catch { /* table may not exist */ }
+
+    // Outstanding payables: sum amount from expenses where status in ('pending','approved')
+    try {
+      const [row] = await trx('expenses')
+        .whereIn('status', ['pending', 'approved'])
+        .sum('amount as total') as Record<string, unknown>[];
+      outstanding_payables = Number(row?.total) || 0;
+    } catch { /* table may not exist */ }
+
+    // Cash balance: sum balance from bank_accounts
+    try {
+      const [row] = await trx('bank_accounts')
+        .sum('balance as total') as Record<string, unknown>[];
+      cash_balance = Number(row?.total) || 0;
+    } catch { /* table may not exist */ }
+
+    // Revenue vs Expenses — last 12 months from journal entries grouped by month
+    const revenue_vs_expenses: { month: string; revenue: number; expenses: number }[] = [];
+    try {
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthStart = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+        const monthEnd = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+        const monthEndStr = `${monthEnd.getFullYear()}-${String(monthEnd.getMonth() + 1).padStart(2, '0')}-${String(monthEnd.getDate()).padStart(2, '0')}`;
+        const label = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+        const [revRow] = await trx('journal_lines as jl')
+          .join('journal_entries as je', 'je.id', 'jl.journal_entry_id')
+          .join('accounts as a', 'a.id', 'jl.account_id')
+          .where('je.status', 'posted')
+          .where('a.account_type', 'revenue')
+          .where('je.posted_at', '>=', `${monthStart}T00:00:00.000Z`)
+          .where('je.posted_at', '<=', `${monthEndStr}T23:59:59.999Z`)
+          .sum('jl.credit as total') as Record<string, unknown>[];
+
+        const [expRow] = await trx('journal_lines as jl')
+          .join('journal_entries as je', 'je.id', 'jl.journal_entry_id')
+          .join('accounts as a', 'a.id', 'jl.account_id')
+          .where('je.status', 'posted')
+          .where('a.account_type', 'expense')
+          .where('je.posted_at', '>=', `${monthStart}T00:00:00.000Z`)
+          .where('je.posted_at', '<=', `${monthEndStr}T23:59:59.999Z`)
+          .sum('jl.debit as total') as Record<string, unknown>[];
+
+        revenue_vs_expenses.push({
+          month: label,
+          revenue: Number(revRow?.total) || 0,
+          expenses: Number(expRow?.total) || 0,
+        });
+      }
+    } catch { /* table may not exist */ }
+
+    // Cash flow trend — last 6 months
+    const cash_flow_trend: { month: string; inflow: number; outflow: number; net: number }[] = [];
+    try {
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthStart = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
+        const monthEnd = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+        const monthEndStr = `${monthEnd.getFullYear()}-${String(monthEnd.getMonth() + 1).padStart(2, '0')}-${String(monthEnd.getDate()).padStart(2, '0')}`;
+        const label = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+        // Inflow: credits to cash accounts (1000-1099)
+        const [inflowRow] = await trx('journal_lines as jl')
+          .join('journal_entries as je', 'je.id', 'jl.journal_entry_id')
+          .join('accounts as a', 'a.id', 'jl.account_id')
+          .where('je.status', 'posted')
+          .where('a.account_type', 'asset')
+          .whereRaw("CAST(a.account_code AS INTEGER) >= 1000 AND CAST(a.account_code AS INTEGER) < 1100")
+          .where('je.posted_at', '>=', `${monthStart}T00:00:00.000Z`)
+          .where('je.posted_at', '<=', `${monthEndStr}T23:59:59.999Z`)
+          .sum('jl.debit as total') as Record<string, unknown>[];
+
+        const [outflowRow] = await trx('journal_lines as jl')
+          .join('journal_entries as je', 'je.id', 'jl.journal_entry_id')
+          .join('accounts as a', 'a.id', 'jl.account_id')
+          .where('je.status', 'posted')
+          .where('a.account_type', 'asset')
+          .whereRaw("CAST(a.account_code AS INTEGER) >= 1000 AND CAST(a.account_code AS INTEGER) < 1100")
+          .where('je.posted_at', '>=', `${monthStart}T00:00:00.000Z`)
+          .where('je.posted_at', '<=', `${monthEndStr}T23:59:59.999Z`)
+          .sum('jl.credit as total') as Record<string, unknown>[];
+
+        const inflow = Number(inflowRow?.total) || 0;
+        const outflow = Number(outflowRow?.total) || 0;
+        cash_flow_trend.push({ month: label, inflow, outflow, net: inflow - outflow });
+      }
+    } catch { /* table may not exist */ }
+
+    // Top customers — from invoices where status='paid' grouped by customer_name, top 5
+    let top_customers: { name: string; revenue: number }[] = [];
+    try {
+      const rows = await trx('invoices')
+        .where('status', 'paid')
+        .groupBy('customer_name')
+        .select('customer_name as name')
+        .sum('paid_amount as revenue')
+        .orderBy('revenue', 'desc')
+        .limit(5) as Record<string, unknown>[];
+      top_customers = rows.map((r) => ({ name: String(r.name), revenue: Number(r.revenue) || 0 }));
+    } catch { /* table may not exist */ }
+
+    // Invoice aging — categorize sent/overdue invoices by days since due_date
+    const invoice_aging = { current: 0, days_30: 0, days_60: 0, days_90_plus: 0 };
+    try {
+      const rows = await trx('invoices')
+        .whereIn('status', ['sent', 'overdue'])
+        .select('due_date', 'total', 'paid_amount') as Record<string, unknown>[];
+
+      for (const inv of rows) {
+        const dueDate = new Date(String(inv.due_date));
+        const daysOverdue = Math.max(0, Math.floor((now.getTime() - dueDate.getTime()) / 86400000));
+        const amount = Number(inv.total) - Number(inv.paid_amount);
+        if (amount <= 0) continue;
+        if (daysOverdue <= 30) invoice_aging.current += amount;
+        else if (daysOverdue <= 60) invoice_aging.days_30 += amount;
+        else if (daysOverdue <= 90) invoice_aging.days_60 += amount;
+        else invoice_aging.days_90_plus += amount;
+      }
+    } catch { /* table may not exist */ }
+
+    // Low stock alerts — join inventory_transactions sum by product, compare with products.reorder_point
+    let low_stock_alerts: { id: number; name: string; sku: string; quantity: number; reorder_point: number }[] = [];
+    try {
+      const rows = await trx('products as p')
+        .leftJoin('inventory_transactions as it', 'it.product_id', 'p.id')
+        .groupBy('p.id', 'p.name', 'p.sku', 'p.reorder_point')
+        .select('p.id', 'p.name', 'p.sku', 'p.reorder_point')
+        .sum('it.quantity as total_qty') as Record<string, unknown>[];
+
+      low_stock_alerts = rows
+        .filter((r) => {
+          const qty = Number(r.total_qty) || 0;
+          const reorderPoint = Number(r.reorder_point) || 0;
+          return reorderPoint > 0 && qty <= reorderPoint;
+        })
+        .map((r) => ({
+          id: Number(r.id),
+          name: String(r.name),
+          sku: String(r.sku || ''),
+          quantity: Number(r.total_qty) || 0,
+          reorder_point: Number(r.reorder_point),
+        }));
+    } catch { /* table may not exist */ }
+
+    // Recent invoices — last 5 ordered by created_at desc
+    let recent_invoices: { id: number; invoice_number: string; customer_name: string; total: string; status: string; issue_date: string }[] = [];
+    try {
+      const rows = await trx('invoices')
+        .orderBy('created_at', 'desc')
+        .limit(5)
+        .select('id', 'invoice_number', 'customer_name', 'total', 'status', 'issue_date') as Record<string, unknown>[];
+      recent_invoices = rows.map((r) => ({
+        id: Number(r.id),
+        invoice_number: String(r.invoice_number),
+        customer_name: String(r.customer_name),
+        total: String(r.total),
+        status: String(r.status),
+        issue_date: String(r.issue_date),
+      }));
+    } catch { /* table may not exist */ }
+
+    // Recent expenses — last 5 ordered by created_at desc
+    let recent_expenses: { id: number; expense_number: string; vendor_name: string; amount: string; status: string; date: string }[] = [];
+    try {
+      const rows = await trx('expenses')
+        .orderBy('created_at', 'desc')
+        .limit(5)
+        .select('id', 'expense_number', 'vendor_name', 'amount', 'status', 'date') as Record<string, unknown>[];
+      recent_expenses = rows.map((r) => ({
+        id: Number(r.id),
+        expense_number: String(r.expense_number),
+        vendor_name: String(r.vendor_name),
+        amount: String(r.amount),
+        status: String(r.status),
+        date: String(r.date),
+      }));
+    } catch { /* table may not exist */ }
+
+    return {
+      kpis: {
+        total_revenue_ytd,
+        total_expenses_ytd,
+        net_income,
+        outstanding_receivables,
+        outstanding_payables,
+        cash_balance,
+      },
+      revenue_vs_expenses,
+      cash_flow_trend,
+      top_customers,
+      invoice_aging,
+      low_stock_alerts,
+      recent_invoices,
+      recent_expenses,
+    };
+  }
+
   // Aged Receivables — invoices grouped by customer with aging buckets
   async agedReceivables(trx: Knex.Transaction, asOf: string) {
     const rows = await trx('invoices')

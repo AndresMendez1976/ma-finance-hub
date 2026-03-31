@@ -6,10 +6,16 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { api } from '@/lib/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface KPIs { total_pipeline_value: number; weighted_value: number; win_rate: number; avg_deal_size: number }
-interface FunnelStage { name: string; count: number; value: number; color: string }
-interface TopOpp { id: number; title: string; contact_name: string; value: number; stage_name: string; expected_close_date: string }
-interface DashData { kpis: KPIs; funnel: FunnelStage[]; top_opportunities: TopOpp[] }
+// Backend response shape from GET /crm/dashboard
+interface StageValue { stage_name: string; count: string; total_value: string; weighted_value: string; sort_order: number }
+interface DashData {
+  pipeline_by_stage: StageValue[];
+  open_pipeline: { count: number; total_value: number; weighted_value: number };
+  win_rate: number;
+  avg_deal_size: number;
+  won: { count: number; total_value: number };
+  lost: { count: number; total_value: number };
+}
 
 export default function CrmDashboardPage() {
   const [data, setData] = useState<DashData | null>(null);
@@ -20,13 +26,15 @@ export default function CrmDashboardPage() {
   }, []);
 
   if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
-  if (!data) return <Shell><p className="text-[#8B7355]">No data available</p></Shell>;
+
+  // Handle empty state gracefully — show zero KPIs instead of error
+  const d = data ?? { pipeline_by_stage: [], open_pipeline: { count: 0, total_value: 0, weighted_value: 0 }, win_rate: 0, avg_deal_size: 0, won: { count: 0, total_value: 0 }, lost: { count: 0, total_value: 0 } };
 
   const kpiCards = [
-    { label: 'Pipeline Value', value: `$${data.kpis.total_pipeline_value.toLocaleString()}`, color: '#5C4033' },
-    { label: 'Weighted Value', value: `$${data.kpis.weighted_value.toLocaleString()}`, color: '#2D6A4F' },
-    { label: 'Win Rate', value: `${data.kpis.win_rate.toFixed(1)}%`, color: '#D4A854' },
-    { label: 'Avg Deal Size', value: `$${data.kpis.avg_deal_size.toLocaleString()}`, color: '#8B7355' },
+    { label: 'Pipeline Value', value: `$${d.open_pipeline.total_value.toLocaleString()}`, color: '#5C4033' },
+    { label: 'Weighted Value', value: `$${d.open_pipeline.weighted_value.toLocaleString()}`, color: '#2D6A4F' },
+    { label: 'Win Rate', value: `${d.win_rate.toFixed(1)}%`, color: '#D4A854' },
+    { label: 'Avg Deal Size', value: `$${d.avg_deal_size.toLocaleString()}`, color: '#8B7355' },
   ];
 
   return (
@@ -46,34 +54,37 @@ export default function CrmDashboardPage() {
         <Card>
           <CardHeader><CardTitle>Pipeline Funnel</CardTitle></CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={280}>
-              <BarChart data={data.funnel} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCC8" />
-                <XAxis type="number" tick={{ fontSize: 11, fill: '#8B7355' }} />
-                <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 11, fill: '#8B7355' }} />
-                <Tooltip />
-                <Bar dataKey="value" fill="#2D6A4F" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {d.pipeline_by_stage.length > 0 ? (
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={d.pipeline_by_stage.map((s) => ({ name: s.stage_name, value: Number(s.total_value) }))} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E8DCC8" />
+                  <XAxis type="number" tick={{ fontSize: 11, fill: '#8B7355' }} />
+                  <YAxis dataKey="name" type="category" width={100} tick={{ fontSize: 11, fill: '#8B7355' }} />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#2D6A4F" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="py-8 text-center text-[#8B7355]">No pipeline data yet</p>
+            )}
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Top Opportunities</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Pipeline by Stage</CardTitle></CardHeader>
           <CardContent>
             <Table>
-              <THead><TR><TH>Title</TH><TH>Contact</TH><TH className="text-right">Value</TH><TH>Stage</TH><TH>Close</TH></TR></THead>
+              <THead><TR><TH>Stage</TH><TH className="text-right">Count</TH><TH className="text-right">Value</TH><TH className="text-right">Weighted</TH></TR></THead>
               <TBody>
-                {data.top_opportunities.map((o) => (
-                  <TR key={o.id}>
-                    <TD className="text-sm font-medium">{o.title}</TD>
-                    <TD className="text-sm">{o.contact_name}</TD>
-                    <TD className="text-right font-mono text-sm">${Number(o.value).toLocaleString()}</TD>
-                    <TD className="text-sm">{o.stage_name}</TD>
-                    <TD className="text-sm">{o.expected_close_date}</TD>
+                {d.pipeline_by_stage.map((s, i) => (
+                  <TR key={i}>
+                    <TD className="text-sm font-medium">{s.stage_name}</TD>
+                    <TD className="text-right font-mono text-sm">{Number(s.count)}</TD>
+                    <TD className="text-right font-mono text-sm">${Number(s.total_value).toLocaleString()}</TD>
+                    <TD className="text-right font-mono text-sm">${Number(s.weighted_value).toLocaleString()}</TD>
                   </TR>
                 ))}
-                {!data.top_opportunities.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No opportunities</TD></TR>}
+                {!d.pipeline_by_stage.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No opportunities yet</TD></TR>}
               </TBody>
             </Table>
           </CardContent>

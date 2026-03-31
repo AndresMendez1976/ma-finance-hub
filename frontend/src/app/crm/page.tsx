@@ -24,9 +24,10 @@ export default function CrmPage() {
     api.get<PipelineData>('/crm/pipeline').then(setData).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
+  // Backend route: POST /crm/opportunities/:id/move
   const moveToStage = async (oppId: number, stageId: number) => {
     try {
-      await api.patch(`/crm/opportunities/${oppId}`, { stage_id: stageId });
+      await api.post(`/crm/opportunities/${oppId}/move`, { stage_id: stageId });
       const fresh = await api.get<PipelineData>('/crm/pipeline');
       setData(fresh);
     } catch { /* */ }

@@ -4,7 +4,7 @@ import { IsString, IsNumber, IsOptional, IsDateString, MaxLength, Min } from 'cl
 export class CreateOpportunityDto {
   @IsString()
   @MaxLength(255)
-  name!: string;
+  title!: string;
 
   @IsNumber()
   pipeline_id!: number;

@@ -14,8 +14,7 @@ export class CrmService {
     const [pipeline] = await trx('crm_pipelines').insert({
       tenant_id: tenantId,
       name: data.name,
-      description: data.description ?? null,
-      is_active: true,
+      is_default: false,
     }).returning('*') as Record<string, unknown>[];
 
     if (data.stages && data.stages.length > 0) {
@@ -26,7 +25,7 @@ export class CrmService {
         sort_order: s.sort_order,
         probability: s.probability ?? 0,
       }));
-      await trx('crm_pipeline_stages').insert(stageRows);
+      await trx('crm_stages').insert(stageRows);
     }
 
     return this.findOnePipeline(trx, Number(pipeline.id));
@@ -40,7 +39,7 @@ export class CrmService {
 
     const pipelineIds = pipelines.map((p) => Number(p.id));
     const stages = pipelineIds.length > 0
-      ? await trx('crm_pipeline_stages').whereIn('pipeline_id', pipelineIds).orderBy('sort_order', 'asc') as Record<string, unknown>[]
+      ? await trx('crm_stages').whereIn('pipeline_id', pipelineIds).orderBy('sort_order', 'asc') as Record<string, unknown>[]
       : [];
 
     return pipelines.map((p) => ({
@@ -54,7 +53,7 @@ export class CrmService {
     const pipeline = await trx('crm_pipelines').where({ id }).first() as Record<string, unknown> | undefined;
     if (!pipeline) return null;
 
-    const stages = await trx('crm_pipeline_stages')
+    const stages = await trx('crm_stages')
       .where({ pipeline_id: id })
       .orderBy('sort_order', 'asc') as Record<string, unknown>[];
 
@@ -63,7 +62,7 @@ export class CrmService {
 
   // Update pipeline
   async updatePipeline(trx: Knex.Transaction, id: number, tenantId: number, data: {
-    name?: string; description?: string; is_active?: boolean;
+    name?: string; is_default?: boolean;
     stages?: { name: string; sort_order: number; probability?: number }[];
   }) {
     const existing = await trx('crm_pipelines').where({ id }).first() as Record<string, unknown> | undefined;
@@ -71,15 +70,14 @@ export class CrmService {
 
     const updates: Record<string, unknown> = {};
     if (data.name !== undefined) updates.name = data.name;
-    if (data.description !== undefined) updates.description = data.description;
-    if (data.is_active !== undefined) updates.is_active = data.is_active;
+    if (data.is_default !== undefined) updates.is_default = data.is_default;
 
     if (Object.keys(updates).length > 0) {
       await trx('crm_pipelines').where({ id }).update(updates);
     }
 
     if (data.stages !== undefined) {
-      await trx('crm_pipeline_stages').where({ pipeline_id: id }).delete();
+      await trx('crm_stages').where({ pipeline_id: id }).delete();
       if (data.stages.length > 0) {
         const stageRows = data.stages.map((s) => ({
           pipeline_id: id,
@@ -88,7 +86,7 @@ export class CrmService {
           sort_order: s.sort_order,
           probability: s.probability ?? 0,
         }));
-        await trx('crm_pipeline_stages').insert(stageRows);
+        await trx('crm_stages').insert(stageRows);
       }
     }
 
@@ -100,7 +98,7 @@ export class CrmService {
     const existing = await trx('crm_pipelines').where({ id }).first() as Record<string, unknown> | undefined;
     if (!existing) throw new NotFoundException('Pipeline not found');
 
-    await trx('crm_pipeline_stages').where({ pipeline_id: id }).delete();
+    await trx('crm_stages').where({ pipeline_id: id }).delete();
     await trx('crm_pipelines').where({ id }).delete();
     return { deleted: true, id };
   }
@@ -109,11 +107,11 @@ export class CrmService {
 
   // Create opportunity
   async createOpportunity(trx: Knex.Transaction, tenantId: number, createdBy: string, data: {
-    name: string; pipeline_id: number; stage_id: number; contact_id?: number;
+    title: string; pipeline_id: number; stage_id: number; contact_id?: number;
     value: number; probability?: number; expected_close_date?: string; notes?: string;
-    assigned_to?: string;
+    assigned_to?: string; source?: string; currency?: string;
   }) {
-    const stage = await trx('crm_pipeline_stages').where({ id: data.stage_id }).first() as Record<string, unknown> | undefined;
+    const stage = await trx('crm_stages').where({ id: data.stage_id }).first() as Record<string, unknown> | undefined;
     if (!stage) throw new BadRequestException('Stage not found');
 
     const probability = data.probability ?? Number(stage.probability ?? 0);
@@ -121,7 +119,7 @@ export class CrmService {
 
     const [opp] = await trx('crm_opportunities').insert({
       tenant_id: tenantId,
-      name: data.name,
+      title: data.title,
       pipeline_id: data.pipeline_id,
       stage_id: data.stage_id,
       contact_id: data.contact_id ?? null,
@@ -131,6 +129,8 @@ export class CrmService {
       expected_close_date: data.expected_close_date ?? null,
       notes: data.notes ?? null,
       assigned_to: data.assigned_to ?? null,
+      source: data.source ?? null,
+      currency: data.currency ?? 'USD',
       status: 'open',
       created_by: createdBy,
     }).returning('*') as Record<string, unknown>[];
@@ -149,13 +149,13 @@ export class CrmService {
 
     const query = trx('crm_opportunities')
       .leftJoin('contacts', 'crm_opportunities.contact_id', 'contacts.id')
-      .leftJoin('crm_pipeline_stages', 'crm_opportunities.stage_id', 'crm_pipeline_stages.id')
+      .leftJoin('crm_stages', 'crm_opportunities.stage_id', 'crm_stages.id')
       .select(
         'crm_opportunities.*',
         'contacts.first_name as contact_first_name',
         'contacts.last_name as contact_last_name',
         'contacts.company_name as contact_company',
-        'crm_pipeline_stages.name as stage_name',
+        'crm_stages.name as stage_name',
       )
       .orderBy('crm_opportunities.created_at', 'desc');
 
@@ -181,14 +181,14 @@ export class CrmService {
   async findOneOpportunity(trx: Knex.Transaction, id: number) {
     const opp = await trx('crm_opportunities')
       .leftJoin('contacts', 'crm_opportunities.contact_id', 'contacts.id')
-      .leftJoin('crm_pipeline_stages', 'crm_opportunities.stage_id', 'crm_pipeline_stages.id')
+      .leftJoin('crm_stages', 'crm_opportunities.stage_id', 'crm_stages.id')
       .leftJoin('crm_pipelines', 'crm_opportunities.pipeline_id', 'crm_pipelines.id')
       .select(
         'crm_opportunities.*',
         'contacts.first_name as contact_first_name',
         'contacts.last_name as contact_last_name',
         'contacts.company_name as contact_company',
-        'crm_pipeline_stages.name as stage_name',
+        'crm_stages.name as stage_name',
         'crm_pipelines.name as pipeline_name',
       )
       .where('crm_opportunities.id', id)
@@ -248,7 +248,7 @@ export class CrmService {
     const opp = await trx('crm_opportunities').where({ id }).first() as Record<string, unknown> | undefined;
     if (!opp) throw new NotFoundException('Opportunity not found');
 
-    const stage = await trx('crm_pipeline_stages').where({ id: stageId }).first() as Record<string, unknown> | undefined;
+    const stage = await trx('crm_stages').where({ id: stageId }).first() as Record<string, unknown> | undefined;
     if (!stage) throw new BadRequestException('Stage not found');
 
     const probability = Number(stage.probability ?? 0);
@@ -305,14 +305,14 @@ export class CrmService {
         tax: 0,
         total: opp.value,
         paid_amount: 0,
-        notes: `Auto-created from CRM opportunity: ${String(opp.name)}`,
+        notes: `Auto-created from CRM opportunity: ${String(opp.title)}`,
       }).returning('*') as Record<string, unknown>[];
 
       // Create a single invoice line
       await trx('invoice_lines').insert({
         invoice_id: inv.id,
         tenant_id: tenantId,
-        description: String(opp.name),
+        description: String(opp.title),
         quantity: 1,
         unit_price: opp.value,
         amount: opp.value,
@@ -338,7 +338,7 @@ export class CrmService {
       probability: 0,
       weighted_value: 0,
       actual_close_date: now,
-      loss_reason: reason ?? null,
+      notes: reason ? `Lost: ${reason}` : null,
     });
 
     return trx('crm_opportunities').where({ id }).first() as Promise<Record<string, unknown>>;
@@ -346,22 +346,20 @@ export class CrmService {
 
   // ─── Activities ───
 
-  // Create activity
+  // Create activity — matches crm_activities schema (type, title, description, date, completed)
   async createActivity(trx: Knex.Transaction, tenantId: number, createdBy: string, data: {
-    opportunity_id?: number; contact_id?: number; type: string;
-    subject: string; description?: string; activity_date: string;
-    duration_minutes?: number; status?: string;
+    opportunity_id: number; type: string;
+    title: string; description?: string; date: string;
+    completed?: boolean;
   }) {
     const [activity] = await trx('crm_activities').insert({
       tenant_id: tenantId,
-      opportunity_id: data.opportunity_id ?? null,
-      contact_id: data.contact_id ?? null,
+      opportunity_id: data.opportunity_id,
       type: data.type,
-      subject: data.subject,
+      title: data.title,
       description: data.description ?? null,
-      activity_date: data.activity_date,
-      duration_minutes: data.duration_minutes ?? null,
-      status: data.status ?? 'planned',
+      date: data.date,
+      completed: data.completed ?? false,
       created_by: createdBy,
     }).returning('*') as Record<string, unknown>[];
 
@@ -370,18 +368,16 @@ export class CrmService {
 
   // List activities
   async findAllActivities(trx: Knex.Transaction, filters?: {
-    opportunity_id?: number; contact_id?: number; type?: string; status?: string;
+    opportunity_id?: number; type?: string;
     page?: number; limit?: number;
   }) {
     const page = filters?.page ?? 1;
     const limit = Math.min(filters?.limit ?? 25, 100);
     const offset = (page - 1) * limit;
 
-    const query = trx('crm_activities').select('*').orderBy('activity_date', 'desc');
+    const query = trx('crm_activities').select('*').orderBy('date', 'desc');
     if (filters?.opportunity_id) void query.where('opportunity_id', filters.opportunity_id);
-    if (filters?.contact_id) void query.where('contact_id', filters.contact_id);
     if (filters?.type) void query.where('type', filters.type);
-    if (filters?.status) void query.where('status', filters.status);
 
     const countQuery = query.clone().clearSelect().clearOrder().count('* as total');
     const [countResult] = await countQuery as Record<string, unknown>[];
@@ -396,16 +392,16 @@ export class CrmService {
     };
   }
 
-  // Update activity
+  // Update activity — matches crm_activities schema
   async updateActivity(trx: Knex.Transaction, id: number, data: {
-    type?: string; subject?: string; description?: string;
-    activity_date?: string; duration_minutes?: number; status?: string;
+    type?: string; title?: string; description?: string;
+    date?: string; completed?: boolean;
   }) {
     const existing = await trx('crm_activities').where({ id }).first() as Record<string, unknown> | undefined;
     if (!existing) throw new NotFoundException('Activity not found');
 
     const updates: Record<string, unknown> = {};
-    const fields = ['type', 'subject', 'description', 'activity_date', 'duration_minutes', 'status'] as const;
+    const fields = ['type', 'title', 'description', 'date', 'completed'] as const;
     for (const field of fields) {
       if ((data as Record<string, unknown>)[field] !== undefined) {
         updates[field] = (data as Record<string, unknown>)[field];
@@ -428,23 +424,53 @@ export class CrmService {
     return { deleted: true, id };
   }
 
+  // Get default pipeline with stages and opportunities for Kanban view
+  async getDefaultPipeline(trx: Knex.Transaction) {
+    // Find default pipeline, or first pipeline
+    let pipeline = await trx('crm_pipelines').where({ is_default: true }).first() as Record<string, unknown> | undefined;
+    if (!pipeline) {
+      pipeline = await trx('crm_pipelines').orderBy('id', 'asc').first() as Record<string, unknown> | undefined;
+    }
+    if (!pipeline) return null;
+
+    const stages = await trx('crm_stages')
+      .where({ pipeline_id: pipeline.id })
+      .orderBy('sort_order', 'asc')
+      .select('*') as Record<string, unknown>[];
+
+    const opportunities = await trx('crm_opportunities')
+      .leftJoin('contacts', 'crm_opportunities.contact_id', 'contacts.id')
+      .where('crm_opportunities.pipeline_id', Number(pipeline.id))
+      .where('crm_opportunities.status', 'open')
+      .select(
+        'crm_opportunities.*',
+        trx.raw("COALESCE(contacts.company_name, contacts.first_name || ' ' || COALESCE(contacts.last_name, '')) as contact_name"),
+      )
+      .orderBy('crm_opportunities.value', 'desc') as Record<string, unknown>[];
+
+    return {
+      pipeline: { id: pipeline.id, name: pipeline.name, stages: stages.map((s) => ({ id: Number(s.id), name: s.name, color: s.color, position: Number(s.sort_order) })) },
+      opportunities: opportunities.map((o) => ({ id: Number(o.id), title: o.title, contact_name: o.contact_name, value: Number(o.value), expected_close_date: o.expected_close_date, stage_id: Number(o.stage_id) })),
+    };
+  }
+
   // ─── Dashboard & Reports ───
 
   // CRM Dashboard — pipeline value by stage, conversion rate, win rate, avg deal size
   async getDashboard(trx: Knex.Transaction) {
     // Pipeline value by stage
     const stageValues = await trx('crm_opportunities')
-      .leftJoin('crm_pipeline_stages', 'crm_opportunities.stage_id', 'crm_pipeline_stages.id')
+      .leftJoin('crm_stages', 'crm_opportunities.stage_id', 'crm_stages.id')
       .where('crm_opportunities.status', 'open')
-      .groupBy('crm_pipeline_stages.id', 'crm_pipeline_stages.name', 'crm_pipeline_stages.sort_order')
+      .groupBy('crm_stages.id', 'crm_stages.name', 'crm_stages.sort_order')
       .select(
-        'crm_pipeline_stages.name as stage_name',
-        'crm_pipeline_stages.sort_order',
+        'crm_stages.name as stage_name',
+        'crm_stages.sort_order',
         trx.raw('COUNT(crm_opportunities.id) as count'),
         trx.raw('COALESCE(SUM(crm_opportunities.value), 0) as total_value'),
         trx.raw('COALESCE(SUM(crm_opportunities.weighted_value), 0) as weighted_value'),
       )
-      .orderBy('crm_pipeline_stages.sort_order', 'asc') as Record<string, unknown>[];
+      .orderBy('crm_stages.sort_order', 'asc') as Record<string, unknown>[];
 
     // Win/loss counts
     const outcomes = await trx('crm_opportunities')
@@ -495,19 +521,19 @@ export class CrmService {
   async getSalesPipelineReport(trx: Knex.Transaction) {
     const opportunities = await trx('crm_opportunities')
       .leftJoin('contacts', 'crm_opportunities.contact_id', 'contacts.id')
-      .leftJoin('crm_pipeline_stages', 'crm_opportunities.stage_id', 'crm_pipeline_stages.id')
+      .leftJoin('crm_stages', 'crm_opportunities.stage_id', 'crm_stages.id')
       .leftJoin('crm_pipelines', 'crm_opportunities.pipeline_id', 'crm_pipelines.id')
       .select(
         'crm_opportunities.*',
         'contacts.first_name as contact_first_name',
         'contacts.last_name as contact_last_name',
         'contacts.company_name as contact_company',
-        'crm_pipeline_stages.name as stage_name',
-        'crm_pipeline_stages.sort_order as stage_order',
+        'crm_stages.name as stage_name',
+        'crm_stages.sort_order as stage_order',
         'crm_pipelines.name as pipeline_name',
       )
       .orderBy('crm_pipelines.name', 'asc')
-      .orderBy('crm_pipeline_stages.sort_order', 'asc')
+      .orderBy('crm_stages.sort_order', 'asc')
       .orderBy('crm_opportunities.value', 'desc') as Record<string, unknown>[];
 
     return { data: opportunities };

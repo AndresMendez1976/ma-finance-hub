@@ -205,6 +205,15 @@ export class ReportsController {
     return lines.join('\n');
   }
 
+  // Executive Dashboard — comprehensive KPIs and trends
+  @Get('dashboard/executive')
+  @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
+  async getExecutiveDashboard(@CurrentPrincipal() p: AuthenticatedPrincipal) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.getExecutiveDashboard(trx, p.tenantId),
+    );
+  }
+
   // Aged Receivables
   @Get('aged-receivables')
   @Roles('owner', 'admin', 'manager', 'analyst')

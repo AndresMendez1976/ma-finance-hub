@@ -1,6 +1,6 @@
 // Expenses controller — CRUD, approve, post, void, summary
 import { Controller, Get, Post, Put, Param, Body, Query, UseGuards, ParseIntPipe, NotFoundException } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiQuery, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard, IdentityGuard, RolesGuard, CurrentPrincipal, Roles } from '../auth';
 import { AuthenticatedPrincipal } from '../auth/interfaces';
 import { TenantContextService } from '../auth/tenant-context.service';
@@ -39,6 +39,32 @@ export class ExpensesController {
     return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
       this.service.findAll(trx, { status, category, vendor, from, to, page: page ? parseInt(page, 10) : undefined, limit: limit ? parseInt(limit, 10) : undefined }),
     );
+  }
+
+  // Batch create multiple expenses
+  @Post('batch')
+  @Roles('owner', 'admin', 'manager')
+  @ApiOperation({ summary: 'Create multiple expenses at once' })
+  async batchCreate(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Body() dto: { expenses: CreateExpenseDto[] },
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
+      const results: Record<string, unknown>[] = [];
+      for (const expenseDto of dto.expenses) {
+        const expense = await this.service.create(trx, p.tenantId, p.sub, expenseDto);
+        results.push(expense);
+      }
+      await this.audit.log(trx, {
+        tenant_id: p.tenantId,
+        actor_subject: p.sub,
+        action: 'batch_create',
+        entity: 'expenses',
+        entity_id: 'batch',
+        metadata: { count: String(results.length) },
+      });
+      return results;
+    });
   }
 
   @Get('summary')

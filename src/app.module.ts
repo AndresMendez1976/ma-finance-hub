@@ -32,6 +32,13 @@ import { ApiKeysModule } from './api-keys';
 import { WebhooksModule } from './webhooks';
 import { NotificationsModule } from './notifications';
 import { DataExportModule } from './data-export';
+import { RecurringInvoicesModule } from './recurring-invoices';
+import { EstimatesModule } from './estimates';
+import { ProjectsModule } from './projects';
+import { TrackingModule } from './tracking';
+import { BankRulesModule } from './bank-rules';
+import { ClientPortalModule } from './client-portal';
+import { CustomFieldsModule } from './custom-fields';
 import { RequestIdMiddleware } from './common/request-id.middleware';
 import { RequestLoggerMiddleware } from './common/request-logger.middleware';
 import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
@@ -69,6 +76,13 @@ import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
     WebhooksModule,
     NotificationsModule,
     DataExportModule,
+    RecurringInvoicesModule,
+    EstimatesModule,
+    ProjectsModule,
+    TrackingModule,
+    BankRulesModule,
+    ClientPortalModule,
+    CustomFieldsModule,
   ],
   providers: [
     RedisThrottlerStorage,

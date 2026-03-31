@@ -23,23 +23,28 @@ export default function NotificationsPage() {
 
   const load = async () => {
     setLoading(true);
-    try { setItems(await api.get<Notification[]>('/notifications')); }
-    catch { /* */ }
+    try {
+      // Backend returns paginated { data: [...], pagination: {...} }
+      const res = await api.get<{ data: Notification[]; pagination: Record<string, number> }>('/notifications?limit=100');
+      setItems(res.data ?? []);
+    } catch { setItems([]); }
     finally { setLoading(false); }
   };
 
   useEffect(() => { void load(); }, []);
 
+  // Backend route: POST /notifications/:id/read
   const markRead = async (id: number) => {
     try {
-      await api.patch(`/notifications/${id}`, { is_read: true });
+      await api.post(`/notifications/${id}/read`);
       setItems((prev) => prev.map((n) => n.id === id ? { ...n, is_read: true } : n));
     } catch { /* */ }
   };
 
+  // Backend route: POST /notifications/read-all
   const markAllRead = async () => {
     try {
-      await api.post('/notifications/mark-all-read');
+      await api.post('/notifications/read-all');
       setItems((prev) => prev.map((n) => ({ ...n, is_read: true })));
     } catch { /* */ }
   };

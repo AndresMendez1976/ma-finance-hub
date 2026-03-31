@@ -1,6 +1,6 @@
 // Invoices controller — CRUD, lifecycle, PDF generation
 import { Controller, Get, Post, Put, Param, Body, Query, Res, UseGuards, ParseIntPipe, NotFoundException } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiQuery, ApiOperation } from '@nestjs/swagger';
 import { Response } from 'express';
 import { JwtAuthGuard, IdentityGuard, RolesGuard, CurrentPrincipal, Roles } from '../auth';
 import { AuthenticatedPrincipal } from '../auth/interfaces';
@@ -49,6 +49,52 @@ export class InvoicesController {
         limit: limit ? parseInt(limit, 10) : undefined,
       }),
     );
+  }
+
+  // Batch create multiple invoices
+  @Post('batch')
+  @Roles('owner', 'admin', 'manager')
+  @ApiOperation({ summary: 'Create multiple invoices at once' })
+  async batchCreate(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Body() dto: { invoices: CreateInvoiceDto[] },
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
+      const results: Record<string, unknown>[] = [];
+      for (const invoiceDto of dto.invoices) {
+        const invoice = await this.service.create(trx, {
+          tenant_id: p.tenantId,
+          created_by: p.sub,
+          ...invoiceDto,
+        }) as Record<string, unknown>;
+        results.push(invoice);
+      }
+      await this.audit.log(trx, {
+        tenant_id: p.tenantId,
+        actor_subject: p.sub,
+        action: 'batch_create',
+        entity: 'invoices',
+        entity_id: 'batch',
+        metadata: { count: String(results.length) },
+      });
+      return results;
+    });
+  }
+
+  // Export all invoices as CSV
+  @Get('export-csv')
+  @Roles('owner', 'admin', 'manager', 'analyst')
+  @ApiOperation({ summary: 'Export all invoices as CSV' })
+  async exportCsv(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Res() res: Response,
+  ) {
+    const csv = await this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.exportCsv(trx),
+    );
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=invoices.csv');
+    res.send(csv);
   }
 
   // Get single invoice with lines
