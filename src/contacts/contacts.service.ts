@@ -145,6 +145,84 @@ export class ContactsService {
     return this.findOne(trx, id);
   }
 
+  // Import contacts from CSV string
+  async importCsv(trx: Knex.Transaction, tenantId: number, csvContent: string) {
+    const lines = csvContent.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
+    if (lines.length < 2) throw new BadRequestException('CSV must contain a header row and at least one data row');
+
+    const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+    const dataLines = lines.slice(1);
+    const errors: string[] = [];
+    let imported = 0;
+    const contacts: Record<string, unknown>[] = [];
+
+    for (let i = 0; i < dataLines.length; i++) {
+      const parts = dataLines[i].split(',').map((p) => p.trim());
+      const row: Record<string, string> = {};
+      for (let j = 0; j < headers.length; j++) {
+        row[headers[j]] = parts[j] ?? '';
+      }
+
+      if (!row.type || !row.first_name) {
+        errors.push(`Row ${String(i + 2)}: Missing required fields (type, first_name)`);
+        continue;
+      }
+
+      if (!['customer', 'vendor', 'both'].includes(row.type)) {
+        errors.push(`Row ${String(i + 2)}: Invalid type '${row.type}'`);
+        continue;
+      }
+
+      const [contact] = await trx('contacts').insert({
+        tenant_id: tenantId,
+        type: row.type,
+        company_name: row.company_name || null,
+        first_name: row.first_name,
+        last_name: row.last_name || null,
+        email: row.email || null,
+        phone: row.phone || null,
+        address_line1: row.address_line1 || null,
+        city: row.city || null,
+        state: row.state || null,
+        zip: row.zip || null,
+        country: row.country || 'US',
+        tax_id: row.tax_id || null,
+        notes: row.notes || null,
+        status: 'active',
+      }).returning('*') as Record<string, unknown>[];
+
+      contacts.push(contact);
+      imported++;
+    }
+
+    return { imported, errors, contacts };
+  }
+
+  // Export all contacts as CSV string
+  async exportCsv(trx: Knex.Transaction): Promise<string> {
+    const contacts = await trx('contacts')
+      .select('*')
+      .orderBy('created_at', 'desc') as Record<string, unknown>[];
+
+    const headers = ['id', 'type', 'company_name', 'first_name', 'last_name', 'email', 'phone', 'address_line1', 'address_line2', 'city', 'state', 'zip', 'country', 'tax_id', 'status', 'notes'];
+    const csvLines = [headers.join(',')];
+
+    for (const contact of contacts) {
+      const row = headers.map((h) => {
+        const val = contact[h];
+        if (val === null || val === undefined) return '';
+        const str = String(val);
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+          return `"${str.replace(/"/g, '""')}"`;
+        }
+        return str;
+      });
+      csvLines.push(row.join(','));
+    }
+
+    return csvLines.join('\n');
+  }
+
   // Soft delete — set status to inactive
   async softDelete(trx: Knex.Transaction, id: number) {
     const contact = await trx('contacts').where({ id }).first() as Record<string, unknown> | undefined;

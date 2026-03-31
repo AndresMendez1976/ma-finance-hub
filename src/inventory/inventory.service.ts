@@ -95,6 +95,88 @@ export class InventoryService {
     return `TRF-${String(num + 1).padStart(4, '0')}`;
   }
 
+  // ─── CSV Import/Export ───
+
+  async importProductsCsv(trx: Knex.Transaction, tenantId: number, csvContent: string) {
+    const lines = csvContent.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
+    if (lines.length < 2) throw new BadRequestException('CSV must contain a header row and at least one data row');
+
+    const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
+    const dataLines = lines.slice(1);
+    const errors: string[] = [];
+    let imported = 0;
+    const products: Record<string, unknown>[] = [];
+
+    for (let i = 0; i < dataLines.length; i++) {
+      const parts = dataLines[i].split(',').map((p) => p.trim());
+      const row: Record<string, string> = {};
+      for (let j = 0; j < headers.length; j++) {
+        row[headers[j]] = parts[j] ?? '';
+      }
+
+      if (!row.sku || !row.name || !row.type) {
+        errors.push(`Row ${String(i + 2)}: Missing required fields (sku, name, type)`);
+        continue;
+      }
+
+      if (!['inventory', 'non_inventory', 'service'].includes(row.type)) {
+        errors.push(`Row ${String(i + 2)}: Invalid type '${row.type}'`);
+        continue;
+      }
+
+      // Check for duplicate SKU
+      const existing = await trx('products').where({ tenant_id: tenantId, sku: row.sku }).first() as Record<string, unknown> | undefined;
+      if (existing) {
+        errors.push(`Row ${String(i + 2)}: Product with SKU '${row.sku}' already exists`);
+        continue;
+      }
+
+      const [product] = await trx('products').insert({
+        tenant_id: tenantId,
+        sku: row.sku,
+        name: row.name,
+        description: row.description || null,
+        category: row.category || null,
+        type: row.type,
+        unit_of_measure: row.unit_of_measure || null,
+        sale_price: row.sale_price ? parseFloat(row.sale_price) : null,
+        purchase_price: row.purchase_price ? parseFloat(row.purchase_price) : null,
+        reorder_point: row.reorder_point ? parseFloat(row.reorder_point) : null,
+        reorder_quantity: row.reorder_quantity ? parseFloat(row.reorder_quantity) : null,
+        is_active: true,
+      }).returning('*') as Record<string, unknown>[];
+
+      products.push(product);
+      imported++;
+    }
+
+    return { imported, errors, products };
+  }
+
+  async exportProductsCsv(trx: Knex.Transaction): Promise<string> {
+    const products = await trx('products')
+      .select('*')
+      .orderBy('created_at', 'desc') as Record<string, unknown>[];
+
+    const headers = ['id', 'sku', 'name', 'description', 'category', 'type', 'costing_method', 'unit_of_measure', 'sale_price', 'purchase_price', 'reorder_point', 'reorder_quantity', 'is_active'];
+    const csvLines = [headers.join(',')];
+
+    for (const product of products) {
+      const row = headers.map((h) => {
+        const val = product[h];
+        if (val === null || val === undefined) return '';
+        const str = String(val);
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+          return `"${str.replace(/"/g, '""')}"`;
+        }
+        return str;
+      });
+      csvLines.push(row.join(','));
+    }
+
+    return csvLines.join('\n');
+  }
+
   // ─── Products CRUD ───
 
   async createProduct(trx: Knex.Transaction, tenantId: number, data: CreateProductInput) {

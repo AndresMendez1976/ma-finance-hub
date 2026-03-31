@@ -1,6 +1,7 @@
 // Inventory controller — products, locations, adjustments, transfers, reports
-import { Controller, Get, Post, Put, Param, Body, Query, UseGuards, ParseIntPipe, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, Query, Res, UseGuards, ParseIntPipe, NotFoundException } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiQuery, ApiOperation } from '@nestjs/swagger';
+import { Response } from 'express';
 import { JwtAuthGuard, IdentityGuard, RolesGuard, CurrentPrincipal, Roles } from '../auth';
 import { AuthenticatedPrincipal } from '../auth/interfaces';
 import { TenantContextService } from '../auth/tenant-context.service';
@@ -56,6 +57,44 @@ export class InventoryController {
         limit: limit ? parseInt(limit, 10) : undefined,
       }),
     );
+  }
+
+  // Import products from CSV
+  @Post('products/import-csv')
+  @Roles('owner', 'admin', 'manager')
+  @ApiOperation({ summary: 'Import products from CSV data' })
+  async importProductsCsv(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Body() dto: { csv_data: string },
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
+      const result = await this.service.importProductsCsv(trx, p.tenantId, dto.csv_data);
+      await this.audit.log(trx, {
+        tenant_id: p.tenantId,
+        actor_subject: p.sub,
+        action: 'import_csv',
+        entity: 'products',
+        entity_id: 'batch',
+        metadata: { imported: String(result.imported), errors: String(result.errors.length) },
+      });
+      return result;
+    });
+  }
+
+  // Export all products as CSV
+  @Get('products/export-csv')
+  @Roles('owner', 'admin', 'manager', 'analyst')
+  @ApiOperation({ summary: 'Export all products as CSV' })
+  async exportProductsCsv(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Res() res: Response,
+  ) {
+    const csv = await this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.exportProductsCsv(trx),
+    );
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=products.csv');
+    res.send(csv);
   }
 
   // Get low stock products
