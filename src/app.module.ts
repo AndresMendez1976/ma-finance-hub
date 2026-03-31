@@ -16,6 +16,9 @@ import { PostingRulesModule } from './posting-rules';
 import { ReportsModule } from './reports';
 import { InvoicesModule } from './invoices';
 import { ExpensesModule } from './expenses';
+import { SettingsModule } from './settings';
+import { BankingModule } from './banking';
+import { ContactsModule } from './contacts';
 import { RequestIdMiddleware } from './common/request-id.middleware';
 import { RequestLoggerMiddleware } from './common/request-logger.middleware';
 import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
@@ -37,6 +40,9 @@ import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
     ReportsModule,
     InvoicesModule,
     ExpensesModule,
+    SettingsModule,
+    BankingModule,
+    ContactsModule,
   ],
   providers: [
     RedisThrottlerStorage,

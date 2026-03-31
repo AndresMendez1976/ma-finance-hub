@@ -5,18 +5,20 @@ import { cn } from '@/lib/cn';
 import {
   LayoutDashboard, BookOpen, List, FileText, Scale, Users, CreditCard, Zap,
   BarChart3, FileSpreadsheet, TrendingUp, Banknote, ChevronDown, ChevronRight, Receipt,
-  Wallet, Clock, ShoppingCart,
+  Wallet, Clock, ShoppingCart, Contact, Landmark, Settings,
 } from 'lucide-react';
 import { useState } from 'react';
 
 // Navigation items with optional sub-items for Reports section
 const nav = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/contacts', label: 'Contacts', icon: Contact },
   { href: '/chart-of-accounts', label: 'Charts', icon: BookOpen },
   { href: '/accounts', label: 'Accounts', icon: List },
   { href: '/journal', label: 'Journal', icon: FileText },
   { href: '/invoices', label: 'Invoices', icon: Receipt },
   { href: '/expenses', label: 'Expenses', icon: Wallet },
+  { href: '/bank-accounts', label: 'Banking', icon: Landmark },
   {
     label: 'Reports', icon: BarChart3, children: [
       { href: '/reports/balance-sheet', label: 'Balance Sheet', icon: FileSpreadsheet },
@@ -30,6 +32,7 @@ const nav = [
   { href: '/posting-rules', label: 'Posting Rules', icon: Zap },
   { href: '/admin', label: 'Admin', icon: Users },
   { href: '/plans', label: 'Plans', icon: CreditCard },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export function Sidebar() {
