@@ -103,11 +103,11 @@ export class LoginService {
     if (!resolvedTenantId) {
       // Find all active memberships for this user
       const membershipsResult: { rows: Record<string, unknown>[] } = await this.db.raw(
-        `SELECT tm.tenant_id, t.company_name
+        `SELECT tm.tenant_id, COALESCE(ts.company_name, CONCAT('Tenant ', tm.tenant_id::text)) as company_name
          FROM tenant_memberships tm
-         JOIN tenants t ON t.id = tm.tenant_id
+         JOIN tenants t ON t.id = tm.tenant_id LEFT JOIN tenant_settings ts ON ts.tenant_id = tm.tenant_id
          WHERE tm.user_id = ? AND tm.is_active = true
-         ORDER BY t.company_name`,
+         ORDER BY company_name`,
         [user.id as number],
       );
       const memberships = membershipsResult.rows;
