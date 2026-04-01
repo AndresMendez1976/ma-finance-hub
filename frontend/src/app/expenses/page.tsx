@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus, Eye, Check, Send, Ban } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   pending: 'bg-[#B4D4E7] text-[#5C4033]', approved: 'bg-[#D4A854] text-[#5C4033]',
@@ -98,10 +99,10 @@ export default function ExpensesPage() {
               {!loading && data?.data.map((exp) => (
                 <TR key={exp.id}>
                   <TD className="font-mono text-sm">{exp.expense_number}</TD>
-                  <TD>{exp.date}</TD>
+                  <TD>{formatDate(exp.date)}</TD>
                   <TD>{exp.vendor_name}</TD>
                   <TD>{exp.category}</TD>
-                  <TD className="text-right font-mono">${Number(exp.amount).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(exp.amount)}</TD>
                   <TD><span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[exp.status] || ''}`}>{exp.status}</span></TD>
                   <TD className="flex gap-1">
                     {exp.status === 'pending' && <Button size="sm" variant="ghost" title="Approve" onClick={() => doAction(exp.id, 'approve')}><Check className="h-4 w-4 text-[#2D6A4F]" /></Button>}

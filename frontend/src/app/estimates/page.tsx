@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus, Eye, FileText } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-[#B4D4E7] text-[#5C4033]',
@@ -92,9 +93,9 @@ export default function EstimatesPage() {
                 <TR key={est.id}>
                   <TD className="font-mono text-sm">{est.estimate_number}</TD>
                   <TD>{est.customer_name}</TD>
-                  <TD>{est.issue_date}</TD>
-                  <TD>{est.expiration_date}</TD>
-                  <TD className="text-right font-mono">${Number(est.total).toFixed(2)}</TD>
+                  <TD>{formatDate(est.issue_date)}</TD>
+                  <TD>{formatDate(est.expiration_date)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(est.total)}</TD>
                   <TD><span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[est.status] || ''}`}>{est.status}</span></TD>
                   <TD><Link href={`/estimates/${est.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
                 </TR>

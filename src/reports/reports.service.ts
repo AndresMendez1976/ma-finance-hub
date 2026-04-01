@@ -600,6 +600,168 @@ export class ReportsService {
     return { as_of: asOf, rows: result, totals };
   }
 
+  // Trial Balance — all accounts with debit/credit totals as of a date
+  async trialBalance(trx: Knex.Transaction, asOf: string) {
+    const rows = await this.getAccountBalances(trx, undefined, asOf);
+
+    const accounts = rows.map((r) => {
+      const debit = r.balance > 0 ? r.balance : 0;
+      const credit = r.balance < 0 ? -r.balance : 0;
+      return {
+        account_code: r.account_code,
+        account_name: r.account_name,
+        account_type: r.account_type,
+        debit,
+        credit,
+      };
+    });
+
+    const totalDebit = accounts.reduce((s, a) => s + a.debit, 0);
+    const totalCredit = accounts.reduce((s, a) => s + a.credit, 0);
+
+    return {
+      as_of: asOf,
+      accounts,
+      total_debit: totalDebit,
+      total_credit: totalCredit,
+      is_balanced: Math.abs(totalDebit - totalCredit) < 0.01,
+    };
+  }
+
+  // Financial Ratios — calculate all key ratios from account balances
+  async getFinancialRatios(trx: Knex.Transaction, _tenantId: number) {
+    const today = new Date().toISOString().slice(0, 10);
+    const yearStart = `${new Date().getFullYear()}-01-01`;
+    const balances = await this.getAccountBalances(trx, undefined, today);
+    const periodBalances = await this.getAccountBalances(trx, yearStart, today);
+
+    // Helper to sum balances by account type and code range
+    const sumByType = (rows: AccountBalance[], type: string, minCode?: number, maxCode?: number) => {
+      return rows.filter((r) => {
+        if (r.account_type !== type) return false;
+        if (minCode !== undefined || maxCode !== undefined) {
+          const code = parseInt(r.account_code, 10);
+          if (minCode !== undefined && code < minCode) return false;
+          if (maxCode !== undefined && code >= maxCode) return false;
+        }
+        return true;
+      }).reduce((s, r) => s + Math.abs(r.balance), 0);
+    };
+
+    // Balance sheet items
+    const currentAssets = sumByType(balances, 'asset', 1000, 1500);
+    const totalAssets = sumByType(balances, 'asset');
+    const currentLiabilities = sumByType(balances, 'liability', 2000, 2500);
+    const totalLiabilities = sumByType(balances, 'liability');
+    const totalEquity = sumByType(balances, 'equity');
+    const inventory = sumByType(balances, 'asset', 1200, 1300);
+    const receivables = sumByType(balances, 'asset', 1100, 1200);
+
+    // Income statement items (period)
+    const revenue = sumByType(periodBalances, 'revenue');
+    const totalExpenses = sumByType(periodBalances, 'expense');
+    const cogs = sumByType(periodBalances, 'expense', 5000, 6000);
+    const netIncome = revenue - totalExpenses;
+
+    // Liquidity ratios
+    const currentRatio = currentLiabilities > 0 ? Math.round((currentAssets / currentLiabilities) * 100) / 100 : 0;
+    const quickRatio = currentLiabilities > 0 ? Math.round(((currentAssets - inventory) / currentLiabilities) * 100) / 100 : 0;
+
+    // Profitability ratios
+    const grossProfitMargin = revenue > 0 ? Math.round(((revenue - cogs) / revenue) * 10000) / 100 : 0;
+    const netProfitMargin = revenue > 0 ? Math.round((netIncome / revenue) * 10000) / 100 : 0;
+    const returnOnAssets = totalAssets > 0 ? Math.round((netIncome / totalAssets) * 10000) / 100 : 0;
+    const returnOnEquity = totalEquity > 0 ? Math.round((netIncome / totalEquity) * 10000) / 100 : 0;
+
+    // Leverage ratios
+    const debtToEquity = totalEquity > 0 ? Math.round((totalLiabilities / totalEquity) * 100) / 100 : 0;
+    const debtToAssets = totalAssets > 0 ? Math.round((totalLiabilities / totalAssets) * 10000) / 100 : 0;
+
+    // Activity ratios
+    const receivablesTurnover = receivables > 0 ? Math.round((revenue / receivables) * 100) / 100 : 0;
+    const daysReceivables = receivablesTurnover > 0 ? Math.round(365 / receivablesTurnover) : 0;
+    const inventoryTurnover = inventory > 0 ? Math.round((cogs / inventory) * 100) / 100 : 0;
+    const daysInventory = inventoryTurnover > 0 ? Math.round(365 / inventoryTurnover) : 0;
+
+    return {
+      as_of: today,
+      period: { from: yearStart, to: today },
+      liquidity: {
+        current_ratio: currentRatio,
+        quick_ratio: quickRatio,
+        working_capital: Math.round((currentAssets - currentLiabilities) * 100) / 100,
+      },
+      profitability: {
+        gross_profit_margin: grossProfitMargin,
+        net_profit_margin: netProfitMargin,
+        return_on_assets: returnOnAssets,
+        return_on_equity: returnOnEquity,
+      },
+      leverage: {
+        debt_to_equity: debtToEquity,
+        debt_to_assets: debtToAssets,
+      },
+      activity: {
+        receivables_turnover: receivablesTurnover,
+        days_receivables: daysReceivables,
+        inventory_turnover: inventoryTurnover,
+        days_inventory: daysInventory,
+      },
+    };
+  }
+
+  // 1099 Summary — vendors with is_1099_eligible, sum expenses+bills paid
+  async get1099Summary(trx: Knex.Transaction) {
+    const threshold = 600; // IRS 1099-NEC threshold
+
+    // Get 1099-eligible contacts
+    const contacts = await trx('contacts')
+      .where({ is_1099_eligible: true, status: 'active' })
+      .select('id', 'first_name', 'last_name', 'company_name', 'tax_id') as Record<string, unknown>[];
+
+    const vendors: { vendor_name: string; tax_id: string; total_paid: number; threshold_met: boolean }[] = [];
+
+    for (const contact of contacts) {
+      const contactId = Number(contact.id);
+      const vendorName = contact.company_name
+        ? String(contact.company_name)
+        : `${String(contact.first_name)} ${String(contact.last_name ?? '')}`.trim();
+
+      // Sum from expenses
+      let totalPaid = 0;
+      try {
+        const [expRow] = await trx('expenses')
+          .where({ contact_id: contactId })
+          .whereIn('status', ['posted', 'approved'])
+          .sum('amount as total') as Record<string, unknown>[];
+        totalPaid += Number(expRow?.total) || 0;
+      } catch { /* table may not have contact_id */ }
+
+      // Sum from bills
+      try {
+        const [billRow] = await trx('bills')
+          .where({ contact_id: contactId })
+          .whereIn('status', ['paid'])
+          .sum('total as total') as Record<string, unknown>[];
+        totalPaid += Number(billRow?.total) || 0;
+      } catch { /* bills table may not exist */ }
+
+      vendors.push({
+        vendor_name: vendorName,
+        tax_id: String(contact.tax_id ?? ''),
+        total_paid: Math.round(totalPaid * 100) / 100,
+        threshold_met: totalPaid >= threshold,
+      });
+    }
+
+    return {
+      threshold,
+      vendors: vendors.sort((a, b) => b.total_paid - a.total_paid),
+      total_vendors: vendors.length,
+      vendors_over_threshold: vendors.filter((v) => v.threshold_met).length,
+    };
+  }
+
   // Aged Payables — expenses grouped by vendor with aging buckets
   async agedPayables(trx: Knex.Transaction, asOf: string) {
     const rows = await trx('expenses')

@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { api } from '@/lib/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { formatCurrency } from '@/lib/format';
 
 // Backend response shape from GET /crm/dashboard
 interface StageValue { stage_name: string; count: string; total_value: string; weighted_value: string; sort_order: number }
@@ -31,10 +32,10 @@ export default function CrmDashboardPage() {
   const d = data ?? { pipeline_by_stage: [], open_pipeline: { count: 0, total_value: 0, weighted_value: 0 }, win_rate: 0, avg_deal_size: 0, won: { count: 0, total_value: 0 }, lost: { count: 0, total_value: 0 } };
 
   const kpiCards = [
-    { label: 'Pipeline Value', value: `$${d.open_pipeline.total_value.toLocaleString()}`, color: '#5C4033' },
-    { label: 'Weighted Value', value: `$${d.open_pipeline.weighted_value.toLocaleString()}`, color: '#2D6A4F' },
+    { label: 'Pipeline Value', value: formatCurrency(d.open_pipeline.total_value), color: '#5C4033' },
+    { label: 'Weighted Value', value: formatCurrency(d.open_pipeline.weighted_value), color: '#2D6A4F' },
     { label: 'Win Rate', value: `${d.win_rate.toFixed(1)}%`, color: '#D4A854' },
-    { label: 'Avg Deal Size', value: `$${d.avg_deal_size.toLocaleString()}`, color: '#8B7355' },
+    { label: 'Avg Deal Size', value: formatCurrency(d.avg_deal_size), color: '#8B7355' },
   ];
 
   return (
@@ -80,8 +81,8 @@ export default function CrmDashboardPage() {
                   <TR key={i}>
                     <TD className="text-sm font-medium">{s.stage_name}</TD>
                     <TD className="text-right font-mono text-sm">{Number(s.count)}</TD>
-                    <TD className="text-right font-mono text-sm">${Number(s.total_value).toLocaleString()}</TD>
-                    <TD className="text-right font-mono text-sm">${Number(s.weighted_value).toLocaleString()}</TD>
+                    <TD className="text-right font-mono text-sm">{formatCurrency(s.total_value)}</TD>
+                    <TD className="text-right font-mono text-sm">{formatCurrency(s.weighted_value)}</TD>
                   </TR>
                 ))}
                 {!d.pipeline_by_stage.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No opportunities yet</TD></TR>}

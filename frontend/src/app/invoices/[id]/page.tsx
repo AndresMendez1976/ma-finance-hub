@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Send, DollarSign, Ban, Download, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatCurrency, formatDateTime } from '@/lib/format';
 
 // Status colors
 const STATUS_COLORS: Record<string, string> = {
@@ -160,9 +161,9 @@ export default function InvoiceDetailPage() {
                 {invoice.customer_address && <p className="mt-1 text-sm text-[#8B7355] whitespace-pre-line">{invoice.customer_address}</p>}
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Issue Date</span><span className="text-sm font-medium">{invoice.issue_date}</span></div>
-                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Due Date</span><span className="text-sm font-medium">{invoice.due_date}</span></div>
-                {invoice.paid_date && <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Paid Date</span><span className="text-sm font-medium">{invoice.paid_date}</span></div>}
+                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Issue Date</span><span className="text-sm font-medium">{formatDate(invoice.issue_date)}</span></div>
+                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Due Date</span><span className="text-sm font-medium">{formatDate(invoice.due_date)}</span></div>
+                {invoice.paid_date && <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Paid Date</span><span className="text-sm font-medium">{formatDate(invoice.paid_date)}</span></div>}
                 {invoice.journal_entry_id && <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Journal Entry</span><span className="text-sm font-medium">#{invoice.journal_entry_id}</span></div>}
               </div>
             </div>
@@ -176,8 +177,8 @@ export default function InvoiceDetailPage() {
                     <TR key={line.id}>
                       <TD>{line.description}</TD>
                       <TD className="text-right font-mono">{Number(line.quantity).toFixed(2)}</TD>
-                      <TD className="text-right font-mono">${Number(line.unit_price).toFixed(2)}</TD>
-                      <TD className="text-right font-mono">${Number(line.amount).toFixed(2)}</TD>
+                      <TD className="text-right font-mono">{formatCurrency(line.unit_price)}</TD>
+                      <TD className="text-right font-mono">{formatCurrency(line.amount)}</TD>
                     </TR>
                   ))}
                 </TBody>
@@ -187,15 +188,15 @@ export default function InvoiceDetailPage() {
             {/* Totals */}
             <div className="mt-4 border-t border-[#E8DCC8] pt-4">
               <div className="ml-auto w-64 space-y-1">
-                <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Subtotal</span><span className="font-mono">${Number(invoice.subtotal).toFixed(2)}</span></div>
+                <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Subtotal</span><span className="font-mono">{formatCurrency(invoice.subtotal)}</span></div>
                 {Number(invoice.tax_rate) > 0 && (
-                  <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Tax ({Number(invoice.tax_rate)}%)</span><span className="font-mono">${Number(invoice.tax_amount).toFixed(2)}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Tax ({Number(invoice.tax_rate)}%)</span><span className="font-mono">{formatCurrency(invoice.tax_amount)}</span></div>
                 )}
                 <div className="flex justify-between border-t border-[#E8DCC8] pt-1 text-lg font-bold">
-                  <span className="text-[#5C4033]">Total</span><span className="font-mono">${Number(invoice.total).toFixed(2)}</span>
+                  <span className="text-[#5C4033]">Total</span><span className="font-mono">{formatCurrency(invoice.total)}</span>
                 </div>
                 {Number(invoice.paid_amount) > 0 && (
-                  <div className="flex justify-between text-sm text-[#2D6A4F]"><span>Paid</span><span className="font-mono">${Number(invoice.paid_amount).toFixed(2)}</span></div>
+                  <div className="flex justify-between text-sm text-[#2D6A4F]"><span>Paid</span><span className="font-mono">{formatCurrency(invoice.paid_amount)}</span></div>
                 )}
               </div>
             </div>
@@ -214,7 +215,7 @@ export default function InvoiceDetailPage() {
           <CardHeader><CardTitle className="text-[#5C4033]">Summary</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="text-center">
-              <p className="text-3xl font-bold text-[#5C4033]">${Number(invoice.total).toFixed(2)}</p>
+              <p className="text-3xl font-bold text-[#5C4033]">{formatCurrency(invoice.total)}</p>
               <p className="text-xs text-[#8B7355]">{invoice.lines.length} line item{invoice.lines.length !== 1 ? 's' : ''}</p>
             </div>
             <div className="rounded-md bg-[#E8DCC8]/40 p-3 text-center">
@@ -223,7 +224,7 @@ export default function InvoiceDetailPage() {
               </span>
             </div>
             <div className="text-xs text-[#8B7355]">
-              <p>Created: {new Date(invoice.created_at).toLocaleString()}</p>
+              <p>Created: {formatDateTime(invoice.created_at)}</p>
             </div>
           </CardContent>
         </Card>

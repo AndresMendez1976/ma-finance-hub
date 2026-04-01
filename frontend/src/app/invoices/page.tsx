@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus, FileText, Eye } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 // Status colors matching the warm palette
 const STATUS_COLORS: Record<string, string> = {
@@ -113,9 +114,9 @@ export default function InvoicesPage() {
                 <TR key={inv.id}>
                   <TD className="font-mono text-sm">{inv.invoice_number}</TD>
                   <TD>{inv.customer_name}</TD>
-                  <TD>{inv.issue_date}</TD>
-                  <TD>{inv.due_date}</TD>
-                  <TD className="text-right font-mono">${Number(inv.total).toFixed(2)}</TD>
+                  <TD>{formatDate(inv.issue_date)}</TD>
+                  <TD>{formatDate(inv.due_date)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(inv.total)}</TD>
                   <TD>
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[inv.status] || ''}`}>
                       {inv.status}

@@ -22,7 +22,8 @@ export const KNEX_CONNECTION = 'KNEX_CONNECTION';
                 ? { rejectUnauthorized: false }
                 : false,
           },
-          pool: { min: 2, max: 10 },
+          pool: { min: 2, max: 30 },
+          acquireConnectionTimeout: 10000,
         });
       },
       inject: [ConfigService],

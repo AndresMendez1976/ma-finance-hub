@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { useApi } from '@/hooks/use-api';
 import { api } from '@/lib/api';
 import { Send, Check, X, FileText, Download } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-[#B4D4E7] text-[#5C4033]', sent: 'bg-[#D4A854] text-[#5C4033]',
@@ -76,8 +77,8 @@ export default function EstimateDetailPage() {
         <Card className="border-[#E8DCC8]">
           <CardHeader><CardTitle>Details</CardTitle></CardHeader>
           <CardContent className="space-y-1 text-sm">
-            <div className="flex justify-between"><span className="text-[#8B7355]">Issue Date</span><span>{est.issue_date}</span></div>
-            <div className="flex justify-between"><span className="text-[#8B7355]">Expiration</span><span>{est.expiration_date}</span></div>
+            <div className="flex justify-between"><span className="text-[#8B7355]">Issue Date</span><span>{formatDate(est.issue_date)}</span></div>
+            <div className="flex justify-between"><span className="text-[#8B7355]">Expiration</span><span>{formatDate(est.expiration_date)}</span></div>
             <div className="flex justify-between"><span className="text-[#8B7355]">Tax Rate</span><span>{est.tax_rate}%</span></div>
             {est.notes && <div className="mt-2 rounded bg-[#E8DCC8]/30 p-2 text-[#8B7355]">{est.notes}</div>}
           </CardContent>
@@ -94,16 +95,16 @@ export default function EstimateDetailPage() {
                 <TR key={line.id}>
                   <TD>{line.description}</TD>
                   <TD className="text-right">{line.quantity}</TD>
-                  <TD className="text-right font-mono">${Number(line.unit_price).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(line.line_total).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(line.unit_price)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(line.line_total)}</TD>
                 </TR>
               ))}
             </TBody>
           </Table>
           <div className="mt-4 border-t border-[#E8DCC8] pt-4 text-right">
-            <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Subtotal:</span><span className="w-28 font-mono">${Number(est.subtotal).toFixed(2)}</span></div>
-            {Number(est.tax_amount) > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Tax:</span><span className="w-28 font-mono">${Number(est.tax_amount).toFixed(2)}</span></div>}
-            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#5C4033]">Total:</span><span className="w-28 font-mono">${Number(est.total).toFixed(2)}</span></div>
+            <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Subtotal:</span><span className="w-28 font-mono">{formatCurrency(est.subtotal)}</span></div>
+            {Number(est.tax_amount) > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Tax:</span><span className="w-28 font-mono">{formatCurrency(est.tax_amount)}</span></div>}
+            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#5C4033]">Total:</span><span className="w-28 font-mono">{formatCurrency(est.total)}</span></div>
           </div>
         </CardContent>
       </Card>

@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { ArrowLeft, Upload, Check, X } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 interface Txn { id: number; date: string; description: string; amount: string; type: string; reference: string | null; reconciled: boolean; journal_entry_id: number | null }
 interface TxnResponse { data: Txn[]; pagination: { page: number; total: number; pages: number } }
@@ -64,7 +65,7 @@ export default function BankAccountDetailPage() {
     } catch (e: unknown) { setImportResult((e as Error).message); }
   };
 
-  const fmt = (n: number) => `$${Math.abs(n).toFixed(2)}`;
+  const fmt = (n: number) => formatCurrency(Math.abs(n));
 
   return (
     <Shell>
@@ -116,11 +117,11 @@ export default function BankAccountDetailPage() {
               <TBody>
                 {txns?.data.map((t) => (
                   <TR key={t.id}>
-                    <TD>{t.date}</TD>
+                    <TD>{formatDate(t.date)}</TD>
                     <TD>{t.description}</TD>
                     <TD><Badge variant={Number(t.amount) >= 0 ? 'success' : 'warning'}>{t.type}</Badge></TD>
                     <TD className={`text-right font-mono font-bold ${Number(t.amount) >= 0 ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>
-                      {Number(t.amount) >= 0 ? '+' : ''}{Number(t.amount).toFixed(2)}
+                      {Number(t.amount) >= 0 ? '+' : '-'}{formatCurrency(Math.abs(Number(t.amount)))}
                     </TD>
                     <TD className="text-xs">{t.reference || '—'}</TD>
                     <TD>{t.reconciled ? <Badge variant="success">Yes</Badge> : <Badge variant="info">No</Badge>}</TD>

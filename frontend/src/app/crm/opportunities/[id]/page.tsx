@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { useParams } from 'next/navigation';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 interface Opportunity {
   id: number; title: string; contact_name: string; value: number; currency: string;
@@ -64,8 +65,8 @@ export default function OpportunityDetailPage() {
               <dt className="text-[#8B7355]">Contact</dt><dd>{opp.contact_name}</dd>
               <dt className="text-[#8B7355]">Pipeline</dt><dd>{opp.pipeline_name}</dd>
               <dt className="text-[#8B7355]">Stage</dt><dd>{opp.stage_name}</dd>
-              <dt className="text-[#8B7355]">Value</dt><dd className="font-mono">{opp.currency} {Number(opp.value).toLocaleString()}</dd>
-              <dt className="text-[#8B7355]">Expected Close</dt><dd>{opp.expected_close_date}</dd>
+              <dt className="text-[#8B7355]">Value</dt><dd className="font-mono">{formatCurrency(opp.value, opp.currency)}</dd>
+              <dt className="text-[#8B7355]">Expected Close</dt><dd>{formatDate(opp.expected_close_date)}</dd>
               <dt className="text-[#8B7355]">Source</dt><dd>{opp.source}</dd>
               <dt className="text-[#8B7355]">Status</dt><dd>{opp.status}</dd>
               <dt className="text-[#8B7355]">Assigned To</dt><dd>{opp.assigned_to}</dd>
@@ -99,7 +100,7 @@ export default function OpportunityDetailPage() {
             <THead><TR><TH>Date</TH><TH>Type</TH><TH>Title</TH><TH>Description</TH></TR></THead>
             <TBody>
               {activities.map((a) => (
-                <TR key={a.id}><TD>{a.date}</TD><TD className="capitalize">{a.type}</TD><TD>{a.title}</TD><TD className="text-sm text-[#8B7355]">{a.description}</TD></TR>
+                <TR key={a.id}><TD>{formatDate(a.date)}</TD><TD className="capitalize">{a.type}</TD><TD>{a.title}</TD><TD className="text-sm text-[#8B7355]">{a.description}</TD></TR>
               ))}
               {!activities.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No activities</TD></TR>}
             </TBody>

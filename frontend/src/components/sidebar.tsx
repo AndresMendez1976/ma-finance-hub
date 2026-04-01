@@ -29,9 +29,12 @@ const nav: NavItem[] = [
       { href: '/invoices', label: 'All Invoices', icon: Receipt },
       { href: '/estimates', label: 'Estimates', icon: FileCheck },
       { href: '/recurring-invoices', label: 'Recurring', icon: RefreshCw },
+      { href: '/credit-notes', label: 'Credit Notes', icon: FileText },
     ],
   },
+  { href: '/bills', label: 'Bills', icon: FileText },
   { href: '/expenses', label: 'Expenses', icon: Wallet },
+  { href: '/mileage', label: 'Mileage', icon: MapPin },
   { href: '/purchase-orders', label: 'Purchases', icon: ClipboardList },
   {
     label: 'Banking', icon: Landmark, key: 'banking', children: [
@@ -62,6 +65,7 @@ const nav: NavItem[] = [
   {
     label: 'Assets', icon: Building, key: 'assets', children: [
       { href: '/fixed-assets', label: 'Fixed Assets', icon: Building },
+      { href: '/equipment', label: 'Equipment', icon: Wrench },
       { href: '/maintenance', label: 'Maintenance', icon: Wrench },
       { href: '/maintenance/schedules', label: 'Schedules', icon: CalendarClock },
     ],
@@ -76,6 +80,7 @@ const nav: NavItem[] = [
     label: 'Projects', icon: Briefcase, key: 'projects', children: [
       { href: '/projects', label: 'Projects', icon: Briefcase },
       { href: '/time-tracking', label: 'Time Tracking', icon: Timer },
+      { href: '/cost-codes', label: 'Cost Codes', icon: List },
     ],
   },
   { href: '/budgets', label: 'Budgets', icon: HardHat },
@@ -97,6 +102,12 @@ const nav: NavItem[] = [
       { href: '/reports/sales-pipeline', label: 'Sales Pipeline', icon: Target },
       { href: '/reports/project-profitability', label: 'Project Profit', icon: Briefcase },
       { href: '/reports/time-summary', label: 'Time Summary', icon: Timer },
+      { href: '/reports/job-cost-detail', label: 'Job Cost', icon: List },
+      { href: '/reports/wip', label: 'WIP Report', icon: BarChart3 },
+      { href: '/reports/equipment-cost', label: 'Equipment Cost', icon: Wrench },
+      { href: '/reports/mileage-summary', label: 'Mileage', icon: MapPin },
+      { href: '/reports/1099-summary', label: '1099 Summary', icon: FileText },
+      { href: '/reports/financial-ratios', label: 'Ratios', icon: TrendingUp },
     ],
   },
   { href: '/notifications', label: 'Notifications', icon: Bell },

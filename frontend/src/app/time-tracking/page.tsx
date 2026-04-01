@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus, Timer, ChevronLeft, ChevronRight } from 'lucide-react';
+import { formatDate } from '@/lib/format';
 
 interface TimeEntry {
   id: number; project_id: number; project_name: string; date: string;
@@ -83,7 +84,7 @@ export default function TimeTrackingPage() {
         <Button size="sm" variant="outline" onClick={() => { setWeekOffset(weekOffset - 1); setInitialLoad(true); }}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <span className="text-sm font-medium text-[#5C4033]">{weekDates[0]} to {weekDates[6]}</span>
+        <span className="text-sm font-medium text-[#5C4033]">{formatDate(weekDates[0])} to {formatDate(weekDates[6])}</span>
         <Button size="sm" variant="outline" onClick={() => { setWeekOffset(weekOffset + 1); setInitialLoad(true); }}>
           <ChevronRight className="h-4 w-4" />
         </Button>

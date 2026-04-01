@@ -7,6 +7,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { Plus, Pause, Play, Zap } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-[#2D6A4F] text-white',
@@ -74,13 +75,13 @@ export default function RecurringInvoicesPage() {
                   <TD className="font-medium">{ri.template_name}</TD>
                   <TD>{ri.customer_name}</TD>
                   <TD className="capitalize">{ri.frequency}</TD>
-                  <TD>{ri.next_run_date}</TD>
+                  <TD>{formatDate(ri.next_run_date)}</TD>
                   <TD>
                     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[ri.status] || ''}`}>
                       {ri.status}
                     </span>
                   </TD>
-                  <TD className="text-right font-mono">${Number(ri.total).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(ri.total)}</TD>
                   <TD>
                     <div className="flex gap-1">
                       <Button size="sm" variant="ghost" onClick={() => toggleStatus(ri.id, ri.status)} title={ri.status === 'active' ? 'Pause' : 'Resume'}>

@@ -6,6 +6,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { api } from '@/lib/api';
 import { useParams } from 'next/navigation';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { formatCurrency } from '@/lib/format';
 
 interface BudgetLine {
   account_name: string; budgeted: number; actual: number;
@@ -65,9 +66,9 @@ export default function BudgetDetailPage() {
               {budget.lines.map((l, i) => (
                 <TR key={i}>
                   <TD>{l.account_name}</TD>
-                  <TD className="text-right font-mono">${l.budgeted.toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${l.actual.toFixed(2)}</TD>
-                  <TD className={`text-right font-mono ${l.favorable ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>${l.variance.toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(l.budgeted)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(l.actual)}</TD>
+                  <TD className={`text-right font-mono ${l.favorable ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>{formatCurrency(l.variance)}</TD>
                   <TD className={`text-right ${l.favorable ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>{l.variance_pct.toFixed(1)}%</TD>
                   <TD>{l.favorable ? <span className="text-[#2D6A4F] font-semibold">Yes</span> : <span className="text-[#E07A5F] font-semibold">No</span>}</TD>
                 </TR>

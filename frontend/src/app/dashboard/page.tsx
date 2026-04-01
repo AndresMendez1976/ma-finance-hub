@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useApi } from '@/hooks/use-api';
 import { DollarSign, TrendingDown, TrendingUp, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { formatCurrency, formatDate } from '@/lib/format';
 
 // Interfaces for KPI data
 interface KpiData {
@@ -27,7 +28,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 // Format currency
-const fmt = (n: number) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const fmt = (n: number) => formatCurrency(n);
 
 export default function DashboardPage() {
   const { context } = useAuth();
@@ -161,10 +162,10 @@ export default function DashboardPage() {
                   <div key={inv.id} className="flex items-center justify-between rounded-md border border-[#E8DCC8] p-3">
                     <div>
                       <p className="font-medium text-[#5C4033]">{inv.customer_name}</p>
-                      <p className="text-xs text-[#8B7355]">{inv.invoice_number} &middot; Due {inv.due_date}</p>
+                      <p className="text-xs text-[#8B7355]">{inv.invoice_number} &middot; Due {formatDate(inv.due_date)}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-mono font-bold text-[#E07A5F]">${Number(inv.total).toFixed(2)}</p>
+                      <p className="font-mono font-bold text-[#E07A5F]">{formatCurrency(inv.total)}</p>
                       <p className="text-xs text-[#E07A5F]">{inv.days_overdue} days overdue</p>
                     </div>
                   </div>
@@ -186,10 +187,10 @@ export default function DashboardPage() {
                   <div key={exp.id} className="flex items-center justify-between rounded-md border border-[#E8DCC8] p-3">
                     <div>
                       <p className="font-medium text-[#5C4033]">{exp.vendor_name}</p>
-                      <p className="text-xs text-[#8B7355]">{exp.expense_number} &middot; {exp.category} &middot; {exp.date}</p>
+                      <p className="text-xs text-[#8B7355]">{exp.expense_number} &middot; {exp.category} &middot; {formatDate(exp.date)}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-mono font-bold text-[#5C4033]">${Number(exp.amount).toFixed(2)}</p>
+                      <p className="font-mono font-bold text-[#5C4033]">{formatCurrency(exp.amount)}</p>
                       <Badge variant={exp.status === 'posted' ? 'success' : exp.status === 'approved' ? 'warning' : 'info'}>{exp.status}</Badge>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 interface Opportunity {
   id: number; title: string; contact_name: string; value: number;
@@ -57,7 +58,7 @@ export default function CrmPage() {
             <div key={stage.id} className="min-w-[280px] flex-shrink-0">
               <div className="mb-2 rounded-t-lg px-3 py-2" style={{ backgroundColor: stage.color || '#E8DCC8' }}>
                 <h3 className="text-sm font-semibold text-white">{stage.name}</h3>
-                <p className="text-xs text-white/80">${total.toLocaleString()}</p>
+                <p className="text-xs text-white/80">{formatCurrency(total)}</p>
               </div>
               <div className="space-y-2">
                 {stageOpps.map((opp) => (
@@ -66,8 +67,8 @@ export default function CrmPage() {
                       <Link href={`/crm/opportunities/${opp.id}`} className="text-sm font-semibold text-[#5C4033] hover:underline">{opp.title}</Link>
                       <p className="text-xs text-[#8B7355]">{opp.contact_name}</p>
                       <div className="mt-1 flex items-center justify-between">
-                        <span className="text-sm font-mono text-[#2D6A4F]">${Number(opp.value).toLocaleString()}</span>
-                        <span className="text-xs text-[#8B7355]">{opp.expected_close_date}</span>
+                        <span className="text-sm font-mono text-[#2D6A4F]">{formatCurrency(opp.value)}</span>
+                        <span className="text-xs text-[#8B7355]">{formatDate(opp.expected_close_date)}</span>
                       </div>
                       {moving === opp.id ? (
                         <div className="mt-2 flex flex-wrap gap-1">

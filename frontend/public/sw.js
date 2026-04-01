@@ -8,10 +8,14 @@ const STATIC_ASSETS = [
   '/icons/icon-512.png',
 ];
 
-// Install — cache static shell
+// Install — cache static shell (with try/catch to avoid blocking on missing resources)
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.addAll(STATIC_ASSETS).catch((err) => {
+        console.warn('SW: some assets failed to cache, continuing:', err);
+      })
+    )
   );
   self.skipWaiting();
 });

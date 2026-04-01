@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   scheduled: 'bg-[#B4D4E7] text-[#5C4033]',
@@ -68,9 +69,9 @@ export default function MaintenancePage() {
               {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
               {!loading && data?.data.map((m) => (
                 <TR key={m.id}>
-                  <TD>{m.title}</TD><TD>{m.asset_name}</TD><TD>{m.type}</TD><TD>{m.scheduled_date}</TD>
+                  <TD>{m.title}</TD><TD>{m.asset_name}</TD><TD>{m.type}</TD><TD>{formatDate(m.scheduled_date)}</TD>
                   <TD><span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[m.status] || ''}`}>{m.status.replace('_', ' ')}</span></TD>
-                  <TD className="text-right font-mono">${Number(m.cost).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(m.cost)}</TD>
                 </TR>
               ))}
               {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No records found</TD></TR>}

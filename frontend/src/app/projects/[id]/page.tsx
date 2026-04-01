@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useApi } from '@/hooks/use-api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { formatDate, formatCurrency } from '@/lib/format';
 
-const fmt = (n: number) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const fmt = (n: number) => formatCurrency(n);
 
 interface TimeEntry { id: number; date: string; description: string; duration_minutes: number; billable: boolean; hourly_rate: string; user_name: string; }
 interface Expense { id: number; expense_number: string; description: string; amount: string; date: string; category: string; }
@@ -78,8 +79,8 @@ export default function ProjectDetailPage() {
           <Card className="border-[#E8DCC8] md:col-span-2"><CardHeader><CardTitle>Details</CardTitle></CardHeader>
             <CardContent className="space-y-1 text-sm">
               <div className="flex justify-between"><span className="text-[#8B7355]">Hourly Rate</span><span>{fmt(Number(proj.hourly_rate))}</span></div>
-              <div className="flex justify-between"><span className="text-[#8B7355]">Start</span><span>{proj.start_date || '---'}</span></div>
-              <div className="flex justify-between"><span className="text-[#8B7355]">End</span><span>{proj.end_date || '---'}</span></div>
+              <div className="flex justify-between"><span className="text-[#8B7355]">Start</span><span>{proj.start_date ? formatDate(proj.start_date) : '---'}</span></div>
+              <div className="flex justify-between"><span className="text-[#8B7355]">End</span><span>{proj.end_date ? formatDate(proj.end_date) : '---'}</span></div>
               {proj.notes && <div className="mt-2 rounded bg-[#E8DCC8]/30 p-2 text-[#8B7355]">{proj.notes}</div>}
             </CardContent></Card>
         </div>
@@ -93,7 +94,7 @@ export default function ProjectDetailPage() {
               <TBody>
                 {proj.time_entries?.map((te) => (
                   <TR key={te.id}>
-                    <TD>{te.date}</TD><TD>{te.user_name}</TD><TD>{te.description}</TD>
+                    <TD>{formatDate(te.date)}</TD><TD>{te.user_name}</TD><TD>{te.description}</TD>
                     <TD className="text-right font-mono">{(te.duration_minutes / 60).toFixed(1)}</TD>
                     <TD>{te.billable ? <span className="text-[#2D6A4F] font-semibold">Yes</span> : <span className="text-[#8B7355]">No</span>}</TD>
                     <TD className="text-right font-mono">{fmt(Number(te.hourly_rate))}</TD>
@@ -116,7 +117,7 @@ export default function ProjectDetailPage() {
               <TBody>
                 {proj.expenses?.map((exp) => (
                   <TR key={exp.id}>
-                    <TD>{exp.date}</TD><TD className="font-mono text-sm">{exp.expense_number}</TD>
+                    <TD>{formatDate(exp.date)}</TD><TD className="font-mono text-sm">{exp.expense_number}</TD>
                     <TD>{exp.description}</TD><TD>{exp.category}</TD>
                     <TD className="text-right font-mono">{fmt(Number(exp.amount))}</TD>
                   </TR>

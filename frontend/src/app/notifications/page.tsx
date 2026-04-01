@@ -6,6 +6,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { CheckCheck } from 'lucide-react';
+import { formatDate } from '@/lib/format';
 
 interface Notification {
   id: number; created_at: string; type: string; category: string;
@@ -78,7 +79,7 @@ export default function NotificationsPage() {
                     className={`cursor-pointer hover:bg-[#E8DCC8]/20 ${!n.is_read ? 'bg-[#E8DCC8]/10 font-medium' : ''}`}
                     onClick={() => !n.is_read && markRead(n.id)}
                   >
-                    <TD className="text-sm text-[#8B7355] whitespace-nowrap">{new Date(n.created_at).toLocaleDateString()}</TD>
+                    <TD className="text-sm text-[#8B7355] whitespace-nowrap">{formatDate(n.created_at)}</TD>
                     <TD><span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${TYPE_COLORS[n.type] || 'bg-[#E8DCC8] text-[#5C4033]'}`}>{n.type}</span></TD>
                     <TD className="text-sm text-[#8B7355]">{n.category}</TD>
                     <TD className="text-[#5C4033]">{n.title}</TD>

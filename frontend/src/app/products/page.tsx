@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { api } from '@/lib/api';
 import { Plus, Eye } from 'lucide-react';
+import { formatCurrency } from '@/lib/format';
 
 interface Product { id: number; sku: string; name: string; product_type: string; sale_price: string; stock_on_hand: number; reorder_point: number }
 interface ProductResponse { data: Product[]; pagination: { page: number; total: number; pages: number } }
@@ -75,7 +76,7 @@ export default function ProductsPage() {
                   <TD className="font-mono text-sm">{p.sku}</TD>
                   <TD className="font-medium">{p.name}</TD>
                   <TD><Badge variant={p.product_type === 'inventory' ? 'success' : p.product_type === 'service' ? 'info' : 'warning'}>{p.product_type}</Badge></TD>
-                  <TD className="text-right font-mono">${Number(p.sale_price).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(p.sale_price)}</TD>
                   <TD className="text-right font-mono">{p.product_type === 'service' ? '—' : p.stock_on_hand}</TD>
                   <TD className="text-right font-mono">{p.reorder_point > 0 ? p.reorder_point : '—'}</TD>
                   <TD><Link href={`/products/${p.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>

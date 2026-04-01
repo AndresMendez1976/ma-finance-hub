@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus, Eye } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-[#B4D4E7] text-[#5C4033]', sent: 'bg-[#D4A854] text-[#5C4033]',
@@ -63,8 +64,8 @@ export default function PurchaseOrdersPage() {
             {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
             {!loading && data?.data.map((po) => (
               <TR key={po.id}>
-                <TD className="font-mono text-sm">{po.po_number}</TD><TD>{po.vendor_name}</TD><TD>{po.order_date}</TD><TD>{po.expected_delivery_date || '—'}</TD>
-                <TD className="text-right font-mono">${Number(po.total).toFixed(2)}</TD>
+                <TD className="font-mono text-sm">{po.po_number}</TD><TD>{po.vendor_name}</TD><TD>{formatDate(po.order_date)}</TD><TD>{po.expected_delivery_date ? formatDate(po.expected_delivery_date) : '—'}</TD>
+                <TD className="text-right font-mono">{formatCurrency(po.total)}</TD>
                 <TD><span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[po.status] || ''}`}>{po.status}</span></TD>
                 <TD><Link href={`/purchase-orders/${po.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
               </TR>))}

@@ -8,6 +8,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { Plus, DollarSign, Eye, AlertTriangle } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-[#B4D4E7] text-[#5C4033]',
@@ -70,16 +71,16 @@ export default function PayrollPage() {
               {!loading && data?.data.map((run) => (
                 <TR key={run.id}>
                   <TD className="font-mono text-sm">{run.run_number}</TD>
-                  <TD>{run.period_start}</TD>
-                  <TD>{run.period_end}</TD>
-                  <TD>{run.pay_date}</TD>
+                  <TD>{formatDate(run.period_start)}</TD>
+                  <TD>{formatDate(run.period_end)}</TD>
+                  <TD>{formatDate(run.pay_date)}</TD>
                   <TD>
                     <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[run.status] || ''}`}>
                       {run.status}
                     </span>
                   </TD>
-                  <TD className="text-right font-mono">${Number(run.total_gross).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(run.total_net).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(run.total_gross)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(run.total_net)}</TD>
                   <TD>
                     <Link href={`/payroll/${run.id}`}>
                       <Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button>

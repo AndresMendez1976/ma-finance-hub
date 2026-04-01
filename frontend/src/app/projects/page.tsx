@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus, Eye, FolderOpen } from 'lucide-react';
+import { formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-[#2D6A4F] text-white', completed: 'bg-[#8B7355] text-white',
@@ -19,7 +20,7 @@ interface Project {
   budget_amount: string; total_revenue: string; total_cost: string; profit: string;
 }
 
-const fmt = (n: number) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const fmt = (n: number) => formatCurrency(n);
 
 export default function ProjectsPage() {
   const [data, setData] = useState<Project[]>([]);

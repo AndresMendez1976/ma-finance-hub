@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-[#2D6A4F] text-white',
@@ -74,9 +75,9 @@ export default function FixedAssetsPage() {
               {!loading && data?.data.map((a) => (
                 <TR key={a.id}>
                   <TD><Link href={`/fixed-assets/${a.id}`} className="font-mono text-sm text-[#2D6A4F] underline">{a.asset_number}</Link></TD>
-                  <TD>{a.name}</TD><TD>{a.category}</TD><TD>{a.purchase_date}</TD>
-                  <TD className="text-right font-mono">${Number(a.purchase_price).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(a.book_value).toFixed(2)}</TD>
+                  <TD>{a.name}</TD><TD>{a.category}</TD><TD>{formatDate(a.purchase_date)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(a.purchase_price)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(a.book_value)}</TD>
                   <TD><span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[a.status] || ''}`}>{a.status.replace('_', ' ')}</span></TD>
                 </TR>
               ))}

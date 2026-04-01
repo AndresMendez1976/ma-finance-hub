@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { useParams } from 'next/navigation';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 interface Asset {
   id: number; asset_number: string; name: string; category: string; status: string;
@@ -52,10 +53,10 @@ export default function AssetDetailPage() {
             <dl className="grid grid-cols-2 gap-2 text-sm">
               <dt className="text-[#8B7355]">Category</dt><dd>{asset.category}</dd>
               <dt className="text-[#8B7355]">Status</dt><dd>{asset.status}</dd>
-              <dt className="text-[#8B7355]">Purchase Date</dt><dd>{asset.purchase_date}</dd>
-              <dt className="text-[#8B7355]">Purchase Price</dt><dd className="font-mono">${Number(asset.purchase_price).toFixed(2)}</dd>
-              <dt className="text-[#8B7355]">Book Value</dt><dd className="font-mono">${Number(asset.book_value).toFixed(2)}</dd>
-              <dt className="text-[#8B7355]">Salvage Value</dt><dd className="font-mono">${Number(asset.salvage_value).toFixed(2)}</dd>
+              <dt className="text-[#8B7355]">Purchase Date</dt><dd>{formatDate(asset.purchase_date)}</dd>
+              <dt className="text-[#8B7355]">Purchase Price</dt><dd className="font-mono">{formatCurrency(asset.purchase_price)}</dd>
+              <dt className="text-[#8B7355]">Book Value</dt><dd className="font-mono">{formatCurrency(asset.book_value)}</dd>
+              <dt className="text-[#8B7355]">Salvage Value</dt><dd className="font-mono">{formatCurrency(asset.salvage_value)}</dd>
               <dt className="text-[#8B7355]">Method</dt><dd>{asset.depreciation_method}</dd>
               <dt className="text-[#8B7355]">Useful Life</dt><dd>{asset.useful_life_months} months</dd>
               <dt className="text-[#8B7355]">Location</dt><dd>{asset.location}</dd>
@@ -93,7 +94,7 @@ export default function AssetDetailPage() {
             <THead><TR><TH>Period</TH><TH className="text-right">Depreciation</TH><TH className="text-right">Accumulated</TH><TH className="text-right">Book Value</TH></TR></THead>
             <TBody>
               {schedule.map((s, i) => (
-                <TR key={i}><TD>{s.period}</TD><TD className="text-right font-mono">${s.depreciation.toFixed(2)}</TD><TD className="text-right font-mono">${s.accumulated.toFixed(2)}</TD><TD className="text-right font-mono">${s.book_value.toFixed(2)}</TD></TR>
+                <TR key={i}><TD>{s.period}</TD><TD className="text-right font-mono">{formatCurrency(s.depreciation)}</TD><TD className="text-right font-mono">{formatCurrency(s.accumulated)}</TD><TD className="text-right font-mono">{formatCurrency(s.book_value)}</TD></TR>
               ))}
               {!schedule.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No schedule</TD></TR>}
             </TBody>
@@ -108,7 +109,7 @@ export default function AssetDetailPage() {
             <THead><TR><TH>Title</TH><TH>Type</TH><TH>Date</TH><TH>Status</TH><TH className="text-right">Cost</TH></TR></THead>
             <TBody>
               {maint.map((m) => (
-                <TR key={m.id}><TD>{m.title}</TD><TD>{m.type}</TD><TD>{m.scheduled_date}</TD><TD>{m.status}</TD><TD className="text-right font-mono">${Number(m.cost).toFixed(2)}</TD></TR>
+                <TR key={m.id}><TD>{m.title}</TD><TD>{m.type}</TD><TD>{formatDate(m.scheduled_date)}</TD><TD>{m.status}</TD><TD className="text-right font-mono">{formatCurrency(m.cost)}</TD></TR>
               ))}
               {!maint.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No maintenance records</TD></TR>}
             </TBody>

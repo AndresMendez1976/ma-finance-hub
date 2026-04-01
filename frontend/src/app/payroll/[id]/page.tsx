@@ -9,6 +9,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
 import { ArrowLeft, Calculator, CheckCircle, Send } from 'lucide-react';
+import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   draft: 'bg-[#B4D4E7] text-[#5C4033]', calculated: 'bg-[#D4A854] text-[#5C4033]',
@@ -70,16 +71,16 @@ export default function PayrollRunDetailPage() {
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="mb-4 grid gap-4 md:grid-cols-4">
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Period</p><p className="font-medium text-[#5C4033]">{run.period_start} - {run.period_end}</p>
+          <p className="text-xs text-[#8B7355]">Period</p><p className="font-medium text-[#5C4033]">{formatDate(run.period_start)} - {formatDate(run.period_end)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Pay Date</p><p className="font-medium text-[#5C4033]">{run.pay_date}</p>
+          <p className="text-xs text-[#8B7355]">Pay Date</p><p className="font-medium text-[#5C4033]">{formatDate(run.pay_date)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Total Gross</p><p className="text-xl font-bold font-mono text-[#5C4033]">${Number(run.total_gross).toFixed(2)}</p>
+          <p className="text-xs text-[#8B7355]">Total Gross</p><p className="text-xl font-bold font-mono text-[#5C4033]">{formatCurrency(run.total_gross)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Total Net</p><p className="text-xl font-bold font-mono text-[#2D6A4F]">${Number(run.total_net).toFixed(2)}</p>
+          <p className="text-xs text-[#8B7355]">Total Net</p><p className="text-xl font-bold font-mono text-[#2D6A4F]">{formatCurrency(run.total_net)}</p>
         </CardContent></Card>
       </div>
       <Card className="border-[#E8DCC8]">
@@ -94,13 +95,13 @@ export default function PayrollRunDetailPage() {
                 <TR key={item.id}>
                   <TD>{item.employee_name}</TD>
                   <TD className="text-right font-mono">{Number(item.hours).toFixed(1)}</TD>
-                  <TD className="text-right font-mono">${Number(item.gross_pay).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(item.federal_tax).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(item.social_security).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(item.medicare).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(item.state_tax).toFixed(2)}</TD>
-                  <TD className="text-right font-mono">${Number(item.deductions).toFixed(2)}</TD>
-                  <TD className="text-right font-mono font-bold">${Number(item.net_pay).toFixed(2)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(item.gross_pay)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(item.federal_tax)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(item.social_security)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(item.medicare)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(item.state_tax)}</TD>
+                  <TD className="text-right font-mono">{formatCurrency(item.deductions)}</TD>
+                  <TD className="text-right font-mono font-bold">{formatCurrency(item.net_pay)}</TD>
                 </TR>
               ))}
               {(!run.items || run.items.length === 0) && (
