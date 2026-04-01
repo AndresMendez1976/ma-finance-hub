@@ -11,8 +11,8 @@ import { Plus, DollarSign, Eye, AlertTriangle } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]',
-  calculated: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]',
+  calculated: 'bg-[#D4A854] text-[#2C1810]',
   approved: 'bg-[#40916C] text-white',
   posted: 'bg-[#2D6A4F] text-white',
 };
@@ -50,12 +50,12 @@ export default function PayrollPage() {
     <Shell>
       <div className="mb-4 flex items-center gap-3 rounded-lg border border-[#D4A854] bg-[#D4A854]/10 p-3">
         <AlertTriangle className="h-5 w-5 flex-shrink-0 text-[#D4A854]" />
-        <p className="text-sm text-[#5C4033]">
+        <p className="text-sm text-[#2C1810]">
           <span className="font-semibold">Tax Disclaimer:</span> Payroll tax calculations are estimates based on simplified federal and state tax tables. These calculations may not reflect your exact tax liability. Consult a licensed tax professional or CPA before filing.
         </p>
       </div>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Payroll Runs</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Payroll Runs</h1>
         <Link href="/payroll/new">
           <Button><Plus className="mr-2 h-4 w-4" />New Payroll Run</Button>
         </Link>
@@ -67,7 +67,7 @@ export default function PayrollPage() {
               <TR><TH>Run#</TH><TH>Period Start</TH><TH>Period End</TH><TH>Pay Date</TH><TH>Status</TH><TH className="text-right">Total Gross</TH><TH className="text-right">Total Net</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={8} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={8} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((run) => (
                 <TR key={run.id}>
                   <TD className="font-mono text-sm">{run.run_number}</TD>
@@ -89,14 +89,14 @@ export default function PayrollPage() {
                 </TR>
               ))}
               {!loading && !data?.data.length && (
-                <TR><TD colSpan={8} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={8} className="text-center text-[#5C4033]">
                   <DollarSign className="mx-auto mb-2 h-8 w-8 opacity-40" />No payroll runs found
                 </TD></TR>
               )}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

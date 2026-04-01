@@ -14,7 +14,7 @@ interface Budget {
 interface Res { data: Budget[]; pagination: { page: number; limit: number; total: number; pages: number } }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]',
   active: 'bg-[#2D6A4F] text-white',
   closed: 'bg-[#8B7355] text-white',
 };
@@ -38,7 +38,7 @@ export default function BudgetsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Budgets</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Budgets</h1>
         <Link href="/budgets/new"><Button><Plus className="mr-2 h-4 w-4" />New Budget</Button></Link>
       </div>
       <Card>
@@ -46,7 +46,7 @@ export default function BudgetsPage() {
           <Table>
             <THead><TR><TH>Name</TH><TH>Fiscal Year</TH><TH>Period Type</TH><TH>Status</TH><TH>Actions</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={5} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={5} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((b) => (
                 <TR key={b.id}>
                   <TD><Link href={`/budgets/${b.id}`} className="text-[#2D6A4F] underline">{b.name}</Link></TD>
@@ -56,11 +56,11 @@ export default function BudgetsPage() {
                   <TD><Link href={`/budgets/${b.id}`}><Button size="sm" variant="ghost">View</Button></Link></TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No budgets found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No budgets found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

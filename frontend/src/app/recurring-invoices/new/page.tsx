@@ -55,18 +55,18 @@ export default function NewRecurringInvoicePage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Recurring Invoice</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Recurring Invoice</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="border-[#E8DCC8]">
           <CardHeader><CardTitle>Template Info</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Template Name *</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Template Name *</label>
               <Input value={templateName} onChange={(e) => setTemplateName(e.target.value)} placeholder="Monthly Retainer" /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Customer Name *</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Customer Name *</label>
               <Input value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Customer name" /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Contact ID</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Contact ID</label>
               <Input value={contactId} onChange={(e) => setContactId(e.target.value)} placeholder="Optional contact ID" /></div>
           </CardContent>
         </Card>
@@ -74,29 +74,29 @@ export default function NewRecurringInvoicePage() {
         <Card className="border-[#E8DCC8]">
           <CardHeader><CardTitle>Schedule</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Frequency *</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Frequency *</label>
               <select value={frequency} onChange={(e) => setFrequency(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+                className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                 <option value="weekly">Weekly</option><option value="biweekly">Biweekly</option>
                 <option value="monthly">Monthly</option><option value="quarterly">Quarterly</option>
                 <option value="yearly">Yearly</option>
               </select></div>
             <div className="grid grid-cols-2 gap-3">
-              <div><label className="text-sm font-medium text-[#5C4033]">Next Run *</label>
+              <div><label className="text-sm font-medium text-[#2C1810]">Next Run *</label>
                 <Input type="date" value={nextRunDate} onChange={(e) => setNextRunDate(e.target.value)} /></div>
-              <div><label className="text-sm font-medium text-[#5C4033]">End Date</label>
+              <div><label className="text-sm font-medium text-[#2C1810]">End Date</label>
                 <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} /></div>
             </div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Tax Rate (%)</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Tax Rate (%)</label>
               <Input type="number" value={taxRate} onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)} min={0} max={100} step={0.01} /></div>
             <div className="flex items-center gap-2">
               <input type="checkbox" checked={autoSend} onChange={(e) => setAutoSend(e.target.checked)} id="autoSend"
                 className="h-4 w-4 rounded border-[#D4C4A8]" />
-              <label htmlFor="autoSend" className="text-sm text-[#5C4033]">Auto-send when generated</label>
+              <label htmlFor="autoSend" className="text-sm text-[#2C1810]">Auto-send when generated</label>
             </div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Notes</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Notes</label>
               <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Notes..."
-                className="flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033] placeholder:text-[#8B7355]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D6A4F]" rows={2} /></div>
+                className="flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810] placeholder:text-[#5C4033]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D6A4F]" rows={2} /></div>
           </CardContent>
         </Card>
       </div>
@@ -108,7 +108,7 @@ export default function NewRecurringInvoicePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-[#8B7355]">
+            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-[#5C4033]">
               <div className="col-span-5">Description</div><div className="col-span-2">Qty</div>
               <div className="col-span-2">Unit Price</div><div className="col-span-2 text-right">Amount</div><div className="col-span-1" />
             </div>
@@ -123,9 +123,9 @@ export default function NewRecurringInvoicePage() {
             ))}
           </div>
           <div className="mt-4 border-t border-[#E8DCC8] pt-4 text-right">
-            <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Subtotal:</span><span className="w-28 font-mono">${subtotal.toFixed(2)}</span></div>
-            {taxRate > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Tax ({taxRate}%):</span><span className="w-28 font-mono">${taxAmount.toFixed(2)}</span></div>}
-            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#5C4033]">Total:</span><span className="w-28 font-mono">${total.toFixed(2)}</span></div>
+            <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Subtotal:</span><span className="w-28 font-mono">${subtotal.toFixed(2)}</span></div>
+            {taxRate > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Tax ({taxRate}%):</span><span className="w-28 font-mono">${taxAmount.toFixed(2)}</span></div>}
+            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#2C1810]">Total:</span><span className="w-28 font-mono">${total.toFixed(2)}</span></div>
           </div>
         </CardContent>
       </Card>

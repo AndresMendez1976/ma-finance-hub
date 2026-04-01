@@ -27,7 +27,7 @@ export default function AgedReceivablesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Aged Receivables</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Aged Receivables</h1>
         <div className="flex items-center gap-2">
           <Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-44" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
@@ -36,7 +36,7 @@ export default function AgedReceivablesPage() {
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">As of {data.as_of}</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">As of {data.as_of}</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <Table>
               <THead>
@@ -60,7 +60,7 @@ export default function AgedReceivablesPage() {
                     <TD className="text-right font-mono font-bold">${r.total.toFixed(2)}</TD>
                   </TR>
                 ))}
-                {data.rows.length === 0 && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No outstanding receivables</TD></TR>}
+                {data.rows.length === 0 && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No outstanding receivables</TD></TR>}
                 {data.rows.length > 0 && (
                   <TR className="border-t-2 bg-[#E8DCC8]/40 font-bold">
                     <TD>Total</TD>
@@ -76,7 +76,7 @@ export default function AgedReceivablesPage() {
           </CardContent>
         </Card>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Select a date and click Generate.</p>}
+      {!data && !loading && <p className="text-[#5C4033]">Select a date and click Generate.</p>}
     </Shell>
   );
 }

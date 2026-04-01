@@ -31,16 +31,16 @@ export default function EquipmentCostReportPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">Equipment Cost Report</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">Equipment Cost Report</h1>
       <div className="mb-4 flex gap-3 items-end">
-        <div><label className="text-xs font-medium text-[#5C4033]">Start Date</label><Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-40" /></div>
-        <div><label className="text-xs font-medium text-[#5C4033]">End Date</label><Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-40" /></div>
+        <div><label className="text-xs font-medium text-[#2C1810]">Start Date</label><Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-40" /></div>
+        <div><label className="text-xs font-medium text-[#2C1810]">End Date</label><Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-40" /></div>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Run Report'}</Button>
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30">
-            <CardTitle className="text-[#5C4033]">
+            <CardTitle className="text-[#2C1810]">
               Cost by Equipment & Project{startDate && ` | ${formatDate(startDate)} - ${formatDate(endDate)}`}
             </CardTitle>
           </CardHeader>
@@ -58,10 +58,10 @@ export default function EquipmentCostReportPage() {
                     <TD className="text-right font-mono font-medium">{formatCurrency(d.total_cost)}</TD>
                   </TR>
                 ))}
-                {!data.data.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No data</TD></TR>}
+                {!data.data.length && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No data</TD></TR>}
               </TBody>
             </Table>
-            <div className="mt-4 border-t border-[#E8DCC8] pt-3 flex justify-between font-bold text-[#5C4033]">
+            <div className="mt-4 border-t border-[#E8DCC8] pt-3 flex justify-between font-bold text-[#2C1810]">
               <span>Totals: {data.totals.total_hours.toLocaleString()} hours</span>
               <span className="font-mono">{formatCurrency(data.totals.total_cost)}</span>
             </div>

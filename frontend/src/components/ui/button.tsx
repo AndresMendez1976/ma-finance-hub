@@ -9,8 +9,8 @@ const variants = cva(
       variant: {
         default: 'bg-[#2D6A4F] text-white hover:bg-[#40916C]',
         destructive: 'bg-[#E07A5F] text-white hover:bg-[#E07A5F]/90',
-        outline: 'border border-[#D4C4A8] bg-white text-[#5C4033] hover:bg-[#E8DCC8] hover:text-[#5C4033]',
-        ghost: 'text-[#5C4033] hover:bg-[#E8DCC8] hover:text-[#5C4033]',
+        outline: 'border border-[#D4C4A8] bg-white text-[#2C1810] hover:bg-[#E8DCC8] hover:text-[#2C1810]',
+        ghost: 'text-[#2C1810] hover:bg-[#E8DCC8] hover:text-[#2C1810]',
       },
       size: { default: 'h-10 px-4 py-2', sm: 'h-9 px-3', lg: 'h-11 px-8', icon: 'h-10 w-10' },
     },

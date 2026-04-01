@@ -38,14 +38,14 @@ export default function NewFixedAssetPage() {
 
   const field = (label: string, key: string, type = 'text', placeholder = '') => (
     <div>
-      <label className="mb-1 block text-xs font-medium text-[#8B7355]">{label}</label>
+      <label className="mb-1 block text-xs font-medium text-[#5C4033]">{label}</label>
       <Input type={type} value={(form as Record<string, string>)[key]} onChange={(e) => set(key, e.target.value)} placeholder={placeholder} />
     </div>
   );
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Fixed Asset</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Fixed Asset</h1>
       {error && <div className="mb-3 rounded-md bg-[#E07A5F]/10 p-2 text-sm text-[#E07A5F]">{error}</div>}
       <Card>
         <CardHeader><CardTitle>Asset Details</CardTitle></CardHeader>
@@ -60,8 +60,8 @@ export default function NewFixedAssetPage() {
             {field('Salvage Value', 'salvage_value', 'number', '0.00')}
             {field('Useful Life (months)', 'useful_life_months', 'number', '60')}
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Depreciation Method</label>
-              <select value={form.depreciation_method} onChange={(e) => set('depreciation_method', e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Depreciation Method</label>
+              <select value={form.depreciation_method} onChange={(e) => set('depreciation_method', e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                 <option value="straight_line">Straight Line</option>
                 <option value="declining_balance">Declining Balance</option>
                 <option value="sum_of_years">Sum of Years Digits</option>
@@ -73,8 +73,8 @@ export default function NewFixedAssetPage() {
             {field('Expense Account ID', 'expense_account_id', 'number')}
           </div>
           <div className="mt-4">
-            <label className="mb-1 block text-xs font-medium text-[#8B7355]">Description</label>
-            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className="w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]" />
+            <label className="mb-1 block text-xs font-medium text-[#5C4033]">Description</label>
+            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className="w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]" />
           </div>
           <div className="mt-6 flex gap-3">
             <Button onClick={save} disabled={saving}>{saving ? 'Saving...' : 'Save Asset'}</Button>

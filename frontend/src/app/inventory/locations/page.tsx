@@ -44,19 +44,19 @@ export default function LocationsPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">Inventory Locations</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">Inventory Locations</h1>
 
       {/* Inline create form */}
       <Card className="mb-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Add Location</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Add Location</CardTitle></CardHeader>
         <CardContent>
           {error && <div className="mb-3 rounded-md bg-[#E07A5F]/10 p-2 text-sm text-[#E07A5F]">{error}</div>}
           <div className="flex flex-wrap items-end gap-3">
-            <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Name *</label>
+            <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Name *</label>
               <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Warehouse A" className="w-48" /></div>
-            <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Address</label>
+            <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Address</label>
               <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="123 Main St" className="w-64" /></div>
-            <label className="flex items-center gap-2 text-sm text-[#5C4033]">
+            <label className="flex items-center gap-2 text-sm text-[#2C1810]">
               <input type="checkbox" checked={isDefault} onChange={(e) => setIsDefault(e.target.checked)} className="rounded" />Default
             </label>
             <Button onClick={create} disabled={saving}><Plus className="mr-2 h-4 w-4" />{saving ? 'Saving...' : 'Add'}</Button>
@@ -70,15 +70,15 @@ export default function LocationsPage() {
           <Table>
             <THead><TR><TH>Name</TH><TH>Address</TH><TH>Default</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={3} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={3} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && locations.map((loc) => (
                 <TR key={loc.id}>
                   <TD className="font-medium">{loc.name}</TD>
-                  <TD className="text-sm text-[#8B7355]">{loc.address || '—'}</TD>
+                  <TD className="text-sm text-[#5C4033]">{loc.address || '—'}</TD>
                   <TD>{loc.is_default && <Badge variant="success">Default</Badge>}</TD>
                 </TR>
               ))}
-              {!loading && !locations.length && <TR><TD colSpan={3} className="text-center text-[#8B7355]">No locations yet</TD></TR>}
+              {!loading && !locations.length && <TR><TD colSpan={3} className="text-center text-[#5C4033]">No locations yet</TD></TR>}
             </TBody>
           </Table>
         </CardContent>

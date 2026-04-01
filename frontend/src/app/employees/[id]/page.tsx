@@ -49,7 +49,7 @@ export default function EmployeeDetailPage() {
     finally { setActionLoading(false); }
   };
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!employee) return <Shell><p className="text-[#E07A5F]">{error || 'Employee not found'}</p></Shell>;
 
   return (
@@ -57,7 +57,7 @@ export default function EmployeeDetailPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/employees"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold text-[#5C4033]">{employee.first_name} {employee.last_name}</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">{employee.first_name} {employee.last_name}</h1>
           <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[employee.status] || ''}`}>
             {employee.status}
           </span>
@@ -74,33 +74,33 @@ export default function EmployeeDetailPage() {
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="border-[#E8DCC8] lg:col-span-2">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Employee Information</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Employee Information</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <div><p className="text-xs text-[#8B7355]">Employee #</p><p className="font-mono font-medium">{employee.employee_number}</p></div>
-                <div><p className="text-xs text-[#8B7355]">Email</p><p className="font-medium">{employee.email}</p></div>
-                <div><p className="text-xs text-[#8B7355]">Phone</p><p className="font-medium">{employee.phone || '-'}</p></div>
+                <div><p className="text-xs text-[#5C4033]">Employee #</p><p className="font-mono font-medium">{employee.employee_number}</p></div>
+                <div><p className="text-xs text-[#5C4033]">Email</p><p className="font-medium">{employee.email}</p></div>
+                <div><p className="text-xs text-[#5C4033]">Phone</p><p className="font-medium">{employee.phone || '-'}</p></div>
               </div>
               <div className="space-y-2">
-                <div><p className="text-xs text-[#8B7355]">Department</p><p className="font-medium">{employee.department}</p></div>
-                <div><p className="text-xs text-[#8B7355]">Position</p><p className="font-medium">{employee.position}</p></div>
-                <div><p className="text-xs text-[#8B7355]">Hire Date</p><p className="font-medium">{employee.hire_date}</p></div>
+                <div><p className="text-xs text-[#5C4033]">Department</p><p className="font-medium">{employee.department}</p></div>
+                <div><p className="text-xs text-[#5C4033]">Position</p><p className="font-medium">{employee.position}</p></div>
+                <div><p className="text-xs text-[#5C4033]">Hire Date</p><p className="font-medium">{employee.hire_date}</p></div>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Compensation</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Compensation</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            <div><p className="text-xs text-[#8B7355]">Pay Type</p><p className="font-medium capitalize">{employee.pay_type}</p></div>
-            <div><p className="text-xs text-[#8B7355]">Pay Rate</p><p className="text-2xl font-bold font-mono text-[#5C4033]">${Number(employee.pay_rate).toFixed(2)}</p></div>
-            <div><p className="text-xs text-[#8B7355]">Frequency</p><p className="font-medium capitalize">{employee.pay_frequency}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Pay Type</p><p className="font-medium capitalize">{employee.pay_type}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Pay Rate</p><p className="text-2xl font-bold font-mono text-[#2C1810]">${Number(employee.pay_rate).toFixed(2)}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Frequency</p><p className="font-medium capitalize">{employee.pay_frequency}</p></div>
           </CardContent>
         </Card>
       </div>
       <Card className="mt-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Payroll History</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Payroll History</CardTitle></CardHeader>
         <CardContent>
           <Table>
             <THead><TR><TH>Run#</TH><TH>Pay Date</TH><TH className="text-right">Gross Pay</TH><TH className="text-right">Net Pay</TH></TR></THead>
@@ -114,7 +114,7 @@ export default function EmployeeDetailPage() {
                 </TR>
               ))}
               {(!employee.payroll_items || employee.payroll_items.length === 0) && (
-                <TR><TD colSpan={4} className="text-center text-[#8B7355]">No payroll history</TD></TR>
+                <TR><TD colSpan={4} className="text-center text-[#5C4033]">No payroll history</TD></TR>
               )}
             </TBody>
           </Table>

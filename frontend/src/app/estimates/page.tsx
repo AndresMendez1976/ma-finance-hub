@@ -11,8 +11,8 @@ import { Plus, Eye, FileText } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]',
-  sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]',
+  sent: 'bg-[#D4A854] text-[#2C1810]',
   accepted: 'bg-[#2D6A4F] text-white',
   rejected: 'bg-[#E07A5F] text-white',
   expired: 'bg-[#8B7355] text-white',
@@ -60,23 +60,23 @@ export default function EstimatesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Estimates</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Estimates</h1>
         <Link href="/estimates/new"><Button><Plus className="mr-2 h-4 w-4" />New Estimate</Button></Link>
       </div>
 
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">Status</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">Status</label>
           <select value={status} onChange={(e) => setStatus(e.target.value)}
-            className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+            className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
             <option value="">All</option><option value="draft">Draft</option><option value="sent">Sent</option>
             <option value="accepted">Accepted</option><option value="rejected">Rejected</option>
             <option value="expired">Expired</option><option value="converted">Converted</option>
           </select>
         </div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">From</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">From</label>
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" /></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">To</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">To</label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" /></div>
         <Button variant="outline" onClick={() => load(1)}>Filter</Button>
       </div>
@@ -88,7 +88,7 @@ export default function EstimatesPage() {
               <TR><TH>EST#</TH><TH>Customer</TH><TH>Issue Date</TH><TH>Expiration</TH><TH className="text-right">Total</TH><TH>Status</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((est) => (
                 <TR key={est.id}>
                   <TD className="font-mono text-sm">{est.estimate_number}</TD>
@@ -101,12 +101,12 @@ export default function EstimatesPage() {
                 </TR>
               ))}
               {!loading && (!data?.data.length) && (
-                <TR><TD colSpan={7} className="text-center text-[#8B7355]"><FileText className="mx-auto mb-2 h-8 w-8 opacity-40" />No estimates found</TD></TR>
+                <TR><TD colSpan={7} className="text-center text-[#5C4033]"><FileText className="mx-auto mb-2 h-8 w-8 opacity-40" />No estimates found</TD></TR>
               )}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

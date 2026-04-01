@@ -11,7 +11,7 @@ import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-[#2D6A4F] text-white',
-  paused: 'bg-[#D4A854] text-[#5C4033]',
+  paused: 'bg-[#D4A854] text-[#2C1810]',
   ended: 'bg-[#8B7355] text-white',
 };
 
@@ -56,7 +56,7 @@ export default function RecurringInvoicesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Recurring Invoices</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Recurring Invoices</h1>
         <Link href="/recurring-invoices/new">
           <Button><Plus className="mr-2 h-4 w-4" />New Template</Button>
         </Link>
@@ -69,7 +69,7 @@ export default function RecurringInvoicesPage() {
               <TR><TH>Template Name</TH><TH>Customer</TH><TH>Frequency</TH><TH>Next Run</TH><TH>Status</TH><TH className="text-right">Total</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data.map((ri) => (
                 <TR key={ri.id}>
                   <TD className="font-medium">{ri.template_name}</TD>
@@ -95,7 +95,7 @@ export default function RecurringInvoicesPage() {
                 </TR>
               ))}
               {!loading && data.length === 0 && (
-                <TR><TD colSpan={7} className="text-center text-[#8B7355]">No recurring invoices yet</TD></TR>
+                <TR><TD colSpan={7} className="text-center text-[#5C4033]">No recurring invoices yet</TD></TR>
               )}
             </TBody>
           </Table>

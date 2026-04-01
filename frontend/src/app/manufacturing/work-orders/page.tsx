@@ -10,7 +10,7 @@ import { api } from '@/lib/api';
 import { Plus, ClipboardList, Eye } from 'lucide-react';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', released: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', released: 'bg-[#D4A854] text-[#2C1810]',
   in_progress: 'bg-[#E07A5F] text-white', completed: 'bg-[#2D6A4F] text-white', cancelled: 'bg-[#8B7355] text-white',
 };
 const PRIORITY_COLORS: Record<string, string> = {
@@ -44,7 +44,7 @@ export default function WorkOrdersPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Work Orders</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Work Orders</h1>
         <Link href="/manufacturing/work-orders/new"><Button><Plus className="mr-2 h-4 w-4" />New Work Order</Button></Link>
       </div>
       <Card className="border-[#E8DCC8]">
@@ -54,7 +54,7 @@ export default function WorkOrdersPage() {
               <TR><TH>WO#</TH><TH>Product</TH><TH className="text-right">Quantity</TH><TH>Status</TH><TH>Priority</TH><TH>Progress</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((wo) => {
                 const pct = wo.qty_to_produce > 0 ? (wo.qty_produced / wo.qty_to_produce) * 100 : 0;
                 return (
@@ -69,7 +69,7 @@ export default function WorkOrdersPage() {
                         <div className="h-2 w-24 overflow-hidden rounded-full bg-[#E8DCC8]">
                           <div className="h-full rounded-full bg-[#2D6A4F]" style={{ width: `${Math.min(pct, 100)}%` }} />
                         </div>
-                        <span className="text-xs font-mono text-[#8B7355]">{wo.qty_produced}/{wo.qty_to_produce}</span>
+                        <span className="text-xs font-mono text-[#5C4033]">{wo.qty_produced}/{wo.qty_to_produce}</span>
                       </div>
                     </TD>
                     <TD><Link href={`/manufacturing/work-orders/${wo.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
@@ -77,14 +77,14 @@ export default function WorkOrdersPage() {
                 );
               })}
               {!loading && !data?.data.length && (
-                <TR><TD colSpan={7} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={7} className="text-center text-[#5C4033]">
                   <ClipboardList className="mx-auto mb-2 h-8 w-8 opacity-40" />No work orders found
                 </TD></TR>
               )}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

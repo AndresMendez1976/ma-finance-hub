@@ -71,23 +71,23 @@ export default function BankAccountDetailPage() {
     <Shell>
       <div className="mb-4 flex items-center gap-3">
         <Link href="/bank-accounts"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-        <h1 className="text-2xl font-bold text-[#5C4033]">Transactions</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Transactions</h1>
       </div>
 
       {/* Reconciliation summary */}
       {summary && (
         <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-5">
-          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#8B7355]">Bank Balance</p><p className="text-xl font-bold text-[#5C4033]">{fmt(summary.bank_balance)}</p></CardContent></Card>
-          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#8B7355]">Book Balance</p><p className="text-xl font-bold text-[#2D6A4F]">{fmt(summary.book_balance)}</p></CardContent></Card>
-          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#8B7355]">Difference</p><p className={`text-xl font-bold ${summary.difference === 0 ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>{fmt(summary.difference)}</p></CardContent></Card>
-          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#8B7355]">Unreconciled</p><p className="text-xl font-bold text-[#D4A854]">{summary.unreconciled_count}</p></CardContent></Card>
-          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#8B7355]">Unrec. Amount</p><p className="text-xl font-bold">{fmt(summary.unreconciled_amount)}</p></CardContent></Card>
+          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#5C4033]">Bank Balance</p><p className="text-xl font-bold text-[#2C1810]">{fmt(summary.bank_balance)}</p></CardContent></Card>
+          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#5C4033]">Book Balance</p><p className="text-xl font-bold text-[#2D6A4F]">{fmt(summary.book_balance)}</p></CardContent></Card>
+          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#5C4033]">Difference</p><p className={`text-xl font-bold ${summary.difference === 0 ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>{fmt(summary.difference)}</p></CardContent></Card>
+          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#5C4033]">Unreconciled</p><p className="text-xl font-bold text-[#D4A854]">{summary.unreconciled_count}</p></CardContent></Card>
+          <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center"><p className="text-xs text-[#5C4033]">Unrec. Amount</p><p className="text-xl font-bold">{fmt(summary.unreconciled_amount)}</p></CardContent></Card>
         </div>
       )}
 
       {/* Controls */}
       <div className="mb-4 flex flex-wrap gap-3">
-        <select value={filter} onChange={(e) => { setFilter(e.target.value); }} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+        <select value={filter} onChange={(e) => { setFilter(e.target.value); }} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
           <option value="">All</option><option value="false">Unreconciled</option><option value="true">Reconciled</option>
         </select>
         <Button variant="outline" onClick={() => loadTxns(1)}>Filter</Button>
@@ -99,9 +99,9 @@ export default function BankAccountDetailPage() {
       {showImport && (
         <Card className="mb-4 border-[#D4A854]/30 bg-[#D4A854]/5">
           <CardContent className="space-y-3 pt-4">
-            <p className="text-sm text-[#5C4033]">Paste CSV (format: date,description,amount):</p>
+            <p className="text-sm text-[#2C1810]">Paste CSV (format: date,description,amount):</p>
             <textarea value={csvText} onChange={(e) => setCsvText(e.target.value)} rows={6}
-              className="w-full rounded-md border border-[#D4C4A8] bg-white p-3 font-mono text-xs text-[#5C4033]"
+              className="w-full rounded-md border border-[#D4C4A8] bg-white p-3 font-mono text-xs text-[#2C1810]"
               placeholder="2026-01-15,Office supplies,-45.99&#10;2026-01-16,Client payment,1500.00" />
             <div className="flex gap-2"><Button onClick={importCsv}>Import</Button><Button variant="ghost" onClick={() => setShowImport(false)}>Cancel</Button></div>
           </CardContent>
@@ -111,7 +111,7 @@ export default function BankAccountDetailPage() {
       {/* Transactions table */}
       <Card className="border-[#E8DCC8]">
         <CardContent className="pt-6">
-          {loading ? <p className="text-center text-[#8B7355]">Loading...</p> : (
+          {loading ? <p className="text-center text-[#5C4033]">Loading...</p> : (
             <Table>
               <THead><TR><TH>Date</TH><TH>Description</TH><TH>Type</TH><TH className="text-right">Amount</TH><TH>Ref</TH><TH>Reconciled</TH><TH>Action</TH></TR></THead>
               <TBody>
@@ -131,12 +131,12 @@ export default function BankAccountDetailPage() {
                     </TD>
                   </TR>
                 ))}
-                {!txns?.data.length && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No transactions</TD></TR>}
+                {!txns?.data.length && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No transactions</TD></TR>}
               </TBody>
             </Table>
           )}
           {txns && txns.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {page} of {txns.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => loadTxns(page - 1)}>Prev</Button>

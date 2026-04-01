@@ -35,10 +35,10 @@ export default function ProductionCostPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Production Cost Report</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Production Cost Report</h1>
         <div className="flex items-center gap-2">
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" />
-          <span className="text-[#8B7355]">to</span>
+          <span className="text-[#5C4033]">to</span>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && (
@@ -50,7 +50,7 @@ export default function ProductionCostPage() {
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">{data.from} to {data.to}</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">{data.from} to {data.to}</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <Table>
               <THead>
@@ -71,7 +71,7 @@ export default function ProductionCostPage() {
                     </TD>
                   </TR>
                 ))}
-                {data.rows.length === 0 && <TR><TD colSpan={8} className="text-center text-[#8B7355]">No production data</TD></TR>}
+                {data.rows.length === 0 && <TR><TD colSpan={8} className="text-center text-[#5C4033]">No production data</TD></TR>}
                 {data.rows.length > 0 && (
                   <TR className="border-t-2 bg-[#E8DCC8]/40 font-bold">
                     <TD colSpan={2}>Totals</TD>
@@ -90,7 +90,7 @@ export default function ProductionCostPage() {
           </CardContent>
         </Card>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Select a date range and click Generate.</p>}
+      {!data && !loading && <p className="text-[#5C4033]">Select a date range and click Generate.</p>}
     </Shell>
   );
 }

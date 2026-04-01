@@ -33,14 +33,14 @@ export default function UnitPriceSummaryPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">Unit Price Summary</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">Unit Price Summary</h1>
       <div className="mb-4 flex gap-3 items-end">
-        <div><label className="text-xs font-medium text-[#5C4033]">Project ID</label><Input value={projectId} onChange={(e) => setProjectId(e.target.value)} type="number" className="w-28" /></div>
+        <div><label className="text-xs font-medium text-[#2C1810]">Project ID</label><Input value={projectId} onChange={(e) => setProjectId(e.target.value)} type="number" className="w-28" /></div>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Run Report'}</Button>
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Unit Price Items — {formatDate(new Date().toISOString())}</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Unit Price Items — {formatDate(new Date().toISOString())}</CardTitle></CardHeader>
           <CardContent className="pt-4 overflow-x-auto">
             <Table>
               <THead>
@@ -52,7 +52,7 @@ export default function UnitPriceSummaryPage() {
                     <TD className="font-medium">{d.project_name}</TD>
                     <TD className="font-mono text-sm">{d.cost_code}</TD>
                     <TD>{d.description}</TD>
-                    <TD className="text-sm text-[#8B7355]">{d.unit}</TD>
+                    <TD className="text-sm text-[#5C4033]">{d.unit}</TD>
                     <TD className="text-right font-mono">{d.est_quantity.toLocaleString()}</TD>
                     <TD className="text-right font-mono">{d.actual_quantity.toLocaleString()}</TD>
                     <TD className="text-right font-mono">{formatCurrency(d.unit_price)}</TD>
@@ -61,7 +61,7 @@ export default function UnitPriceSummaryPage() {
                     <TD className={`text-right font-mono ${Number(d.variance) >= 0 ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>{formatCurrency(d.variance)}</TD>
                   </TR>
                 ))}
-                {!data.data.length && <TR><TD colSpan={10} className="text-center text-[#8B7355]">No data</TD></TR>}
+                {!data.data.length && <TR><TD colSpan={10} className="text-center text-[#5C4033]">No data</TD></TR>}
               </TBody>
             </Table>
             <div className="mt-4 border-t border-[#E8DCC8] pt-3 flex justify-end gap-8 font-bold text-sm">

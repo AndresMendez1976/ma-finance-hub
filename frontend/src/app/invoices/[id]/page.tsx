@@ -14,8 +14,8 @@ import { formatDate, formatCurrency, formatDateTime } from '@/lib/format';
 
 // Status colors
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]',
-  sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]',
+  sent: 'bg-[#D4A854] text-[#2C1810]',
   paid: 'bg-[#2D6A4F] text-white',
   overdue: 'bg-[#E07A5F] text-white',
   voided: 'bg-[#8B7355] text-white',
@@ -87,7 +87,7 @@ export default function InvoiceDetailPage() {
     finally { setActionLoading(false); }
   };
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!invoice) return <Shell><p className="text-[#E07A5F]">{error || 'Invoice not found'}</p></Shell>;
 
   return (
@@ -96,7 +96,7 @@ export default function InvoiceDetailPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/invoices"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold text-[#5C4033]">{invoice.invoice_number}</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">{invoice.invoice_number}</h1>
           <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[invoice.status] || ''}`}>
             {invoice.status.toUpperCase()}
           </span>
@@ -129,15 +129,15 @@ export default function InvoiceDetailPage() {
         <Card className="mb-4 border-[#2D6A4F]/30 bg-[#2D6A4F]/5">
           <CardContent className="flex items-end gap-3 pt-4">
             <div>
-              <label className="text-xs font-medium text-[#5C4033]">Paid Date</label>
+              <label className="text-xs font-medium text-[#2C1810]">Paid Date</label>
               <Input type="date" value={paidDate} onChange={(e) => setPaidDate(e.target.value)} className="w-40" />
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5C4033]">Amount Paid</label>
+              <label className="text-xs font-medium text-[#2C1810]">Amount Paid</label>
               <Input type="number" value={paidAmount} onChange={(e) => setPaidAmount(e.target.value)} step={0.01} className="w-36" />
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5C4033]">Fiscal Period ID</label>
+              <label className="text-xs font-medium text-[#2C1810]">Fiscal Period ID</label>
               <Input type="number" value={fiscalPeriodId} onChange={(e) => setFiscalPeriodId(e.target.value)} placeholder="Optional" className="w-32" />
             </div>
             <Button onClick={payInvoice} disabled={actionLoading}>{actionLoading ? 'Processing...' : 'Confirm Payment'}</Button>
@@ -150,21 +150,21 @@ export default function InvoiceDetailPage() {
         {/* Invoice info */}
         <Card className="border-[#E8DCC8] lg:col-span-2">
           <CardHeader className="bg-[#E8DCC8]/30">
-            <CardTitle className="text-[#5C4033]">Invoice Details</CardTitle>
+            <CardTitle className="text-[#2C1810]">Invoice Details</CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <p className="text-xs text-[#8B7355]">Customer</p>
-                <p className="font-medium text-[#5C4033]">{invoice.customer_name}</p>
-                {invoice.customer_email && <p className="text-sm text-[#8B7355]">{invoice.customer_email}</p>}
-                {invoice.customer_address && <p className="mt-1 text-sm text-[#8B7355] whitespace-pre-line">{invoice.customer_address}</p>}
+                <p className="text-xs text-[#5C4033]">Customer</p>
+                <p className="font-medium text-[#2C1810]">{invoice.customer_name}</p>
+                {invoice.customer_email && <p className="text-sm text-[#5C4033]">{invoice.customer_email}</p>}
+                {invoice.customer_address && <p className="mt-1 text-sm text-[#5C4033] whitespace-pre-line">{invoice.customer_address}</p>}
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Issue Date</span><span className="text-sm font-medium">{formatDate(invoice.issue_date)}</span></div>
-                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Due Date</span><span className="text-sm font-medium">{formatDate(invoice.due_date)}</span></div>
-                {invoice.paid_date && <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Paid Date</span><span className="text-sm font-medium">{formatDate(invoice.paid_date)}</span></div>}
-                {invoice.journal_entry_id && <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Journal Entry</span><span className="text-sm font-medium">#{invoice.journal_entry_id}</span></div>}
+                <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Issue Date</span><span className="text-sm font-medium">{formatDate(invoice.issue_date)}</span></div>
+                <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Due Date</span><span className="text-sm font-medium">{formatDate(invoice.due_date)}</span></div>
+                {invoice.paid_date && <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Paid Date</span><span className="text-sm font-medium">{formatDate(invoice.paid_date)}</span></div>}
+                {invoice.journal_entry_id && <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Journal Entry</span><span className="text-sm font-medium">#{invoice.journal_entry_id}</span></div>}
               </div>
             </div>
 
@@ -188,12 +188,12 @@ export default function InvoiceDetailPage() {
             {/* Totals */}
             <div className="mt-4 border-t border-[#E8DCC8] pt-4">
               <div className="ml-auto w-64 space-y-1">
-                <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Subtotal</span><span className="font-mono">{formatCurrency(invoice.subtotal)}</span></div>
+                <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Subtotal</span><span className="font-mono">{formatCurrency(invoice.subtotal)}</span></div>
                 {Number(invoice.tax_rate) > 0 && (
-                  <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Tax ({Number(invoice.tax_rate)}%)</span><span className="font-mono">{formatCurrency(invoice.tax_amount)}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Tax ({Number(invoice.tax_rate)}%)</span><span className="font-mono">{formatCurrency(invoice.tax_amount)}</span></div>
                 )}
                 <div className="flex justify-between border-t border-[#E8DCC8] pt-1 text-lg font-bold">
-                  <span className="text-[#5C4033]">Total</span><span className="font-mono">{formatCurrency(invoice.total)}</span>
+                  <span className="text-[#2C1810]">Total</span><span className="font-mono">{formatCurrency(invoice.total)}</span>
                 </div>
                 {Number(invoice.paid_amount) > 0 && (
                   <div className="flex justify-between text-sm text-[#2D6A4F]"><span>Paid</span><span className="font-mono">{formatCurrency(invoice.paid_amount)}</span></div>
@@ -203,8 +203,8 @@ export default function InvoiceDetailPage() {
 
             {invoice.notes && (
               <div className="mt-4 rounded-md bg-[#E8DCC8]/30 p-3">
-                <p className="text-xs font-medium text-[#8B7355]">Notes</p>
-                <p className="mt-1 text-sm text-[#5C4033]">{invoice.notes}</p>
+                <p className="text-xs font-medium text-[#5C4033]">Notes</p>
+                <p className="mt-1 text-sm text-[#2C1810]">{invoice.notes}</p>
               </div>
             )}
           </CardContent>
@@ -212,18 +212,18 @@ export default function InvoiceDetailPage() {
 
         {/* Summary sidebar */}
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Summary</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Summary</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="text-center">
-              <p className="text-3xl font-bold text-[#5C4033]">{formatCurrency(invoice.total)}</p>
-              <p className="text-xs text-[#8B7355]">{invoice.lines.length} line item{invoice.lines.length !== 1 ? 's' : ''}</p>
+              <p className="text-3xl font-bold text-[#2C1810]">{formatCurrency(invoice.total)}</p>
+              <p className="text-xs text-[#5C4033]">{invoice.lines.length} line item{invoice.lines.length !== 1 ? 's' : ''}</p>
             </div>
             <div className="rounded-md bg-[#E8DCC8]/40 p-3 text-center">
               <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${STATUS_COLORS[invoice.status] || ''}`}>
                 {invoice.status.toUpperCase()}
               </span>
             </div>
-            <div className="text-xs text-[#8B7355]">
+            <div className="text-xs text-[#5C4033]">
               <p>Created: {formatDateTime(invoice.created_at)}</p>
             </div>
           </CardContent>

@@ -10,8 +10,8 @@ import Link from 'next/link';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  scheduled: 'bg-[#B4D4E7] text-[#5C4033]',
-  in_progress: 'bg-[#D4A854] text-[#5C4033]',
+  scheduled: 'bg-[#B4D4E7] text-[#2C1810]',
+  in_progress: 'bg-[#D4A854] text-[#2C1810]',
   completed: 'bg-[#2D6A4F] text-white',
   overdue: 'bg-[#E07A5F] text-white',
 };
@@ -47,7 +47,7 @@ export default function MaintenancePage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Maintenance</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Maintenance</h1>
         <div className="flex gap-2">
           <Link href="/maintenance/schedules"><Button variant="outline">Schedules</Button></Link>
           <Link href="/maintenance/new"><Button><Plus className="mr-2 h-4 w-4" />New Record</Button></Link>
@@ -56,7 +56,7 @@ export default function MaintenancePage() {
       <div className="mb-4 flex gap-1">
         {tabs.map((t) => (
           <button key={t} onClick={() => { setTab(t); setInit(true); }}
-            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${tab === t ? 'bg-[#2D6A4F] text-white' : 'bg-[#E8DCC8]/50 text-[#5C4033] hover:bg-[#E8DCC8]'}`}>
+            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${tab === t ? 'bg-[#2D6A4F] text-white' : 'bg-[#E8DCC8]/50 text-[#2C1810] hover:bg-[#E8DCC8]'}`}>
             {t.charAt(0).toUpperCase() + t.slice(1)}
           </button>
         ))}
@@ -66,7 +66,7 @@ export default function MaintenancePage() {
           <Table>
             <THead><TR><TH>Title</TH><TH>Asset</TH><TH>Type</TH><TH>Scheduled Date</TH><TH>Status</TH><TH className="text-right">Cost</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={6} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((m) => (
                 <TR key={m.id}>
                   <TD>{m.title}</TD><TD>{m.asset_name}</TD><TD>{m.type}</TD><TD>{formatDate(m.scheduled_date)}</TD>
@@ -74,11 +74,11 @@ export default function MaintenancePage() {
                   <TD className="text-right font-mono">{formatCurrency(m.cost)}</TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No records found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No records found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

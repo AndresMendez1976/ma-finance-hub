@@ -27,7 +27,7 @@ export default function MaintenanceSchedulesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Maintenance Schedules</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Maintenance Schedules</h1>
         <Link href="/maintenance/schedules/new"><Button><Plus className="mr-2 h-4 w-4" />New Schedule</Button></Link>
       </div>
       <Card>
@@ -38,7 +38,7 @@ export default function MaintenanceSchedulesPage() {
               <TR><TH>Title</TH><TH>Asset</TH><TH>Frequency</TH><TH>Next Due</TH><TH>Active</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={5} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={5} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && schedules.map((s) => (
                 <TR key={s.id}>
                   <TD>{s.title}</TD>
@@ -52,7 +52,7 @@ export default function MaintenanceSchedulesPage() {
                   </TD>
                 </TR>
               ))}
-              {!loading && !schedules.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No schedules found</TD></TR>}
+              {!loading && !schedules.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No schedules found</TD></TR>}
             </TBody>
           </Table>
         </CardContent>

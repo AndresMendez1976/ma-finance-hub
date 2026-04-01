@@ -35,15 +35,15 @@ export default function CrmPage() {
     setMoving(null);
   };
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading pipeline...</p></Shell>;
-  if (!data) return <Shell><p className="text-[#8B7355]">No pipeline data</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading pipeline...</p></Shell>;
+  if (!data) return <Shell><p className="text-[#5C4033]">No pipeline data</p></Shell>;
 
   const stages = [...data.pipeline.stages].sort((a, b) => a.position - b.position);
 
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">CRM Pipeline</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">CRM Pipeline</h1>
         <div className="flex gap-2">
           <Link href="/crm/dashboard"><Button variant="outline">Dashboard</Button></Link>
           <Link href="/crm/opportunities/new"><Button><Plus className="mr-2 h-4 w-4" />New Opportunity</Button></Link>
@@ -64,11 +64,11 @@ export default function CrmPage() {
                 {stageOpps.map((opp) => (
                   <Card key={opp.id} className="cursor-pointer hover:shadow-md">
                     <CardContent className="p-3">
-                      <Link href={`/crm/opportunities/${opp.id}`} className="text-sm font-semibold text-[#5C4033] hover:underline">{opp.title}</Link>
-                      <p className="text-xs text-[#8B7355]">{opp.contact_name}</p>
+                      <Link href={`/crm/opportunities/${opp.id}`} className="text-sm font-semibold text-[#2C1810] hover:underline">{opp.title}</Link>
+                      <p className="text-xs text-[#5C4033]">{opp.contact_name}</p>
                       <div className="mt-1 flex items-center justify-between">
                         <span className="text-sm font-mono text-[#2D6A4F]">{formatCurrency(opp.value)}</span>
-                        <span className="text-xs text-[#8B7355]">{formatDate(opp.expected_close_date)}</span>
+                        <span className="text-xs text-[#5C4033]">{formatDate(opp.expected_close_date)}</span>
                       </div>
                       {moving === opp.id ? (
                         <div className="mt-2 flex flex-wrap gap-1">
@@ -78,7 +78,7 @@ export default function CrmPage() {
                               {s.name}
                             </button>
                           ))}
-                          <button onClick={() => setMoving(null)} className="rounded px-2 py-0.5 text-xs text-[#8B7355] border border-[#D4C4A8]">Cancel</button>
+                          <button onClick={() => setMoving(null)} className="rounded px-2 py-0.5 text-xs text-[#5C4033] border border-[#D4C4A8]">Cancel</button>
                         </div>
                       ) : (
                         <Button size="sm" variant="ghost" className="mt-1 h-6 text-xs" onClick={() => setMoving(opp.id)}>Move</Button>
@@ -86,7 +86,7 @@ export default function CrmPage() {
                     </CardContent>
                   </Card>
                 ))}
-                {!stageOpps.length && <p className="px-3 py-4 text-center text-xs text-[#8B7355]">No opportunities</p>}
+                {!stageOpps.length && <p className="px-3 py-4 text-center text-xs text-[#5C4033]">No opportunities</p>}
               </div>
             </div>
           );

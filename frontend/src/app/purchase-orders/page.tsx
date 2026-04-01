@@ -12,7 +12,7 @@ import { Plus, Eye } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', sent: 'bg-[#D4A854] text-[#2C1810]',
   partial: 'bg-[#E07A5F] text-white', received: 'bg-[#2D6A4F] text-white', cancelled: 'bg-[#8B7355] text-white',
 };
 
@@ -46,22 +46,22 @@ export default function PurchaseOrdersPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Purchase Orders</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Purchase Orders</h1>
         <Link href="/purchase-orders/new"><Button><Plus className="mr-2 h-4 w-4" />New PO</Button></Link>
       </div>
       <div className="mb-4 flex flex-wrap items-end gap-3">
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
             <option value="">All</option><option value="draft">Draft</option><option value="sent">Sent</option><option value="partial">Partial</option><option value="received">Received</option><option value="cancelled">Cancelled</option>
           </select></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">From</label><Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" /></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">To</label><Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" /></div>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">From</label><Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" /></div>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">To</label><Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" /></div>
         <Button variant="outline" onClick={() => load(1)}>Filter</Button>
       </div>
       <Card className="border-[#E8DCC8]"><CardContent className="pt-6">
         <Table><THead><TR><TH>PO#</TH><TH>Vendor</TH><TH>Date</TH><TH>Delivery</TH><TH className="text-right">Total</TH><TH>Status</TH><TH></TH></TR></THead>
           <TBody>
-            {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+            {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
             {!loading && data?.data.map((po) => (
               <TR key={po.id}>
                 <TD className="font-mono text-sm">{po.po_number}</TD><TD>{po.vendor_name}</TD><TD>{formatDate(po.order_date)}</TD><TD>{po.expected_delivery_date ? formatDate(po.expected_delivery_date) : '—'}</TD>
@@ -69,10 +69,10 @@ export default function PurchaseOrdersPage() {
                 <TD><span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[po.status] || ''}`}>{po.status}</span></TD>
                 <TD><Link href={`/purchase-orders/${po.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
               </TR>))}
-            {!loading && !data?.data.length && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No purchase orders</TD></TR>}
+            {!loading && !data?.data.length && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No purchase orders</TD></TR>}
           </TBody></Table>
         {data && data.pagination.pages > 1 && (
-          <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+          <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
             <span>Page {page} of {data.pagination.pages}</span>
             <div className="flex gap-2"><Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button><Button size="sm" variant="outline" disabled={page >= data.pagination.pages} onClick={() => load(page + 1)}>Next</Button></div>
           </div>)}

@@ -12,7 +12,7 @@ import { ArrowLeft, Calculator, CheckCircle, Send } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', calculated: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', calculated: 'bg-[#D4A854] text-[#2C1810]',
   approved: 'bg-[#40916C] text-white', posted: 'bg-[#2D6A4F] text-white',
 };
 
@@ -51,7 +51,7 @@ export default function PayrollRunDetailPage() {
     finally { setActionLoading(false); }
   };
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!run) return <Shell><p className="text-[#E07A5F]">{error || 'Payroll run not found'}</p></Shell>;
 
   return (
@@ -59,7 +59,7 @@ export default function PayrollRunDetailPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/payroll"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold text-[#5C4033]">{run.run_number}</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">{run.run_number}</h1>
           <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[run.status] || ''}`}>{run.status.toUpperCase()}</span>
         </div>
         <div className="flex gap-2">
@@ -71,20 +71,20 @@ export default function PayrollRunDetailPage() {
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="mb-4 grid gap-4 md:grid-cols-4">
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Period</p><p className="font-medium text-[#5C4033]">{formatDate(run.period_start)} - {formatDate(run.period_end)}</p>
+          <p className="text-xs text-[#5C4033]">Period</p><p className="font-medium text-[#2C1810]">{formatDate(run.period_start)} - {formatDate(run.period_end)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Pay Date</p><p className="font-medium text-[#5C4033]">{formatDate(run.pay_date)}</p>
+          <p className="text-xs text-[#5C4033]">Pay Date</p><p className="font-medium text-[#2C1810]">{formatDate(run.pay_date)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Total Gross</p><p className="text-xl font-bold font-mono text-[#5C4033]">{formatCurrency(run.total_gross)}</p>
+          <p className="text-xs text-[#5C4033]">Total Gross</p><p className="text-xl font-bold font-mono text-[#2C1810]">{formatCurrency(run.total_gross)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Total Net</p><p className="text-xl font-bold font-mono text-[#2D6A4F]">{formatCurrency(run.total_net)}</p>
+          <p className="text-xs text-[#5C4033]">Total Net</p><p className="text-xl font-bold font-mono text-[#2D6A4F]">{formatCurrency(run.total_net)}</p>
         </CardContent></Card>
       </div>
       <Card className="border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Payroll Items</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Payroll Items</CardTitle></CardHeader>
         <CardContent>
           <Table>
             <THead>
@@ -105,7 +105,7 @@ export default function PayrollRunDetailPage() {
                 </TR>
               ))}
               {(!run.items || run.items.length === 0) && (
-                <TR><TD colSpan={9} className="text-center text-[#8B7355]">No payroll items</TD></TR>
+                <TR><TD colSpan={9} className="text-center text-[#5C4033]">No payroll items</TD></TR>
               )}
             </TBody>
           </Table>

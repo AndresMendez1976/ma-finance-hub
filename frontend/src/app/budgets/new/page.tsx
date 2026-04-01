@@ -40,23 +40,23 @@ export default function NewBudgetPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Budget</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Budget</h1>
       {error && <div className="mb-3 rounded-md bg-[#E07A5F]/10 p-2 text-sm text-[#E07A5F]">{error}</div>}
       <Card className="mb-6">
         <CardHeader><CardTitle>Budget Info</CardTitle></CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Name</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Name</label>
               <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Budget name" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Fiscal Year</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Fiscal Year</label>
               <Input type="number" value={fiscalYear} onChange={(e) => setFiscalYear(e.target.value)} />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Period Type</label>
-              <select value={periodType} onChange={(e) => setPeriodType(e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Period Type</label>
+              <select value={periodType} onChange={(e) => setPeriodType(e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                 <option value="monthly">Monthly</option>
                 <option value="quarterly">Quarterly</option>
                 <option value="annual">Annual</option>
@@ -78,19 +78,19 @@ export default function NewBudgetPage() {
             {lines.map((line, i) => (
               <div key={i} className="flex items-end gap-3">
                 <div className="flex-1">
-                  <label className="mb-1 block text-xs font-medium text-[#8B7355]">Account ID</label>
+                  <label className="mb-1 block text-xs font-medium text-[#5C4033]">Account ID</label>
                   <Input type="number" value={line.account_id} onChange={(e) => setLine(i, 'account_id', e.target.value)} placeholder="Account" />
                 </div>
                 <div className="flex-1">
-                  <label className="mb-1 block text-xs font-medium text-[#8B7355]">Period Start</label>
+                  <label className="mb-1 block text-xs font-medium text-[#5C4033]">Period Start</label>
                   <Input type="date" value={line.period_start} onChange={(e) => setLine(i, 'period_start', e.target.value)} />
                 </div>
                 <div className="flex-1">
-                  <label className="mb-1 block text-xs font-medium text-[#8B7355]">Period End</label>
+                  <label className="mb-1 block text-xs font-medium text-[#5C4033]">Period End</label>
                   <Input type="date" value={line.period_end} onChange={(e) => setLine(i, 'period_end', e.target.value)} />
                 </div>
                 <div className="flex-1">
-                  <label className="mb-1 block text-xs font-medium text-[#8B7355]">Amount</label>
+                  <label className="mb-1 block text-xs font-medium text-[#5C4033]">Amount</label>
                   <Input type="number" value={line.amount} onChange={(e) => setLine(i, 'amount', e.target.value)} placeholder="0.00" />
                 </div>
                 <Button size="icon" variant="ghost" onClick={() => removeLine(i)} disabled={lines.length <= 1}><Trash2 className="h-4 w-4 text-[#E07A5F]" /></Button>

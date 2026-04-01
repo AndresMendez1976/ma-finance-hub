@@ -30,14 +30,14 @@ export default function WipSchedulePage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">WIP Schedule</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">WIP Schedule</h1>
       <div className="mb-4 flex gap-3 items-end">
-        <div><label className="text-xs font-medium text-[#5C4033]">As of Date</label><Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-40" /></div>
+        <div><label className="text-xs font-medium text-[#2C1810]">As of Date</label><Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-40" /></div>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Run Report'}</Button>
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Work in Progress — {formatDate(data.as_of)}</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Work in Progress — {formatDate(data.as_of)}</CardTitle></CardHeader>
           <CardContent className="pt-4 overflow-x-auto">
             <Table>
               <THead>
@@ -61,7 +61,7 @@ export default function WipSchedulePage() {
                     <TD className={`text-right font-mono font-medium ${Number(d.over_under) >= 0 ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>{formatCurrency(d.over_under)}</TD>
                   </TR>
                 ))}
-                {!data.data.length && <TR><TD colSpan={9} className="text-center text-[#8B7355]">No WIP data</TD></TR>}
+                {!data.data.length && <TR><TD colSpan={9} className="text-center text-[#5C4033]">No WIP data</TD></TR>}
               </TBody>
             </Table>
           </CardContent>

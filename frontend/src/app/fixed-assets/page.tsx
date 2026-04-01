@@ -13,7 +13,7 @@ import { formatDate, formatCurrency } from '@/lib/format';
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-[#2D6A4F] text-white',
   disposed: 'bg-[#8B7355] text-white',
-  fully_depreciated: 'bg-[#D4A854] text-[#5C4033]',
+  fully_depreciated: 'bg-[#D4A854] text-[#2C1810]',
 };
 
 interface Asset {
@@ -47,17 +47,17 @@ export default function FixedAssetsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Fixed Assets</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Fixed Assets</h1>
         <Link href="/fixed-assets/new"><Button><Plus className="mr-2 h-4 w-4" />New Asset</Button></Link>
       </div>
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">Search</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">Search</label>
           <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Name or #" className="w-48" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
             <option value="">All</option>
             <option value="active">Active</option>
             <option value="disposed">Disposed</option>
@@ -71,7 +71,7 @@ export default function FixedAssetsPage() {
           <Table>
             <THead><TR><TH>Asset#</TH><TH>Name</TH><TH>Category</TH><TH>Purchase Date</TH><TH className="text-right">Purchase Price</TH><TH className="text-right">Book Value</TH><TH>Status</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((a) => (
                 <TR key={a.id}>
                   <TD><Link href={`/fixed-assets/${a.id}`} className="font-mono text-sm text-[#2D6A4F] underline">{a.asset_number}</Link></TD>
@@ -81,11 +81,11 @@ export default function FixedAssetsPage() {
                   <TD><span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[a.status] || ''}`}>{a.status.replace('_', ' ')}</span></TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No assets found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No assets found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

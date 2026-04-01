@@ -74,42 +74,42 @@ export default function RegisterPage() {
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Create Your Account</CardTitle>
-          <p className="text-sm" style={{ color: '#8B7355' }}>Start your free 14-day trial of MA Finance Hub</p>
+          <p className="text-sm" style={{ color: '#5C4033' }}>Start your free 14-day trial of MA Finance Hub</p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Company Name</label>
+            <label className="text-sm font-medium text-[#2C1810]">Company Name</label>
             <Input placeholder="Acme Corporation" value={form.company_name} onChange={update('company_name')} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">First Name</label>
+              <label className="text-sm font-medium text-[#2C1810]">First Name</label>
               <Input placeholder="John" value={form.first_name} onChange={update('first_name')} />
             </div>
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Last Name</label>
+              <label className="text-sm font-medium text-[#2C1810]">Last Name</label>
               <Input placeholder="Doe" value={form.last_name} onChange={update('last_name')} />
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Email</label>
+            <label className="text-sm font-medium text-[#2C1810]">Email</label>
             <Input type="email" placeholder="you@company.com" value={form.email} onChange={update('email')} />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Password</label>
+            <label className="text-sm font-medium text-[#2C1810]">Password</label>
             <Input type="password" placeholder="Min 10 chars, upper, lower, number, special" value={form.password} onChange={update('password')} />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Confirm Password</label>
+            <label className="text-sm font-medium text-[#2C1810]">Confirm Password</label>
             <Input type="password" placeholder="Re-enter password" value={form.confirm_password} onChange={update('confirm_password')}
               onKeyDown={(e) => e.key === 'Enter' && handleRegister()} />
           </div>
 
-          <label className="flex items-start gap-2 text-sm text-[#5C4033]">
+          <label className="flex items-start gap-2 text-sm text-[#2C1810]">
             <input type="checkbox" checked={agreedToTerms} onChange={(e) => setAgreedToTerms(e.target.checked)}
               className="mt-1 h-4 w-4 rounded border-[#C4B5A0]" />
             <span>
@@ -126,7 +126,7 @@ export default function RegisterPage() {
             {loading ? 'Creating account...' : 'Start Free 14-Day Trial'}
           </Button>
 
-          <p className="text-center text-sm" style={{ color: '#8B7355' }}>
+          <p className="text-center text-sm" style={{ color: '#5C4033' }}>
             Already have an account?{' '}
             <Link href="/login" className="font-medium underline" style={{ color: '#8B5E3C' }}>Sign in</Link>
           </p>

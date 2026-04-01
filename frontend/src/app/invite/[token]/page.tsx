@@ -88,7 +88,7 @@ export default function InviteAcceptPage() {
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <h2 className="text-xl font-bold" style={{ color: '#E07A5F' }}>Invalid Invitation</h2>
-            <p className="mt-2 text-sm" style={{ color: '#8B7355' }}>{loadError}</p>
+            <p className="mt-2 text-sm" style={{ color: '#5C4033' }}>{loadError}</p>
             <Link href="/login" className="mt-4 inline-block text-sm underline" style={{ color: '#8B5E3C' }}>Go to Login</Link>
           </CardContent>
         </Card>
@@ -102,7 +102,7 @@ export default function InviteAcceptPage() {
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <h2 className="text-xl font-bold" style={{ color: '#6B8F71' }}>Account Created</h2>
-            <p className="mt-2 text-sm" style={{ color: '#5C4033' }}>Your account has been set up successfully. You can now sign in.</p>
+            <p className="mt-2 text-sm" style={{ color: '#2C1810' }}>Your account has been set up successfully. You can now sign in.</p>
             <Link href="/login">
               <Button className="mt-4">Sign In</Button>
             </Link>
@@ -115,7 +115,7 @@ export default function InviteAcceptPage() {
   if (!info) {
     return (
       <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#F5F0E8' }}>
-        <p style={{ color: '#8B7355' }}>Loading invitation...</p>
+        <p style={{ color: '#5C4033' }}>Loading invitation...</p>
       </div>
     );
   }
@@ -125,44 +125,44 @@ export default function InviteAcceptPage() {
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Join {info.company_name}</CardTitle>
-          <p className="mt-1 text-sm" style={{ color: '#8B7355' }}>
+          <p className="mt-1 text-sm" style={{ color: '#5C4033' }}>
             {info.inviter_name} invited you to join as <Badge variant="outline">{info.role}</Badge>
           </p>
           {info.user_type === 'external' && info.external_type && (
-            <p className="mt-1 text-xs" style={{ color: '#8B7355' }}>
+            <p className="mt-1 text-xs" style={{ color: '#5C4033' }}>
               External access: {info.external_type}
             </p>
           )}
           {info.message && (
-            <div className="mt-3 rounded-md p-3 text-left text-sm" style={{ backgroundColor: '#F5F0E8', color: '#5C4033' }}>
+            <div className="mt-3 rounded-md p-3 text-left text-sm" style={{ backgroundColor: '#F5F0E8', color: '#2C1810' }}>
               &quot;{info.message}&quot;
             </div>
           )}
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Email</label>
+            <label className="text-sm font-medium text-[#2C1810]">Email</label>
             <Input value={info.email} disabled className="bg-gray-50" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">First Name</label>
+              <label className="text-sm font-medium text-[#2C1810]">First Name</label>
               <Input placeholder="John" value={form.first_name} onChange={update('first_name')} />
             </div>
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Last Name</label>
+              <label className="text-sm font-medium text-[#2C1810]">Last Name</label>
               <Input placeholder="Doe" value={form.last_name} onChange={update('last_name')} />
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Password</label>
+            <label className="text-sm font-medium text-[#2C1810]">Password</label>
             <Input type="password" placeholder="Min 10 chars, upper, lower, number, special" value={form.password} onChange={update('password')} />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-[#5C4033]">Confirm Password</label>
+            <label className="text-sm font-medium text-[#2C1810]">Confirm Password</label>
             <Input type="password" placeholder="Re-enter password" value={form.confirm_password} onChange={update('confirm_password')}
               onKeyDown={(e) => e.key === 'Enter' && handleAccept()} />
           </div>
@@ -173,7 +173,7 @@ export default function InviteAcceptPage() {
             {loading ? 'Creating account...' : 'Accept Invitation'}
           </Button>
 
-          <p className="text-center text-sm" style={{ color: '#8B7355' }}>
+          <p className="text-center text-sm" style={{ color: '#5C4033' }}>
             Already have an account?{' '}
             <Link href="/login" className="font-medium underline" style={{ color: '#8B5E3C' }}>Sign in</Link>
           </p>

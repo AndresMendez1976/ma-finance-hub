@@ -78,23 +78,23 @@ export default function SecurityPage() {
     finally { setLoading(false); }
   };
 
-  if (status === 'loading') return <Shell><p className="text-[#8B7355]">Loading security settings...</p></Shell>;
+  if (status === 'loading') return <Shell><p className="text-[#5C4033]">Loading security settings...</p></Shell>;
 
   return (
     <Shell>
-      <h1 className="mb-6 text-2xl font-bold text-[#5C4033]">Security Settings</h1>
+      <h1 className="mb-6 text-2xl font-bold text-[#2C1810]">Security Settings</h1>
       {msg && <div className={`mb-4 rounded-md p-3 text-sm ${msg.includes('success') || msg.includes('disabled') ? 'bg-[#2D6A4F]/10 text-[#2D6A4F]' : 'bg-[#E07A5F]/10 text-[#E07A5F]'}`}>{msg}</div>}
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
       <Card className="border-[#E8DCC8]">
         <CardHeader>
-          <CardTitle className="text-[#5C4033]">Two-Factor Authentication (TOTP)</CardTitle>
+          <CardTitle className="text-[#2C1810]">Two-Factor Authentication (TOTP)</CardTitle>
         </CardHeader>
         <CardContent>
           {/* MFA Disabled — show enable button */}
           {status === 'disabled' && (
             <div className="space-y-3">
-              <p className="text-sm text-[#8B7355]">
+              <p className="text-sm text-[#5C4033]">
                 Add an extra layer of security to your account by enabling two-factor authentication.
                 You will need an authenticator app like Google Authenticator, Authy, or 1Password.
               </p>
@@ -107,7 +107,7 @@ export default function SecurityPage() {
           {/* Setup — show QR code */}
           {status === 'setup' && setupData && (
             <div className="space-y-4">
-              <p className="text-sm text-[#5C4033]">
+              <p className="text-sm text-[#2C1810]">
                 Scan this QR code with your authenticator app, then enter the 6-digit verification code below.
               </p>
               <div className="flex justify-center">
@@ -115,11 +115,11 @@ export default function SecurityPage() {
                 <img src={setupData.qr_code_data_url} alt="MFA QR Code" className="h-48 w-48 rounded-md border border-[#E8DCC8]" />
               </div>
               <div className="rounded-md bg-[#F5F0E8] p-3">
-                <p className="text-xs font-medium text-[#8B7355]">Manual entry key:</p>
-                <p className="mt-1 font-mono text-sm text-[#5C4033] select-all">{setupData.secret}</p>
+                <p className="text-xs font-medium text-[#5C4033]">Manual entry key:</p>
+                <p className="mt-1 font-mono text-sm text-[#2C1810] select-all">{setupData.secret}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-[#5C4033]">Verification Code</label>
+                <label className="text-sm font-medium text-[#2C1810]">Verification Code</label>
                 <Input
                   type="text"
                   inputMode="numeric"
@@ -150,14 +150,14 @@ export default function SecurityPage() {
                   Two-factor authentication is now enabled.
                 </p>
               </div>
-              <p className="text-sm text-[#5C4033]">
+              <p className="text-sm text-[#2C1810]">
                 Save these backup codes in a secure place. Each code can only be used once.
                 If you lose access to your authenticator app, you can use a backup code to sign in.
               </p>
               <div className="rounded-md border border-[#E8DCC8] bg-[#F5F0E8] p-4">
                 <div className="grid grid-cols-2 gap-2">
                   {backupCodes.map((code, i) => (
-                    <span key={i} className="font-mono text-sm text-[#5C4033]">{code}</span>
+                    <span key={i} className="font-mono text-sm text-[#2C1810]">{code}</span>
                   ))}
                 </div>
               </div>
@@ -173,10 +173,10 @@ export default function SecurityPage() {
                 <span className="text-sm font-medium text-[#2D6A4F]">Two-factor authentication is enabled</span>
               </div>
               <hr className="border-[#E8DCC8]" />
-              <p className="text-sm text-[#8B7355]">To disable MFA, enter your current TOTP code and password.</p>
+              <p className="text-sm text-[#5C4033]">To disable MFA, enter your current TOTP code and password.</p>
               <div className="grid gap-3 max-w-sm">
                 <div>
-                  <label className="text-sm font-medium text-[#5C4033]">Current TOTP Code</label>
+                  <label className="text-sm font-medium text-[#2C1810]">Current TOTP Code</label>
                   <Input
                     type="text"
                     inputMode="numeric"
@@ -188,7 +188,7 @@ export default function SecurityPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-[#5C4033]">Password</label>
+                  <label className="text-sm font-medium text-[#2C1810]">Password</label>
                   <Input
                     type="password"
                     placeholder="Enter your password"

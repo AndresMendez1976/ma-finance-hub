@@ -35,20 +35,20 @@ export default function NewBankAccountPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Bank Account</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Bank Account</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <Card className="max-w-lg border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Account Details</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Account Details</CardTitle></CardHeader>
         <CardContent className="space-y-4">
-          <div><label className="text-sm font-medium text-[#5C4033]">Account Name *</label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Chase Business Checking" /></div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Linked GL Account *</label>
-            <select value={accountId} onChange={(e) => setAccountId(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]">
+          <div><label className="text-sm font-medium text-[#2C1810]">Account Name *</label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Chase Business Checking" /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Linked GL Account *</label>
+            <select value={accountId} onChange={(e) => setAccountId(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]">
               <option value="">Select account</option>
               {assetAccounts.map((a) => <option key={a.id} value={a.id}>{a.account_code} - {a.name}</option>)}
             </select>
           </div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Institution</label><Input value={institution} onChange={(e) => setInstitution(e.target.value)} placeholder="Bank name" /></div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Last 4 Digits</label><Input value={last4} onChange={(e) => setLast4(e.target.value.slice(0, 4))} placeholder="1234" maxLength={4} /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Institution</label><Input value={institution} onChange={(e) => setInstitution(e.target.value)} placeholder="Bank name" /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Last 4 Digits</label><Input value={last4} onChange={(e) => setLast4(e.target.value.slice(0, 4))} placeholder="1234" maxLength={4} /></div>
           <Button onClick={save} disabled={loading}>{loading ? 'Saving...' : 'Create Account'}</Button>
         </CardContent>
       </Card>

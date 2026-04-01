@@ -50,11 +50,11 @@ export default function OpportunityDetailPage() {
     } catch (e: unknown) { setMsg((e as Error).message); }
   };
 
-  if (!opp) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (!opp) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">{opp.title}</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">{opp.title}</h1>
       {msg && <div className="mb-3 rounded-md bg-[#2D6A4F]/10 p-2 text-sm text-[#2D6A4F]">{msg}</div>}
 
       <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -62,16 +62,16 @@ export default function OpportunityDetailPage() {
           <CardHeader><CardTitle>Opportunity Info</CardTitle></CardHeader>
           <CardContent>
             <dl className="grid grid-cols-2 gap-2 text-sm">
-              <dt className="text-[#8B7355]">Contact</dt><dd>{opp.contact_name}</dd>
-              <dt className="text-[#8B7355]">Pipeline</dt><dd>{opp.pipeline_name}</dd>
-              <dt className="text-[#8B7355]">Stage</dt><dd>{opp.stage_name}</dd>
-              <dt className="text-[#8B7355]">Value</dt><dd className="font-mono">{formatCurrency(opp.value, opp.currency)}</dd>
-              <dt className="text-[#8B7355]">Expected Close</dt><dd>{formatDate(opp.expected_close_date)}</dd>
-              <dt className="text-[#8B7355]">Source</dt><dd>{opp.source}</dd>
-              <dt className="text-[#8B7355]">Status</dt><dd>{opp.status}</dd>
-              <dt className="text-[#8B7355]">Assigned To</dt><dd>{opp.assigned_to}</dd>
+              <dt className="text-[#5C4033]">Contact</dt><dd>{opp.contact_name}</dd>
+              <dt className="text-[#5C4033]">Pipeline</dt><dd>{opp.pipeline_name}</dd>
+              <dt className="text-[#5C4033]">Stage</dt><dd>{opp.stage_name}</dd>
+              <dt className="text-[#5C4033]">Value</dt><dd className="font-mono">{formatCurrency(opp.value, opp.currency)}</dd>
+              <dt className="text-[#5C4033]">Expected Close</dt><dd>{formatDate(opp.expected_close_date)}</dd>
+              <dt className="text-[#5C4033]">Source</dt><dd>{opp.source}</dd>
+              <dt className="text-[#5C4033]">Status</dt><dd>{opp.status}</dd>
+              <dt className="text-[#5C4033]">Assigned To</dt><dd>{opp.assigned_to}</dd>
             </dl>
-            {opp.notes && <p className="mt-3 text-sm text-[#8B7355]">{opp.notes}</p>}
+            {opp.notes && <p className="mt-3 text-sm text-[#5C4033]">{opp.notes}</p>}
           </CardContent>
         </Card>
 
@@ -79,7 +79,7 @@ export default function OpportunityDetailPage() {
           <CardHeader><CardTitle>Actions</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="flex gap-2">
-              <select value={moveStage} onChange={(e) => setMoveStage(e.target.value)} className="h-10 flex-1 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+              <select value={moveStage} onChange={(e) => setMoveStage(e.target.value)} className="h-10 flex-1 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                 <option value="">Move to stage...</option>
                 {stages.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
@@ -100,9 +100,9 @@ export default function OpportunityDetailPage() {
             <THead><TR><TH>Date</TH><TH>Type</TH><TH>Title</TH><TH>Description</TH></TR></THead>
             <TBody>
               {activities.map((a) => (
-                <TR key={a.id}><TD>{formatDate(a.date)}</TD><TD className="capitalize">{a.type}</TD><TD>{a.title}</TD><TD className="text-sm text-[#8B7355]">{a.description}</TD></TR>
+                <TR key={a.id}><TD>{formatDate(a.date)}</TD><TD className="capitalize">{a.type}</TD><TD>{a.title}</TD><TD className="text-sm text-[#5C4033]">{a.description}</TD></TR>
               ))}
-              {!activities.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No activities</TD></TR>}
+              {!activities.length && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No activities</TD></TR>}
             </TBody>
           </Table>
         </CardContent>
@@ -112,7 +112,7 @@ export default function OpportunityDetailPage() {
         <CardHeader><CardTitle>Add Activity</CardTitle></CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-            <select value={actForm.type} onChange={(e) => setActForm((p) => ({ ...p, type: e.target.value }))} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+            <select value={actForm.type} onChange={(e) => setActForm((p) => ({ ...p, type: e.target.value }))} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
               <option value="note">Note</option><option value="call">Call</option><option value="email">Email</option><option value="meeting">Meeting</option>
             </select>
             <Input value={actForm.title} onChange={(e) => setActForm((p) => ({ ...p, title: e.target.value }))} placeholder="Title" />

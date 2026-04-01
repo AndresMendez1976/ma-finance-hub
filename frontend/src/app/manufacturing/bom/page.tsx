@@ -10,7 +10,7 @@ import { api } from '@/lib/api';
 import { Plus, Package, Eye } from 'lucide-react';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', active: 'bg-[#2D6A4F] text-white', archived: 'bg-[#8B7355] text-white',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', active: 'bg-[#2D6A4F] text-white', archived: 'bg-[#8B7355] text-white',
 };
 
 interface BOM {
@@ -39,7 +39,7 @@ export default function BOMListPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Bills of Materials</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Bills of Materials</h1>
         <Link href="/manufacturing/bom/new"><Button><Plus className="mr-2 h-4 w-4" />New BOM</Button></Link>
       </div>
       <Card className="border-[#E8DCC8]">
@@ -49,7 +49,7 @@ export default function BOMListPage() {
               <TR><TH>Name</TH><TH>Product</TH><TH>Version</TH><TH>Status</TH><TH className="text-right">Estimated Cost</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={6} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((bom) => (
                 <TR key={bom.id}>
                   <TD className="font-medium">{bom.name}</TD>
@@ -61,14 +61,14 @@ export default function BOMListPage() {
                 </TR>
               ))}
               {!loading && !data?.data.length && (
-                <TR><TD colSpan={6} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={6} className="text-center text-[#5C4033]">
                   <Package className="mx-auto mb-2 h-8 w-8 opacity-40" />No BOMs found
                 </TD></TR>
               )}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

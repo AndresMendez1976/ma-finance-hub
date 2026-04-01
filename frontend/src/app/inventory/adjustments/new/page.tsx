@@ -52,24 +52,24 @@ export default function NewAdjustmentPage() {
     finally { setLoading(false); }
   };
 
-  const selectClass = 'flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]';
+  const selectClass = 'flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]';
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Inventory Adjustment</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Inventory Adjustment</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
       <Card className="border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Adjustment Details</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Adjustment Details</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <div><label className="text-sm font-medium text-[#5C4033]">Date *</label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Reason *</label><Input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Physical count, damage, etc." /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Date *</label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Reason *</label><Input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Physical count, damage, etc." /></div>
           </div>
 
           <div className="rounded-md border border-[#E8DCC8] p-4">
             <div className="mb-2 flex items-center justify-between">
-              <p className="text-sm font-semibold text-[#5C4033]">Lines</p>
+              <p className="text-sm font-semibold text-[#2C1810]">Lines</p>
               <Button size="sm" variant="outline" onClick={addLine}><Plus className="mr-1 h-3 w-3" />Add Line</Button>
             </div>
             <Table>

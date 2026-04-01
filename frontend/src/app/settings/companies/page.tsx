@@ -65,8 +65,8 @@ export default function CompaniesSettingsPage() {
     <Shell>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Building2 className="h-6 w-6 text-[#5C4033]" />
-          <h1 className="text-2xl font-bold text-[#5C4033]">Multi-Company Management</h1>
+          <Building2 className="h-6 w-6 text-[#2C1810]" />
+          <h1 className="text-2xl font-bold text-[#2C1810]">Multi-Company Management</h1>
         </div>
         <Button onClick={() => setShowNewGroup(!showNewGroup)}><Plus className="mr-2 h-4 w-4" />New Group</Button>
       </div>
@@ -74,19 +74,19 @@ export default function CompaniesSettingsPage() {
       {showNewGroup && (
         <Card className="mb-4 border-[#D4A854]/30 bg-[#D4A854]/5">
           <CardContent className="flex items-end gap-3 pt-4">
-            <div className="flex-1"><label className="text-xs font-medium text-[#5C4033]">Group Name</label><Input value={newGroupName} onChange={(e) => setNewGroupName(e.target.value)} placeholder="e.g. Acme Holdings" /></div>
+            <div className="flex-1"><label className="text-xs font-medium text-[#2C1810]">Group Name</label><Input value={newGroupName} onChange={(e) => setNewGroupName(e.target.value)} placeholder="e.g. Acme Holdings" /></div>
             <Button onClick={createGroup} disabled={saving}>{saving ? 'Creating...' : 'Create Group'}</Button>
             <Button variant="ghost" onClick={() => setShowNewGroup(false)}>Cancel</Button>
           </CardContent>
         </Card>
       )}
-      {loading && <p className="text-[#8B7355]">Loading...</p>}
+      {loading && <p className="text-[#5C4033]">Loading...</p>}
       {!loading && groups.map((group) => (
         <Card key={group.id} className="mb-4 border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-[#5C4033]">{group.name}</CardTitle>
-              <span className="text-xs text-[#8B7355]">Created {formatDate(group.created_at)}</span>
+              <CardTitle className="text-[#2C1810]">{group.name}</CardTitle>
+              <span className="text-xs text-[#5C4033]">Created {formatDate(group.created_at)}</span>
             </div>
           </CardHeader>
           <CardContent className="pt-4">
@@ -95,19 +95,19 @@ export default function CompaniesSettingsPage() {
               <TBody>
                 {group.tenants.map((t) => (
                   <TR key={t.id}>
-                    <TD className="font-medium">{t.tenant_name} <span className="text-xs text-[#8B7355]">(ID: {t.tenant_id})</span></TD>
+                    <TD className="font-medium">{t.tenant_name} <span className="text-xs text-[#5C4033]">(ID: {t.tenant_id})</span></TD>
                     <TD><Badge variant={t.role === 'parent' ? 'success' : 'info'}>{t.role}</Badge></TD>
-                    <TD className="text-sm text-[#8B7355]">{formatDate(t.added_at)}</TD>
+                    <TD className="text-sm text-[#5C4033]">{formatDate(t.added_at)}</TD>
                     <TD><Button size="sm" variant="ghost" className="text-[#E07A5F]" onClick={() => removeTenant(group.id, t.tenant_id)}><Trash2 className="h-4 w-4" /></Button></TD>
                   </TR>
                 ))}
-                {!group.tenants.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No tenants in this group</TD></TR>}
+                {!group.tenants.length && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No tenants in this group</TD></TR>}
               </TBody>
             </Table>
             {addTenantGroupId === group.id ? (
               <div className="mt-3 flex items-end gap-3">
-                <div><label className="text-xs text-[#8B7355]">Tenant ID</label><Input type="number" value={newTenantId} onChange={(e) => setNewTenantId(e.target.value)} className="w-28" /></div>
-                <div><label className="text-xs text-[#8B7355]">Role</label>
+                <div><label className="text-xs text-[#5C4033]">Tenant ID</label><Input type="number" value={newTenantId} onChange={(e) => setNewTenantId(e.target.value)} className="w-28" /></div>
+                <div><label className="text-xs text-[#5C4033]">Role</label>
                   <select value={newTenantRole} onChange={(e) => setNewTenantRole(e.target.value)} className="flex h-10 rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm">
                     <option value="parent">Parent</option><option value="subsidiary">Subsidiary</option><option value="affiliate">Affiliate</option>
                   </select>
@@ -118,13 +118,13 @@ export default function CompaniesSettingsPage() {
             ) : (
               <Button size="sm" variant="outline" className="mt-3" onClick={() => setAddTenantGroupId(group.id)}><Plus className="mr-1 h-3 w-3" />Add Tenant</Button>
             )}
-            <p className="mt-2 text-xs text-[#8B7355]">Group value tracked via consolidated reporting | {formatCurrency(0)} base</p>
+            <p className="mt-2 text-xs text-[#5C4033]">Group value tracked via consolidated reporting | {formatCurrency(0)} base</p>
           </CardContent>
         </Card>
       ))}
       {!loading && !groups.length && (
         <Card className="border-[#E8DCC8]">
-          <CardContent className="pt-6 text-center text-[#8B7355]">
+          <CardContent className="pt-6 text-center text-[#5C4033]">
             <p>No company groups configured. Create a group to manage multi-company relationships.</p>
           </CardContent>
         </Card>

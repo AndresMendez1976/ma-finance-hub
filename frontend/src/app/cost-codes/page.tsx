@@ -35,7 +35,7 @@ export default function CostCodesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Cost Codes</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Cost Codes</h1>
         <Link href="/cost-codes/new"><Button><Plus className="mr-2 h-4 w-4" />New Cost Code</Button></Link>
       </div>
       <div className="mb-4 flex gap-2">
@@ -48,22 +48,22 @@ export default function CostCodesPage() {
           <Table>
             <THead><TR><TH>Code</TH><TH>Name</TH><TH>Category</TH><TH>Unit</TH><TH className="text-right">Default Cost</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={5} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={5} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data.map((cc) => (
                 <TR key={cc.id}>
                   <TD className="font-mono font-medium" style={{ paddingLeft: `${(cc.depth || 0) * 24 + 16}px` }}>
                     {cc.depth > 0 && <span className="text-[#D4C4A8] mr-1">{'--'.repeat(cc.depth)}</span>}{cc.code}
                   </TD>
                   <TD>{cc.name}</TD>
-                  <TD><span className="rounded bg-[#E8DCC8] px-2 py-1 text-xs font-medium text-[#5C4033]">{cc.category}</span></TD>
-                  <TD className="text-sm text-[#8B7355]">{cc.unit || '—'}</TD>
+                  <TD><span className="rounded bg-[#E8DCC8] px-2 py-1 text-xs font-medium text-[#2C1810]">{cc.category}</span></TD>
+                  <TD className="text-sm text-[#5C4033]">{cc.unit || '—'}</TD>
                   <TD className="text-right font-mono">{cc.default_cost ? formatCurrency(cc.default_cost) : '—'}</TD>
                 </TR>
               ))}
-              {!loading && !data.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No cost codes found</TD></TR>}
+              {!loading && !data.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No cost codes found</TD></TR>}
             </TBody>
           </Table>
-          <p className="mt-2 text-xs text-[#8B7355]">Last updated: {formatDate(new Date().toISOString())}</p>
+          <p className="mt-2 text-xs text-[#5C4033]">Last updated: {formatDate(new Date().toISOString())}</p>
         </CardContent>
       </Card>
     </Shell>

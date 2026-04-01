@@ -56,33 +56,33 @@ export default function NewPurchaseOrderPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Purchase Order</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Purchase Order</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="border-[#E8DCC8]"><CardHeader><CardTitle className="text-[#5C4033]">Vendor</CardTitle></CardHeader><CardContent className="space-y-3">
-          <div><label className="text-sm font-medium text-[#5C4033]">Select Contact</label>
-            <select value={contactId} onChange={(e) => selectContact(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]">
+        <Card className="border-[#E8DCC8]"><CardHeader><CardTitle className="text-[#2C1810]">Vendor</CardTitle></CardHeader><CardContent className="space-y-3">
+          <div><label className="text-sm font-medium text-[#2C1810]">Select Contact</label>
+            <select value={contactId} onChange={(e) => selectContact(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]">
               <option value="">— or type manually —</option>
               {contacts.map((c) => <option key={c.id} value={c.id}>{c.company_name || ''} {c.first_name} {c.last_name || ''}</option>)}
             </select></div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Vendor Name *</label><Input value={vendorName} onChange={(e) => setVendorName(e.target.value)} /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Vendor Name *</label><Input value={vendorName} onChange={(e) => setVendorName(e.target.value)} /></div>
         </CardContent></Card>
-        <Card className="border-[#E8DCC8]"><CardHeader><CardTitle className="text-[#5C4033]">Details</CardTitle></CardHeader><CardContent className="space-y-3">
+        <Card className="border-[#E8DCC8]"><CardHeader><CardTitle className="text-[#2C1810]">Details</CardTitle></CardHeader><CardContent className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Order Date *</label><Input type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Expected Delivery</label><Input type="date" value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Order Date *</label><Input type="date" value={orderDate} onChange={(e) => setOrderDate(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Expected Delivery</label><Input type="date" value={deliveryDate} onChange={(e) => setDeliveryDate(e.target.value)} /></div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Tax %</label><Input type="number" value={taxRate} onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)} step={0.01} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Shipping</label><Input type="number" value={shippingCost} onChange={(e) => setShippingCost(parseFloat(e.target.value) || 0)} step={0.01} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Tax %</label><Input type="number" value={taxRate} onChange={(e) => setTaxRate(parseFloat(e.target.value) || 0)} step={0.01} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Shipping</label><Input type="number" value={shippingCost} onChange={(e) => setShippingCost(parseFloat(e.target.value) || 0)} step={0.01} /></div>
           </div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Notes</label><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]" /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Notes</label><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]" /></div>
         </CardContent></Card>
       </div>
-      <Card className="mt-4 border-[#E8DCC8]"><CardHeader className="flex flex-row items-center justify-between"><CardTitle className="text-[#5C4033]">Line Items</CardTitle><Button size="sm" variant="outline" onClick={() => setLines([...lines, { description: '', quantity_ordered: 1, unit_price: 0 }])}><Plus className="mr-1 h-3 w-3" />Add</Button></CardHeader>
+      <Card className="mt-4 border-[#E8DCC8]"><CardHeader className="flex flex-row items-center justify-between"><CardTitle className="text-[#2C1810]">Line Items</CardTitle><Button size="sm" variant="outline" onClick={() => setLines([...lines, { description: '', quantity_ordered: 1, unit_price: 0 }])}><Plus className="mr-1 h-3 w-3" />Add</Button></CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-[#8B7355]"><div className="col-span-5">Description</div><div className="col-span-2">Qty</div><div className="col-span-2">Unit Price</div><div className="col-span-2 text-right">Amount</div><div className="col-span-1"></div></div>
+            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-[#5C4033]"><div className="col-span-5">Description</div><div className="col-span-2">Qty</div><div className="col-span-2">Unit Price</div><div className="col-span-2 text-right">Amount</div><div className="col-span-1"></div></div>
             {lines.map((l, i) => (
               <div key={i} className="grid grid-cols-12 items-center gap-2">
                 <div className="col-span-5"><Input value={l.description} onChange={(e) => { const u = [...lines]; u[i] = { ...u[i], description: e.target.value }; setLines(u); }} /></div>
@@ -93,10 +93,10 @@ export default function NewPurchaseOrderPage() {
               </div>))}
           </div>
           <div className="mt-4 border-t border-[#E8DCC8] pt-4 text-right space-y-1">
-            <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Subtotal:</span><span className="w-28 font-mono">${subtotal.toFixed(2)}</span></div>
-            {taxRate > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Tax ({taxRate}%):</span><span className="w-28 font-mono">${taxAmount.toFixed(2)}</span></div>}
-            {shippingCost > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Shipping:</span><span className="w-28 font-mono">${shippingCost.toFixed(2)}</span></div>}
-            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#5C4033]">Total:</span><span className="w-28 font-mono">${total.toFixed(2)}</span></div>
+            <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Subtotal:</span><span className="w-28 font-mono">${subtotal.toFixed(2)}</span></div>
+            {taxRate > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Tax ({taxRate}%):</span><span className="w-28 font-mono">${taxAmount.toFixed(2)}</span></div>}
+            {shippingCost > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Shipping:</span><span className="w-28 font-mono">${shippingCost.toFixed(2)}</span></div>}
+            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#2C1810]">Total:</span><span className="w-28 font-mono">${total.toFixed(2)}</span></div>
           </div>
         </CardContent></Card>
       <div className="mt-4"><Button onClick={save} disabled={loading}>{loading ? 'Saving...' : 'Create Purchase Order'}</Button></div>

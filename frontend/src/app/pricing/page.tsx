@@ -78,14 +78,14 @@ export default function PricingPage() {
     <div className="min-h-screen" style={{ backgroundColor: '#F5F0E8' }}>
       {/* Header */}
       <div className="py-6 text-center">
-        <Link href="/" className="text-xl font-bold" style={{ color: '#5C4033' }}>MA Finance Hub</Link>
-        <p className="mt-1 text-sm" style={{ color: '#8B7355' }}>Powered by MAiSHQ</p>
+        <Link href="/" className="text-xl font-bold" style={{ color: '#2C1810' }}>MA Finance Hub</Link>
+        <p className="mt-1 text-sm" style={{ color: '#5C4033' }}>Powered by MAiSHQ</p>
       </div>
 
       <div className="mx-auto max-w-6xl px-4 pb-16">
         <div className="mb-12 text-center">
-          <h1 className="text-3xl font-bold" style={{ color: '#5C4033' }}>Simple, transparent pricing</h1>
-          <p className="mt-2 text-lg" style={{ color: '#8B7355' }}>Choose the plan that fits your business. All plans include a 14-day free trial.</p>
+          <h1 className="text-3xl font-bold" style={{ color: '#2C1810' }}>Simple, transparent pricing</h1>
+          <p className="mt-2 text-lg" style={{ color: '#5C4033' }}>Choose the plan that fits your business. All plans include a 14-day free trial.</p>
         </div>
 
         {/* Tier cards */}
@@ -98,17 +98,17 @@ export default function PricingPage() {
                 </div>
               )}
               <CardHeader className="text-center">
-                <CardTitle className="text-lg" style={{ color: '#5C4033' }}>{tier.name}</CardTitle>
+                <CardTitle className="text-lg" style={{ color: '#2C1810' }}>{tier.name}</CardTitle>
                 <div className="mt-2">
-                  <span className="text-3xl font-bold" style={{ color: '#5C4033' }}>${tier.price}</span>
-                  <span className="text-sm" style={{ color: '#8B7355' }}>/month</span>
+                  <span className="text-3xl font-bold" style={{ color: '#2C1810' }}>${tier.price}</span>
+                  <span className="text-sm" style={{ color: '#5C4033' }}>/month</span>
                 </div>
-                <p className="mt-1 text-sm" style={{ color: '#8B7355' }}>{tier.description}</p>
+                <p className="mt-1 text-sm" style={{ color: '#5C4033' }}>{tier.description}</p>
               </CardHeader>
               <CardContent className="flex flex-1 flex-col">
                 <ul className="flex-1 space-y-2">
                   {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm" style={{ color: '#5C4033' }}>
+                    <li key={feature} className="flex items-start gap-2 text-sm" style={{ color: '#2C1810' }}>
                       <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: '#6B8F71' }} />
                       {feature}
                     </li>
@@ -128,15 +128,15 @@ export default function PricingPage() {
         <div className="mt-16">
           <Card className="mx-auto max-w-2xl">
             <CardContent className="p-8 text-center">
-              <h2 className="text-xl font-bold" style={{ color: '#5C4033' }}>Standalone License</h2>
-              <p className="mt-2" style={{ color: '#8B7355' }}>
+              <h2 className="text-xl font-bold" style={{ color: '#2C1810' }}>Standalone License</h2>
+              <p className="mt-2" style={{ color: '#5C4033' }}>
                 Need a self-hosted solution? Our standalone license includes full source code access,
                 unlimited users, and one year of updates. Perfect for organizations that need complete
                 control over their data and infrastructure.
               </p>
               <p className="mt-4">
-                <span className="text-2xl font-bold" style={{ color: '#5C4033' }}>Contact us</span>
-                <span className="text-sm" style={{ color: '#8B7355' }}> for pricing</span>
+                <span className="text-2xl font-bold" style={{ color: '#2C1810' }}>Contact us</span>
+                <span className="text-sm" style={{ color: '#5C4033' }}> for pricing</span>
               </p>
               <a href="mailto:sales@maishq.com" className="mt-4 inline-block">
                 <Button variant="outline">Request a Quote</Button>
@@ -146,7 +146,7 @@ export default function PricingPage() {
         </div>
 
         {/* Footer links */}
-        <div className="mt-12 text-center text-sm" style={{ color: '#8B7355' }}>
+        <div className="mt-12 text-center text-sm" style={{ color: '#5C4033' }}>
           <Link href="/login" className="underline">Sign In</Link>
           {' | '}
           <Link href="/register" className="underline">Register</Link>

@@ -26,26 +26,26 @@ export default function CrmDashboardPage() {
     api.get<DashData>('/crm/dashboard').then(setData).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
 
   // Handle empty state gracefully — show zero KPIs instead of error
   const d = data ?? { pipeline_by_stage: [], open_pipeline: { count: 0, total_value: 0, weighted_value: 0 }, win_rate: 0, avg_deal_size: 0, won: { count: 0, total_value: 0 }, lost: { count: 0, total_value: 0 } };
 
   const kpiCards = [
-    { label: 'Pipeline Value', value: formatCurrency(d.open_pipeline.total_value), color: '#5C4033' },
+    { label: 'Pipeline Value', value: formatCurrency(d.open_pipeline.total_value), color: '#2C1810' },
     { label: 'Weighted Value', value: formatCurrency(d.open_pipeline.weighted_value), color: '#2D6A4F' },
     { label: 'Win Rate', value: `${d.win_rate.toFixed(1)}%`, color: '#D4A854' },
-    { label: 'Avg Deal Size', value: formatCurrency(d.avg_deal_size), color: '#8B7355' },
+    { label: 'Avg Deal Size', value: formatCurrency(d.avg_deal_size), color: '#5C4033' },
   ];
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">CRM Dashboard</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">CRM Dashboard</h1>
 
       <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
         {kpiCards.map((k) => (
           <Card key={k.label}>
-            <CardHeader><CardTitle className="text-sm text-[#8B7355]">{k.label}</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-sm text-[#5C4033]">{k.label}</CardTitle></CardHeader>
             <CardContent><p className="text-2xl font-bold" style={{ color: k.color }}>{k.value}</p></CardContent>
           </Card>
         ))}
@@ -66,7 +66,7 @@ export default function CrmDashboardPage() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="py-8 text-center text-[#8B7355]">No pipeline data yet</p>
+              <p className="py-8 text-center text-[#5C4033]">No pipeline data yet</p>
             )}
           </CardContent>
         </Card>
@@ -85,7 +85,7 @@ export default function CrmDashboardPage() {
                     <TD className="text-right font-mono text-sm">{formatCurrency(s.weighted_value)}</TD>
                   </TR>
                 ))}
-                {!d.pipeline_by_stage.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No opportunities yet</TD></TR>}
+                {!d.pipeline_by_stage.length && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No opportunities yet</TD></TR>}
               </TBody>
             </Table>
           </CardContent>

@@ -19,7 +19,7 @@ interface Equipment {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  available: 'bg-[#2D6A4F] text-white', assigned: 'bg-[#D4A854] text-[#5C4033]',
+  available: 'bg-[#2D6A4F] text-white', assigned: 'bg-[#D4A854] text-[#2C1810]',
   maintenance: 'bg-[#E07A5F] text-white', retired: 'bg-[#8B7355] text-white',
 };
 
@@ -38,28 +38,28 @@ export default function EquipmentDetailPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!eq) return <Shell><p className="text-[#E07A5F]">Equipment not found</p></Shell>;
 
   return (
     <Shell>
       <div className="mb-4 flex items-center gap-3">
         <Link href="/equipment"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-        <h1 className="text-2xl font-bold text-[#5C4033]">{eq.equipment_number} — {eq.name}</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">{eq.equipment_number} — {eq.name}</h1>
         <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[eq.status] || ''}`}>{eq.status}</span>
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Details</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Details</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            <div><span className="text-xs text-[#8B7355]">Category</span><p className="font-medium">{eq.category}</p></div>
-            {eq.make && <div><span className="text-xs text-[#8B7355]">Make / Model</span><p>{eq.make} {eq.model || ''}</p></div>}
-            {eq.serial_number && <div><span className="text-xs text-[#8B7355]">Serial #</span><p className="font-mono">{eq.serial_number}</p></div>}
-            {eq.year && <div><span className="text-xs text-[#8B7355]">Year</span><p>{eq.year}</p></div>}
+            <div><span className="text-xs text-[#5C4033]">Category</span><p className="font-medium">{eq.category}</p></div>
+            {eq.make && <div><span className="text-xs text-[#5C4033]">Make / Model</span><p>{eq.make} {eq.model || ''}</p></div>}
+            {eq.serial_number && <div><span className="text-xs text-[#5C4033]">Serial #</span><p className="font-mono">{eq.serial_number}</p></div>}
+            {eq.year && <div><span className="text-xs text-[#5C4033]">Year</span><p>{eq.year}</p></div>}
             <div className="border-t border-[#E8DCC8] pt-2 space-y-1">
-              <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Hourly</span><span className="font-mono">{formatCurrency(eq.hourly_rate)}</span></div>
-              {eq.daily_rate && <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Daily</span><span className="font-mono">{formatCurrency(eq.daily_rate)}</span></div>}
-              {eq.monthly_rate && <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Monthly</span><span className="font-mono">{formatCurrency(eq.monthly_rate)}</span></div>}
+              <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Hourly</span><span className="font-mono">{formatCurrency(eq.hourly_rate)}</span></div>
+              {eq.daily_rate && <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Daily</span><span className="font-mono">{formatCurrency(eq.daily_rate)}</span></div>}
+              {eq.monthly_rate && <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Monthly</span><span className="font-mono">{formatCurrency(eq.monthly_rate)}</span></div>}
             </div>
             <div className="border-t border-[#E8DCC8] pt-2">
               <div className="flex justify-between text-sm font-bold"><span>Total Hours</span><span>{eq.total_hours.toLocaleString()}</span></div>
@@ -68,7 +68,7 @@ export default function EquipmentDetailPage() {
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8] lg:col-span-2">
-          <CardHeader><CardTitle className="text-[#5C4033]">Usage History</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Usage History</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <THead><TR><TH>Date</TH><TH>Project</TH><TH className="text-right">Hours</TH><TH className="text-right">Cost</TH><TH>Operator</TH></TR></THead>
@@ -79,18 +79,18 @@ export default function EquipmentDetailPage() {
                     <TD>{u.project_name}</TD>
                     <TD className="text-right font-mono">{u.hours}</TD>
                     <TD className="text-right font-mono">{formatCurrency(u.cost)}</TD>
-                    <TD className="text-sm text-[#8B7355]">{u.operator || '—'}</TD>
+                    <TD className="text-sm text-[#5C4033]">{u.operator || '—'}</TD>
                   </TR>
                 ))}
-                {!eq.usage?.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No usage records</TD></TR>}
+                {!eq.usage?.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No usage records</TD></TR>}
               </TBody>
             </Table>
           </CardContent>
         </Card>
       </div>
       <Card className="mt-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Utilization</CardTitle></CardHeader>
-        <CardContent className="flex items-center justify-center h-48 text-[#8B7355]">
+        <CardHeader><CardTitle className="text-[#2C1810]">Utilization</CardTitle></CardHeader>
+        <CardContent className="flex items-center justify-center h-48 text-[#5C4033]">
           <div className="text-center">
             <p className="text-sm">Utilization chart — hours by month</p>
             <p className="text-xs mt-1 text-[#D4A854]">Chart integration pending</p>

@@ -31,7 +31,7 @@ export default function BOMCostAnalysisPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">BOM Cost Analysis</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">BOM Cost Analysis</h1>
         <div className="flex gap-2">
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && (
@@ -45,8 +45,8 @@ export default function BOMCostAnalysisPage() {
         <Card key={bom.bom_id} className="mb-4 border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-[#5C4033]">{bom.bom_name} <span className="text-sm font-normal text-[#8B7355]">v{bom.version} - {bom.product_name}</span></CardTitle>
-              <span className="text-lg font-bold font-mono text-[#5C4033]">{fmt(bom.grand_total)}</span>
+              <CardTitle className="text-[#2C1810]">{bom.bom_name} <span className="text-sm font-normal text-[#5C4033]">v{bom.version} - {bom.product_name}</span></CardTitle>
+              <span className="text-lg font-bold font-mono text-[#2C1810]">{fmt(bom.grand_total)}</span>
             </div>
           </CardHeader>
           <CardContent className="pt-4">
@@ -59,20 +59,20 @@ export default function BOMCostAnalysisPage() {
                     <TD className="text-right font-mono">{fmt(c.cost_per_unit)}</TD><TD className="text-right font-mono">{fmt(c.total)}</TD>
                   </TR>
                 ))}
-                {bom.components.length === 0 && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No components</TD></TR>}
+                {bom.components.length === 0 && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No components</TD></TR>}
               </TBody>
             </Table>
             <div className="mt-4 flex justify-end gap-6 border-t border-[#E8DCC8] pt-3 text-sm">
-              <span className="text-[#8B7355]">Material: <span className="font-mono font-medium">{fmt(bom.material_total)}</span></span>
-              <span className="text-[#8B7355]">Labor: <span className="font-mono font-medium">{fmt(bom.labor_total)}</span></span>
-              <span className="text-[#8B7355]">Overhead: <span className="font-mono font-medium">{fmt(bom.overhead_total)}</span></span>
-              <span className="font-bold text-[#5C4033]">Total: <span className="font-mono">{fmt(bom.grand_total)}</span></span>
+              <span className="text-[#5C4033]">Material: <span className="font-mono font-medium">{fmt(bom.material_total)}</span></span>
+              <span className="text-[#5C4033]">Labor: <span className="font-mono font-medium">{fmt(bom.labor_total)}</span></span>
+              <span className="text-[#5C4033]">Overhead: <span className="font-mono font-medium">{fmt(bom.overhead_total)}</span></span>
+              <span className="font-bold text-[#2C1810]">Total: <span className="font-mono">{fmt(bom.grand_total)}</span></span>
             </div>
           </CardContent>
         </Card>
       ))}
-      {data && data.length === 0 && <p className="text-[#8B7355]">No BOMs found.</p>}
-      {!data && !loading && <p className="text-[#8B7355]">Click Generate to load BOM cost analysis.</p>}
+      {data && data.length === 0 && <p className="text-[#5C4033]">No BOMs found.</p>}
+      {!data && !loading && <p className="text-[#5C4033]">Click Generate to load BOM cost analysis.</p>}
     </Shell>
   );
 }

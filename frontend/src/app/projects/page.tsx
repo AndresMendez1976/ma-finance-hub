@@ -12,7 +12,7 @@ import { formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
   active: 'bg-[#2D6A4F] text-white', completed: 'bg-[#8B7355] text-white',
-  on_hold: 'bg-[#D4A854] text-[#5C4033]', cancelled: 'bg-[#E07A5F] text-white',
+  on_hold: 'bg-[#D4A854] text-[#2C1810]', cancelled: 'bg-[#E07A5F] text-white',
 };
 
 interface Project {
@@ -38,7 +38,7 @@ export default function ProjectsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Projects</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Projects</h1>
         <Link href="/projects/new"><Button><Plus className="mr-2 h-4 w-4" />New Project</Button></Link>
       </div>
 
@@ -49,7 +49,7 @@ export default function ProjectsPage() {
               <TR><TH>Name</TH><TH>Client</TH><TH>Status</TH><TH className="text-right">Budget</TH><TH className="text-right">Revenue</TH><TH className="text-right">Cost</TH><TH className="text-right">Profit</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={8} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={8} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data.map((p) => {
                 const profit = Number(p.profit);
                 return (
@@ -68,7 +68,7 @@ export default function ProjectsPage() {
                 );
               })}
               {!loading && data.length === 0 && (
-                <TR><TD colSpan={8} className="text-center text-[#8B7355]"><FolderOpen className="mx-auto mb-2 h-8 w-8 opacity-40" />No projects found</TD></TR>
+                <TR><TD colSpan={8} className="text-center text-[#5C4033]"><FolderOpen className="mx-auto mb-2 h-8 w-8 opacity-40" />No projects found</TD></TR>
               )}
             </TBody>
           </Table>

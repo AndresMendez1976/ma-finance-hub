@@ -51,27 +51,27 @@ export default function NewBOMPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Bill of Materials</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Bill of Materials</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <Card className="mb-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">BOM Details</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">BOM Details</CardTitle></CardHeader>
         <CardContent>
           <div className="grid gap-3 md:grid-cols-4">
-            <div><label className="text-sm font-medium text-[#5C4033]">Name *</label><Input value={name} onChange={(e) => setName(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Product ID *</label><Input value={productId} onChange={(e) => setProductId(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Version</label><Input value={version} onChange={(e) => setVersion(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Yield Qty</label><Input type="number" value={yieldQty} onChange={(e) => setYieldQty(parseInt(e.target.value) || 1)} min={1} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Name *</label><Input value={name} onChange={(e) => setName(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Product ID *</label><Input value={productId} onChange={(e) => setProductId(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Version</label><Input value={version} onChange={(e) => setVersion(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Yield Qty</label><Input type="number" value={yieldQty} onChange={(e) => setYieldQty(parseInt(e.target.value) || 1)} min={1} /></div>
           </div>
         </CardContent>
       </Card>
       <Card className="mb-4 border-[#E8DCC8]">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-[#5C4033]">Components</CardTitle>
+          <CardTitle className="text-[#2C1810]">Components</CardTitle>
           <Button size="sm" variant="outline" onClick={() => setComponents([...components, { product_id: '', quantity: 1, waste_pct: 0, cost_per_unit: 0 }])}><Plus className="mr-1 h-3 w-3" />Add</Button>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-[#8B7355]"><div className="col-span-3">Product ID</div><div className="col-span-2">Qty</div><div className="col-span-2">Waste%</div><div className="col-span-2">Cost/Unit</div><div className="col-span-2 text-right">Total</div><div className="col-span-1"></div></div>
+            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-[#5C4033]"><div className="col-span-3">Product ID</div><div className="col-span-2">Qty</div><div className="col-span-2">Waste%</div><div className="col-span-2">Cost/Unit</div><div className="col-span-2 text-right">Total</div><div className="col-span-1"></div></div>
             {components.map((c, i) => (
               <div key={i} className="grid grid-cols-12 items-center gap-2">
                 <div className="col-span-3"><Input value={c.product_id} onChange={(e) => updateComp(i, 'product_id', e.target.value)} placeholder="Product ID" /></div>
@@ -88,7 +88,7 @@ export default function NewBOMPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="border-[#E8DCC8]">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-[#5C4033]">Labor</CardTitle>
+            <CardTitle className="text-[#2C1810]">Labor</CardTitle>
             <Button size="sm" variant="outline" onClick={() => setLabor([...labor, { description: '', hours: 0, rate: 0 }])}><Plus className="mr-1 h-3 w-3" />Add</Button>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -104,14 +104,14 @@ export default function NewBOMPage() {
         </Card>
         <Card className="border-[#E8DCC8]">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-[#5C4033]">Overhead</CardTitle>
+            <CardTitle className="text-[#2C1810]">Overhead</CardTitle>
             <Button size="sm" variant="outline" onClick={() => setOverhead([...overhead, { description: '', type: 'fixed', amount: 0 }])}><Plus className="mr-1 h-3 w-3" />Add</Button>
           </CardHeader>
           <CardContent className="space-y-2">
             {overhead.map((o, i) => (
               <div key={i} className="flex items-center gap-2">
                 <Input value={o.description} onChange={(e) => updateOh(i, 'description', e.target.value)} placeholder="Description" className="flex-1" />
-                <select value={o.type} onChange={(e) => updateOh(i, 'type', e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-2 text-sm text-[#5C4033]">
+                <select value={o.type} onChange={(e) => updateOh(i, 'type', e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-2 text-sm text-[#2C1810]">
                   <option value="fixed">Fixed</option><option value="per_unit">Per Unit</option>
                 </select>
                 <Input type="number" value={o.amount} onChange={(e) => updateOh(i, 'amount', parseFloat(e.target.value) || 0)} placeholder="Amount" className="w-24" min={0} step={0.01} />
@@ -124,10 +124,10 @@ export default function NewBOMPage() {
       <Card className="mt-4 border-[#E8DCC8]">
         <CardContent className="flex items-center justify-between pt-4">
           <div className="flex gap-6 text-sm">
-            <span className="text-[#8B7355]">Material: <span className="font-mono font-medium">${materialCost.toFixed(2)}</span></span>
-            <span className="text-[#8B7355]">Labor: <span className="font-mono font-medium">${laborCost.toFixed(2)}</span></span>
-            <span className="text-[#8B7355]">Overhead: <span className="font-mono font-medium">${overheadCost.toFixed(2)}</span></span>
-            <span className="text-lg font-bold text-[#5C4033]">Total: <span className="font-mono">${totalCost.toFixed(2)}</span></span>
+            <span className="text-[#5C4033]">Material: <span className="font-mono font-medium">${materialCost.toFixed(2)}</span></span>
+            <span className="text-[#5C4033]">Labor: <span className="font-mono font-medium">${laborCost.toFixed(2)}</span></span>
+            <span className="text-[#5C4033]">Overhead: <span className="font-mono font-medium">${overheadCost.toFixed(2)}</span></span>
+            <span className="text-lg font-bold text-[#2C1810]">Total: <span className="font-mono">${totalCost.toFixed(2)}</span></span>
           </div>
           <Button onClick={save} disabled={loading}>{loading ? 'Saving...' : 'Save BOM'}</Button>
         </CardContent>

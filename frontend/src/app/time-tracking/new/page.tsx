@@ -41,37 +41,37 @@ export default function NewTimeEntryPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Time Entry</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Time Entry</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
       <Card className="border-[#E8DCC8] max-w-xl">
         <CardHeader><CardTitle>Entry Details</CardTitle></CardHeader>
         <CardContent className="space-y-3">
-          <div><label className="text-sm font-medium text-[#5C4033]">Project ID *</label>
+          <div><label className="text-sm font-medium text-[#2C1810]">Project ID *</label>
             <Input value={projectId} onChange={(e) => setProjectId(e.target.value)} placeholder="Project ID" /></div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Date *</label>
+          <div><label className="text-sm font-medium text-[#2C1810]">Date *</label>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Start Time</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">Start Time</label>
               <Input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">End Time</label>
+            <div><label className="text-sm font-medium text-[#2C1810]">End Time</label>
               <Input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} /></div>
           </div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Or Duration (minutes)</label>
+          <div><label className="text-sm font-medium text-[#2C1810]">Or Duration (minutes)</label>
             <Input type="number" value={durationMinutes} onChange={(e) => setDurationMinutes(parseInt(e.target.value) || 0)}
               min={0} disabled={!!(startTime && endTime)} /></div>
           {computedMinutes > 0 && (
-            <p className="text-xs text-[#8B7355]">Duration: {(computedMinutes / 60).toFixed(1)} hours</p>
+            <p className="text-xs text-[#5C4033]">Duration: {(computedMinutes / 60).toFixed(1)} hours</p>
           )}
-          <div><label className="text-sm font-medium text-[#5C4033]">Description</label>
+          <div><label className="text-sm font-medium text-[#2C1810]">Description</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What did you work on?"
-              className="flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033] placeholder:text-[#8B7355]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D6A4F]" rows={2} /></div>
+              className="flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810] placeholder:text-[#5C4033]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2D6A4F]" rows={2} /></div>
           <div className="flex items-center gap-2">
             <input type="checkbox" checked={billable} onChange={(e) => setBillable(e.target.checked)} id="billable"
               className="h-4 w-4 rounded border-[#D4C4A8]" />
-            <label htmlFor="billable" className="text-sm text-[#5C4033]">Billable</label>
+            <label htmlFor="billable" className="text-sm text-[#2C1810]">Billable</label>
           </div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Hourly Rate</label>
+          <div><label className="text-sm font-medium text-[#2C1810]">Hourly Rate</label>
             <Input type="number" value={hourlyRate} onChange={(e) => setHourlyRate(parseFloat(e.target.value) || 0)} min={0} step={0.01} /></div>
         </CardContent>
       </Card>

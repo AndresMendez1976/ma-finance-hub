@@ -15,8 +15,8 @@ interface CreditNote { id: number; credit_note_number: string; customer_name: st
 interface CreditNoteResponse { data: CreditNote[]; pagination: { page: number; total: number; pages: number } }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]',
-  issued: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]',
+  issued: 'bg-[#D4A854] text-[#2C1810]',
   applied: 'bg-[#2D6A4F] text-white',
   voided: 'bg-[#8B7355] text-white',
 };
@@ -45,7 +45,7 @@ export default function CreditNotesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Credit Notes</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Credit Notes</h1>
         <Link href="/credit-notes/new"><Button><Plus className="mr-2 h-4 w-4" />New Credit Note</Button></Link>
       </div>
       <div className="mb-4 flex gap-2">
@@ -58,7 +58,7 @@ export default function CreditNotesPage() {
           <Table>
             <THead><TR><TH>CN #</TH><TH>Customer</TH><TH>Date</TH><TH className="text-right">Total</TH><TH>Status</TH><TH>Actions</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={6} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((cn) => (
                 <TR key={cn.id}>
                   <TD className="font-medium font-mono">{cn.credit_note_number}</TD>
@@ -69,11 +69,11 @@ export default function CreditNotesPage() {
                   <TD><Link href={`/credit-notes/${cn.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No credit notes found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No credit notes found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

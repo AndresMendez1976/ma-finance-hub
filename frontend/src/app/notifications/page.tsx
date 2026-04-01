@@ -14,7 +14,7 @@ interface Notification {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  info: 'bg-[#B4D4E7] text-[#5C4033]', warning: 'bg-[#D4A854] text-[#5C4033]',
+  info: 'bg-[#B4D4E7] text-[#2C1810]', warning: 'bg-[#D4A854] text-[#2C1810]',
   error: 'bg-[#E07A5F] text-white', success: 'bg-[#2D6A4F] text-white',
 };
 
@@ -55,8 +55,8 @@ export default function NotificationsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">
-          Notifications {unreadCount > 0 && <span className="ml-2 text-sm font-normal text-[#8B7355]">({unreadCount} unread)</span>}
+        <h1 className="text-2xl font-bold text-[#2C1810]">
+          Notifications {unreadCount > 0 && <span className="ml-2 text-sm font-normal text-[#5C4033]">({unreadCount} unread)</span>}
         </h1>
         {unreadCount > 0 && (
           <Button variant="outline" onClick={markAllRead}>
@@ -65,9 +65,9 @@ export default function NotificationsPage() {
         )}
       </div>
       <Card className="border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">All Notifications</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">All Notifications</CardTitle></CardHeader>
         <CardContent>
-          {loading ? <p className="text-[#8B7355]">Loading...</p> : (
+          {loading ? <p className="text-[#5C4033]">Loading...</p> : (
             <Table>
               <THead>
                 <TR><TH>Date</TH><TH>Type</TH><TH>Category</TH><TH>Title</TH><TH>Message</TH><TH>Status</TH></TR>
@@ -79,15 +79,15 @@ export default function NotificationsPage() {
                     className={`cursor-pointer hover:bg-[#E8DCC8]/20 ${!n.is_read ? 'bg-[#E8DCC8]/10 font-medium' : ''}`}
                     onClick={() => !n.is_read && markRead(n.id)}
                   >
-                    <TD className="text-sm text-[#8B7355] whitespace-nowrap">{formatDate(n.created_at)}</TD>
-                    <TD><span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${TYPE_COLORS[n.type] || 'bg-[#E8DCC8] text-[#5C4033]'}`}>{n.type}</span></TD>
-                    <TD className="text-sm text-[#8B7355]">{n.category}</TD>
-                    <TD className="text-[#5C4033]">{n.title}</TD>
-                    <TD className="text-sm text-[#8B7355] max-w-xs truncate">{n.message}</TD>
-                    <TD>{n.is_read ? <span className="text-xs text-[#8B7355]">Read</span> : <span className="text-xs font-semibold text-[#2D6A4F]">Unread</span>}</TD>
+                    <TD className="text-sm text-[#5C4033] whitespace-nowrap">{formatDate(n.created_at)}</TD>
+                    <TD><span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${TYPE_COLORS[n.type] || 'bg-[#E8DCC8] text-[#2C1810]'}`}>{n.type}</span></TD>
+                    <TD className="text-sm text-[#5C4033]">{n.category}</TD>
+                    <TD className="text-[#2C1810]">{n.title}</TD>
+                    <TD className="text-sm text-[#5C4033] max-w-xs truncate">{n.message}</TD>
+                    <TD>{n.is_read ? <span className="text-xs text-[#5C4033]">Read</span> : <span className="text-xs font-semibold text-[#2D6A4F]">Unread</span>}</TD>
                   </TR>
                 ))}
-                {items.length === 0 && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No notifications</TD></TR>}
+                {items.length === 0 && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No notifications</TD></TR>}
               </TBody>
             </Table>
           )}

@@ -41,28 +41,28 @@ export default function NewRecurringExpensePage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Recurring Expense</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Recurring Expense</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <Card className="max-w-lg border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Expense Details</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Expense Details</CardTitle></CardHeader>
         <CardContent className="space-y-3">
-          <div><label className="text-sm font-medium text-[#5C4033]">Vendor ID *</label><Input value={vendorId} onChange={(e) => setVendorId(e.target.value)} type="number" /></div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Description *</label><Input value={description} onChange={(e) => setDescription(e.target.value)} /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Vendor ID *</label><Input value={vendorId} onChange={(e) => setVendorId(e.target.value)} type="number" /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Description *</label><Input value={description} onChange={(e) => setDescription(e.target.value)} /></div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Amount *</label><Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="0.01" /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Account ID</label><Input type="number" value={accountId} onChange={(e) => setAccountId(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Amount *</label><Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="0.01" /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Account ID</label><Input type="number" value={accountId} onChange={(e) => setAccountId(e.target.value)} /></div>
           </div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Category</label><Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="e.g. Utilities, Rent, Insurance" /></div>
-          <div><label className="text-sm font-medium text-[#5C4033]">Frequency *</label>
-            <select value={frequency} onChange={(e) => setFrequency(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]">
+          <div><label className="text-sm font-medium text-[#2C1810]">Category</label><Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="e.g. Utilities, Rent, Insurance" /></div>
+          <div><label className="text-sm font-medium text-[#2C1810]">Frequency *</label>
+            <select value={frequency} onChange={(e) => setFrequency(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]">
               {FREQUENCIES.map((f) => <option key={f} value={f}>{f.charAt(0).toUpperCase() + f.slice(1)}</option>)}
             </select>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Start Date</label><Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">End Date</label><Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} placeholder="Optional" /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Start Date</label><Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">End Date</label><Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} placeholder="Optional" /></div>
           </div>
-          {amount && <p className="text-xs text-[#8B7355]">{formatCurrency(amount)} {frequency} starting {formatDate(startDate)}</p>}
+          {amount && <p className="text-xs text-[#5C4033]">{formatCurrency(amount)} {frequency} starting {formatDate(startDate)}</p>}
           <Button onClick={save} disabled={loading} className="w-full">{loading ? 'Saving...' : 'Create Recurring Expense'}</Button>
         </CardContent>
       </Card>

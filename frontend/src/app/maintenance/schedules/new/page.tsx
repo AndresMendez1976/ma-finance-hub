@@ -31,23 +31,23 @@ export default function NewMaintenanceSchedulePage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Maintenance Schedule</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Maintenance Schedule</h1>
       {error && <div className="mb-3 rounded-md bg-[#E07A5F]/10 p-2 text-sm text-[#E07A5F]">{error}</div>}
       <Card>
         <CardHeader><CardTitle>Schedule Details</CardTitle></CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Asset ID</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Asset ID</label>
               <Input type="number" value={form.asset_id} onChange={(e) => set('asset_id', e.target.value)} placeholder="Asset ID" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Title</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Title</label>
               <Input value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="Schedule title" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Frequency</label>
-              <select value={form.frequency} onChange={(e) => set('frequency', e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Frequency</label>
+              <select value={form.frequency} onChange={(e) => set('frequency', e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
@@ -57,7 +57,7 @@ export default function NewMaintenanceSchedulePage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Next Due Date</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Next Due Date</label>
               <Input type="date" value={form.next_due_date} onChange={(e) => set('next_due_date', e.target.value)} />
             </div>
           </div>

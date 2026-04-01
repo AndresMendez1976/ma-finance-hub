@@ -30,25 +30,25 @@ export default function FixedAssetsReportPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Fixed Assets Report</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Fixed Assets Report</h1>
         <Button variant="outline" onClick={exportCsv}>Export CSV</Button>
       </div>
 
-      {loading && <p className="text-[#8B7355]">Loading...</p>}
+      {loading && <p className="text-[#5C4033]">Loading...</p>}
 
       {report && (
         <>
           <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
             <Card>
-              <CardHeader><CardTitle className="text-sm text-[#8B7355]">Total Assets</CardTitle></CardHeader>
-              <CardContent><p className="text-2xl font-bold text-[#5C4033]">{report.summary.total_assets}</p></CardContent>
+              <CardHeader><CardTitle className="text-sm text-[#5C4033]">Total Assets</CardTitle></CardHeader>
+              <CardContent><p className="text-2xl font-bold text-[#2C1810]">{report.summary.total_assets}</p></CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle className="text-sm text-[#8B7355]">Total Value</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-sm text-[#5C4033]">Total Value</CardTitle></CardHeader>
               <CardContent><p className="text-2xl font-bold text-[#2D6A4F]">${report.summary.total_value.toFixed(2)}</p></CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle className="text-sm text-[#8B7355]">Total Depreciation</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-sm text-[#5C4033]">Total Depreciation</CardTitle></CardHeader>
               <CardContent><p className="text-2xl font-bold text-[#D4A854]">${report.summary.total_depreciation.toFixed(2)}</p></CardContent>
             </Card>
           </div>
@@ -67,7 +67,7 @@ export default function FixedAssetsReportPage() {
                       <TD>{a.status}</TD>
                     </TR>
                   ))}
-                  {!report.assets.length && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No assets</TD></TR>}
+                  {!report.assets.length && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No assets</TD></TR>}
                 </TBody>
               </Table>
             </CardContent>

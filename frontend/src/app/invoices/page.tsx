@@ -14,8 +14,8 @@ import { formatDate, formatCurrency } from '@/lib/format';
 
 // Status colors matching the warm palette
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]',
-  sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]',
+  sent: 'bg-[#D4A854] text-[#2C1810]',
   paid: 'bg-[#2D6A4F] text-white',
   overdue: 'bg-[#E07A5F] text-white',
   voided: 'bg-[#8B7355] text-white',
@@ -68,7 +68,7 @@ export default function InvoicesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Invoices</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Invoices</h1>
         <Link href="/invoices/new">
           <Button><Plus className="mr-2 h-4 w-4" />New Invoice</Button>
         </Link>
@@ -77,11 +77,11 @@ export default function InvoicesPage() {
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">Status</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">Status</label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]"
+            className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]"
           >
             <option value="">All</option>
             <option value="draft">Draft</option>
@@ -92,11 +92,11 @@ export default function InvoicesPage() {
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">From</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">From</label>
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">To</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">To</label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" />
         </div>
         <Button variant="outline" onClick={() => load(1)}>Filter</Button>
@@ -109,7 +109,7 @@ export default function InvoicesPage() {
               <TR><TH>#</TH><TH>Customer</TH><TH>Issue Date</TH><TH>Due Date</TH><TH className="text-right">Total</TH><TH>Status</TH><TH>Actions</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((inv) => (
                 <TR key={inv.id}>
                   <TD className="font-mono text-sm">{inv.invoice_number}</TD>
@@ -130,7 +130,7 @@ export default function InvoicesPage() {
                 </TR>
               ))}
               {!loading && (!data?.data.length) && (
-                <TR><TD colSpan={7} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={7} className="text-center text-[#5C4033]">
                   <FileText className="mx-auto mb-2 h-8 w-8 opacity-40" />
                   No invoices found
                 </TD></TR>
@@ -140,7 +140,7 @@ export default function InvoicesPage() {
 
           {/* Pagination */}
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

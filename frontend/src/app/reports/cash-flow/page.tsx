@@ -44,10 +44,10 @@ export default function CashFlowPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Cash Flow Statement</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Cash Flow Statement</h1>
         <div className="flex items-center gap-2">
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40 border-[#D4C4A8]" />
-          <span className="text-[#8B7355]">to</span>
+          <span className="text-[#5C4033]">to</span>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40 border-[#D4C4A8]" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && (
@@ -61,32 +61,32 @@ export default function CashFlowPage() {
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/50">
-            <CardTitle className="text-[#5C4033]">Cash Flow: {data.period.from} to {data.period.to}</CardTitle>
+            <CardTitle className="text-[#2C1810]">Cash Flow: {data.period.from} to {data.period.to}</CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             <Table>
               <THead><TR><TH>Item</TH><TH className="text-right">Amount</TH></TR></THead>
               <TBody>
                 {/* Operating Activities */}
-                <TR className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#5C4033]">Operating Activities</TD></TR>
+                <TR className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#2C1810]">Operating Activities</TD></TR>
                 <TR><TD className="pl-6">Net Income</TD><TD className="text-right font-mono">{data.net_income.toFixed(2)}</TD></TR>
                 {data.operating.adjustments.length > 0 && (
-                  <TR className="bg-[#E8DCC8]/15"><TD colSpan={2} className="text-sm text-[#8B7355]">Adjustments:</TD></TR>
+                  <TR className="bg-[#E8DCC8]/15"><TD colSpan={2} className="text-sm text-[#5C4033]">Adjustments:</TD></TR>
                 )}
                 {renderItems(data.operating.adjustments)}
                 <TR className="border-t font-semibold"><TD>Cash from Operating</TD><TD className="text-right font-mono">{data.operating.total.toFixed(2)}</TD></TR>
 
                 {/* Investing Activities */}
-                <TR className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#5C4033]">Investing Activities</TD></TR>
+                <TR className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#2C1810]">Investing Activities</TD></TR>
                 {data.investing.items.length > 0 ? renderItems(data.investing.items) : (
-                  <TR><TD className="pl-6 text-[#8B7355]">No investing activity</TD><TD></TD></TR>
+                  <TR><TD className="pl-6 text-[#5C4033]">No investing activity</TD><TD></TD></TR>
                 )}
                 <TR className="border-t font-semibold"><TD>Cash from Investing</TD><TD className="text-right font-mono">{data.investing.total.toFixed(2)}</TD></TR>
 
                 {/* Financing Activities */}
-                <TR className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#5C4033]">Financing Activities</TD></TR>
+                <TR className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#2C1810]">Financing Activities</TD></TR>
                 {data.financing.items.length > 0 ? renderItems(data.financing.items) : (
-                  <TR><TD className="pl-6 text-[#8B7355]">No financing activity</TD><TD></TD></TR>
+                  <TR><TD className="pl-6 text-[#5C4033]">No financing activity</TD><TD></TD></TR>
                 )}
                 <TR className="border-t font-semibold"><TD>Cash from Financing</TD><TD className="text-right font-mono">{data.financing.total.toFixed(2)}</TD></TR>
 
@@ -100,8 +100,8 @@ export default function CashFlowPage() {
           </CardContent>
         </Card>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Select a date range and click Generate.</p>}
-      <p className="mt-6 text-center text-xs text-[#8B7355]">
+      {!data && !loading && <p className="text-[#5C4033]">Select a date range and click Generate.</p>}
+      <p className="mt-6 text-center text-xs text-[#5C4033]">
         Financial reports are generated based on data entered by the user. These reports have not been audited by a CPA.
       </p>
     </Shell>

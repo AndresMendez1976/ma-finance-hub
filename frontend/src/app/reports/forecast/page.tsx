@@ -33,10 +33,10 @@ export default function ForecastPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Forecast</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Forecast</h1>
         <div className="flex items-end gap-3">
           <div>
-            <label className="mb-1 block text-xs font-medium text-[#8B7355]">Months to Project</label>
+            <label className="mb-1 block text-xs font-medium text-[#5C4033]">Months to Project</label>
             <Input type="number" min={1} max={24} value={months} onChange={(e) => setMonths(Number(e.target.value))} className="w-24" />
           </div>
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Refresh'}</Button>
@@ -60,7 +60,7 @@ export default function ForecastPage() {
                     <Line type="monotone" dataKey="projected" stroke="#D4A854" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 3 }} name="Projected" />
                   </LineChart>
                 </ResponsiveContainer>
-              ) : <p className="text-sm text-[#8B7355]">No chart data</p>}
+              ) : <p className="text-sm text-[#5C4033]">No chart data</p>}
             </CardContent>
           </Card>
 
@@ -69,7 +69,7 @@ export default function ForecastPage() {
             <CardContent>
               {data.rows.map((row, i) => (
                 <div key={i} className="mb-4">
-                  <h4 className="mb-2 text-sm font-semibold text-[#5C4033]">{row.account_name}</h4>
+                  <h4 className="mb-2 text-sm font-semibold text-[#2C1810]">{row.account_name}</h4>
                   <Table>
                     <THead>
                       <TR>
@@ -86,7 +86,7 @@ export default function ForecastPage() {
                   </Table>
                 </div>
               ))}
-              {!data.rows.length && <p className="text-center text-[#8B7355]">No forecast data</p>}
+              {!data.rows.length && <p className="text-center text-[#5C4033]">No forecast data</p>}
             </CardContent>
           </Card>
         </>

@@ -39,7 +39,7 @@ export default function MileagePage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Mileage Log</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Mileage Log</h1>
         <Link href="/mileage/new"><Button><Plus className="mr-2 h-4 w-4" />Log Mileage</Button></Link>
       </div>
       <div className="mb-4 flex gap-2">
@@ -52,7 +52,7 @@ export default function MileagePage() {
           <Table>
             <THead><TR><TH>Date</TH><TH>Description</TH><TH className="text-right">Miles</TH><TH className="text-right">Rate</TH><TH className="text-right">Amount</TH><TH>Status</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={6} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((m) => (
                 <TR key={m.id}>
                   <TD>{formatDate(m.date)}</TD>
@@ -63,11 +63,11 @@ export default function MileagePage() {
                   <TD><Badge variant={m.status === 'approved' ? 'success' : m.status === 'pending' ? 'warning' : 'secondary'}>{m.status}</Badge></TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No mileage entries</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No mileage entries</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

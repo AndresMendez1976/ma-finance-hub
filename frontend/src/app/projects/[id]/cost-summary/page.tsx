@@ -29,25 +29,25 @@ export default function CostSummaryPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!data) return <Shell><p className="text-[#E07A5F]">Cost summary not available</p></Shell>;
 
   return (
     <Shell>
       <div className="mb-4 flex items-center gap-3">
         <Link href={`/projects/${id}`}><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-        <h1 className="text-2xl font-bold text-[#5C4033]">{data.project_name} - Cost Summary</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">{data.project_name} - Cost Summary</h1>
       </div>
-      <p className="mb-4 text-sm text-[#8B7355]">As of {formatDate(data.as_of)}</p>
+      <p className="mb-4 text-sm text-[#5C4033]">As of {formatDate(data.as_of)}</p>
       <Card className="border-[#E8DCC8]">
-        <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Cost by Code</CardTitle></CardHeader>
+        <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Cost by Code</CardTitle></CardHeader>
         <CardContent className="pt-4">
           <Table>
             <THead><TR><TH>Cost Code</TH><TH className="text-right">Budgeted</TH><TH className="text-right">Actual</TH><TH className="text-right">Variance</TH><TH>% Complete</TH></TR></THead>
             <TBody>
               {data.lines.map((l, i) => (
                 <TR key={i}>
-                  <TD><span className="font-mono text-sm">{l.cost_code}</span> <span className="text-[#8B7355]">{l.cost_code_name}</span></TD>
+                  <TD><span className="font-mono text-sm">{l.cost_code}</span> <span className="text-[#5C4033]">{l.cost_code_name}</span></TD>
                   <TD className="text-right font-mono">{formatCurrency(l.budgeted)}</TD>
                   <TD className="text-right font-mono">{formatCurrency(l.actual)}</TD>
                   <TD className={`text-right font-mono ${Number(l.variance) < 0 ? 'text-[#E07A5F]' : 'text-[#2D6A4F]'}`}>{formatCurrency(l.variance)}</TD>
@@ -63,7 +63,7 @@ export default function CostSummaryPage() {
               ))}
             </TBody>
           </Table>
-          <div className="mt-4 border-t border-[#E8DCC8] pt-4 flex justify-between font-bold text-[#5C4033]">
+          <div className="mt-4 border-t border-[#E8DCC8] pt-4 flex justify-between font-bold text-[#2C1810]">
             <span>Totals</span>
             <div className="flex gap-8 font-mono">
               <span>{formatCurrency(data.total_budgeted)}</span>

@@ -23,8 +23,8 @@ export default function BudgetDetailPage() {
     api.get<BudgetDetail>(`/budgets/${id}/vs-actual`).then(setBudget).catch(() => {}).finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
-  if (!budget) return <Shell><p className="text-[#8B7355]">Budget not found</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
+  if (!budget) return <Shell><p className="text-[#5C4033]">Budget not found</p></Shell>;
 
   const chartData = budget.lines.map((l) => ({
     name: l.account_name.length > 20 ? l.account_name.slice(0, 20) + '...' : l.account_name,
@@ -34,8 +34,8 @@ export default function BudgetDetailPage() {
 
   return (
     <Shell>
-      <h1 className="mb-1 text-2xl font-bold text-[#5C4033]">{budget.name}</h1>
-      <p className="mb-4 text-sm text-[#8B7355]">FY {budget.fiscal_year} | {budget.period_type} | {budget.status}</p>
+      <h1 className="mb-1 text-2xl font-bold text-[#2C1810]">{budget.name}</h1>
+      <p className="mb-4 text-sm text-[#5C4033]">FY {budget.fiscal_year} | {budget.period_type} | {budget.status}</p>
 
       <Card className="mb-6">
         <CardHeader><CardTitle>Budget vs Actual</CardTitle></CardHeader>
@@ -52,7 +52,7 @@ export default function BudgetDetailPage() {
                 <Bar dataKey="Actual" fill="#2D6A4F" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          ) : <p className="text-sm text-[#8B7355]">No data to chart</p>}
+          ) : <p className="text-sm text-[#5C4033]">No data to chart</p>}
         </CardContent>
       </Card>
 
@@ -73,7 +73,7 @@ export default function BudgetDetailPage() {
                   <TD>{l.favorable ? <span className="text-[#2D6A4F] font-semibold">Yes</span> : <span className="text-[#E07A5F] font-semibold">No</span>}</TD>
                 </TR>
               ))}
-              {!budget.lines.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No budget lines</TD></TR>}
+              {!budget.lines.length && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No budget lines</TD></TR>}
             </TBody>
           </Table>
         </CardContent>

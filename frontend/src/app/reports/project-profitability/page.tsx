@@ -35,12 +35,12 @@ export default function ProjectProfitabilityPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">Project Profitability Report</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">Project Profitability Report</h1>
 
       <div className="mb-4 flex flex-wrap items-end gap-3">
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">From</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">From</label>
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" /></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">To</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">To</label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" /></div>
         <Button onClick={load}>Run Report</Button>
       </div>
@@ -52,7 +52,7 @@ export default function ProjectProfitabilityPage() {
               <TR><TH>Project</TH><TH>Client</TH><TH className="text-right">Revenue</TH><TH className="text-right">Cost</TH><TH className="text-right">Profit</TH><TH className="text-right">Margin %</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={6} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data.map((r, i) => (
                 <TR key={i}>
                   <TD className="font-medium">{r.project_name}</TD>
@@ -68,7 +68,7 @@ export default function ProjectProfitabilityPage() {
                 </TR>
               ))}
               {!loading && data.length === 0 && (
-                <TR><TD colSpan={6} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={6} className="text-center text-[#5C4033]">
                   <BarChart3 className="mx-auto mb-2 h-8 w-8 opacity-40" />Run report to see data
                 </TD></TR>
               )}

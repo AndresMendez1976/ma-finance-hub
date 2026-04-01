@@ -32,8 +32,8 @@ interface PortalInvoice {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#E8DCC8] text-[#5C4033]',
-  sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#E8DCC8] text-[#2C1810]',
+  sent: 'bg-[#D4A854] text-[#2C1810]',
   paid: 'bg-[#2D6A4F] text-white',
   overdue: 'bg-[#E07A5F] text-white',
   voided: 'bg-[#8B7355] text-white',
@@ -72,7 +72,7 @@ export default function PortalInvoiceViewPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#E8DCC8]/30 to-white">
-        <p className="text-[#8B7355]">Loading invoice...</p>
+        <p className="text-[#5C4033]">Loading invoice...</p>
       </div>
     );
   }
@@ -82,7 +82,7 @@ export default function PortalInvoiceViewPage() {
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#E8DCC8]/30 to-white">
         <div className="text-center">
           <p className="mb-4 text-[#E07A5F]">{error || 'Invoice not found'}</p>
-          <Link href={`/portal/${token}`} className="text-sm text-[#5C4033] underline">
+          <Link href={`/portal/${token}`} className="text-sm text-[#2C1810] underline">
             Back to invoices
           </Link>
         </div>
@@ -95,10 +95,10 @@ export default function PortalInvoiceViewPage() {
       {/* Header */}
       <header className="border-b border-[#E8DCC8] bg-white px-6 py-4">
         <div className="mx-auto flex max-w-4xl items-center gap-3">
-          <Building2 className="h-8 w-8 text-[#5C4033]" />
+          <Building2 className="h-8 w-8 text-[#2C1810]" />
           <div>
-            <h1 className="text-xl font-bold text-[#5C4033]">MA Finance Hub</h1>
-            <p className="text-xs text-[#8B7355]">Customer Portal</p>
+            <h1 className="text-xl font-bold text-[#2C1810]">MA Finance Hub</h1>
+            <p className="text-xs text-[#5C4033]">Customer Portal</p>
           </div>
         </div>
       </header>
@@ -108,7 +108,7 @@ export default function PortalInvoiceViewPage() {
         <div className="mb-6 flex items-center justify-between">
           <Link
             href={`/portal/${token}`}
-            className="flex items-center gap-1 text-sm text-[#8B7355] hover:text-[#5C4033] transition-colors"
+            className="flex items-center gap-1 text-sm text-[#5C4033] hover:text-[#2C1810] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to invoices
@@ -128,11 +128,11 @@ export default function PortalInvoiceViewPage() {
           <div className="border-b border-[#E8DCC8] p-6">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-[#5C4033]">INVOICE</h2>
+                <h2 className="text-2xl font-bold text-[#2C1810]">INVOICE</h2>
                 <p className="mt-1 text-lg font-semibold text-[#D4A854]">{invoice.invoice_number}</p>
               </div>
               <span
-                className={`rounded-full px-3 py-1 text-sm font-semibold ${STATUS_COLORS[invoice.status] || 'bg-[#E8DCC8] text-[#5C4033]'}`}
+                className={`rounded-full px-3 py-1 text-sm font-semibold ${STATUS_COLORS[invoice.status] || 'bg-[#E8DCC8] text-[#2C1810]'}`}
               >
                 {invoice.status.toUpperCase()}
               </span>
@@ -142,29 +142,29 @@ export default function PortalInvoiceViewPage() {
           {/* Details */}
           <div className="grid gap-6 border-b border-[#E8DCC8] p-6 md:grid-cols-2">
             <div>
-              <p className="text-xs font-medium uppercase text-[#8B7355]">Bill To</p>
-              <p className="mt-1 font-semibold text-[#5C4033]">{invoice.customer_name}</p>
+              <p className="text-xs font-medium uppercase text-[#5C4033]">Bill To</p>
+              <p className="mt-1 font-semibold text-[#2C1810]">{invoice.customer_name}</p>
               {invoice.customer_email && (
-                <p className="text-sm text-[#8B7355]">{invoice.customer_email}</p>
+                <p className="text-sm text-[#5C4033]">{invoice.customer_email}</p>
               )}
               {invoice.customer_address && (
-                <p className="mt-1 whitespace-pre-line text-sm text-[#8B7355]">
+                <p className="mt-1 whitespace-pre-line text-sm text-[#5C4033]">
                   {invoice.customer_address}
                 </p>
               )}
             </div>
             <div className="space-y-2 text-right">
               <div>
-                <p className="text-xs font-medium uppercase text-[#8B7355]">Issue Date</p>
-                <p className="font-medium text-[#5C4033]">{invoice.issue_date}</p>
+                <p className="text-xs font-medium uppercase text-[#5C4033]">Issue Date</p>
+                <p className="font-medium text-[#2C1810]">{invoice.issue_date}</p>
               </div>
               <div>
-                <p className="text-xs font-medium uppercase text-[#8B7355]">Due Date</p>
-                <p className="font-medium text-[#5C4033]">{invoice.due_date}</p>
+                <p className="text-xs font-medium uppercase text-[#5C4033]">Due Date</p>
+                <p className="font-medium text-[#2C1810]">{invoice.due_date}</p>
               </div>
               {invoice.paid_date && (
                 <div>
-                  <p className="text-xs font-medium uppercase text-[#8B7355]">Paid Date</p>
+                  <p className="text-xs font-medium uppercase text-[#5C4033]">Paid Date</p>
                   <p className="font-medium text-[#2D6A4F]">{invoice.paid_date}</p>
                 </div>
               )}
@@ -176,19 +176,19 @@ export default function PortalInvoiceViewPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[#E8DCC8]">
-                  <th className="pb-2 text-left text-xs font-medium uppercase text-[#8B7355]">Description</th>
-                  <th className="pb-2 text-right text-xs font-medium uppercase text-[#8B7355]">Qty</th>
-                  <th className="pb-2 text-right text-xs font-medium uppercase text-[#8B7355]">Unit Price</th>
-                  <th className="pb-2 text-right text-xs font-medium uppercase text-[#8B7355]">Amount</th>
+                  <th className="pb-2 text-left text-xs font-medium uppercase text-[#5C4033]">Description</th>
+                  <th className="pb-2 text-right text-xs font-medium uppercase text-[#5C4033]">Qty</th>
+                  <th className="pb-2 text-right text-xs font-medium uppercase text-[#5C4033]">Unit Price</th>
+                  <th className="pb-2 text-right text-xs font-medium uppercase text-[#5C4033]">Amount</th>
                 </tr>
               </thead>
               <tbody>
                 {invoice.lines.map((line) => (
                   <tr key={line.id} className="border-b border-[#E8DCC8]/50">
-                    <td className="py-3 text-sm text-[#5C4033]">{line.description}</td>
-                    <td className="py-3 text-right text-sm text-[#5C4033]">{line.quantity}</td>
-                    <td className="py-3 text-right text-sm text-[#5C4033]">{fmt(Number(line.unit_price))}</td>
-                    <td className="py-3 text-right text-sm font-medium text-[#5C4033]">{fmt(Number(line.amount))}</td>
+                    <td className="py-3 text-sm text-[#2C1810]">{line.description}</td>
+                    <td className="py-3 text-right text-sm text-[#2C1810]">{line.quantity}</td>
+                    <td className="py-3 text-right text-sm text-[#2C1810]">{fmt(Number(line.unit_price))}</td>
+                    <td className="py-3 text-right text-sm font-medium text-[#2C1810]">{fmt(Number(line.amount))}</td>
                   </tr>
                 ))}
               </tbody>
@@ -197,15 +197,15 @@ export default function PortalInvoiceViewPage() {
             {/* Totals */}
             <div className="mt-4 flex justify-end">
               <div className="w-64 space-y-2">
-                <div className="flex justify-between text-sm text-[#8B7355]">
+                <div className="flex justify-between text-sm text-[#5C4033]">
                   <span>Subtotal</span>
                   <span>{fmt(Number(invoice.subtotal))}</span>
                 </div>
-                <div className="flex justify-between text-sm text-[#8B7355]">
+                <div className="flex justify-between text-sm text-[#5C4033]">
                   <span>Tax ({Number(invoice.tax_rate)}%)</span>
                   <span>{fmt(Number(invoice.tax_amount))}</span>
                 </div>
-                <div className="flex justify-between border-t border-[#E8DCC8] pt-2 text-lg font-bold text-[#5C4033]">
+                <div className="flex justify-between border-t border-[#E8DCC8] pt-2 text-lg font-bold text-[#2C1810]">
                   <span>Total</span>
                   <span>{fmt(Number(invoice.total))}</span>
                 </div>
@@ -222,15 +222,15 @@ export default function PortalInvoiceViewPage() {
           {/* Notes */}
           {invoice.notes && (
             <div className="border-t border-[#E8DCC8] p-6">
-              <p className="text-xs font-medium uppercase text-[#8B7355]">Notes</p>
-              <p className="mt-1 whitespace-pre-line text-sm text-[#5C4033]">{invoice.notes}</p>
+              <p className="text-xs font-medium uppercase text-[#5C4033]">Notes</p>
+              <p className="mt-1 whitespace-pre-line text-sm text-[#2C1810]">{invoice.notes}</p>
             </div>
           )}
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#E8DCC8] py-6 text-center text-xs text-[#8B7355]">
+      <footer className="border-t border-[#E8DCC8] py-6 text-center text-xs text-[#5C4033]">
         Powered by MA Finance Hub &mdash; maishq.com
       </footer>
     </div>

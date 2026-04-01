@@ -26,9 +26,9 @@ export default function MileageSummaryPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">Mileage Summary</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">Mileage Summary</h1>
       <div className="mb-4 flex gap-3 items-end">
-        <div><label className="text-xs font-medium text-[#5C4033]">Year</label><Input type="number" value={year} onChange={(e) => setYear(e.target.value)} className="w-28" /></div>
+        <div><label className="text-xs font-medium text-[#2C1810]">Year</label><Input type="number" value={year} onChange={(e) => setYear(e.target.value)} className="w-28" /></div>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Run Report'}</Button>
       </div>
       {data && (
@@ -36,25 +36,25 @@ export default function MileageSummaryPage() {
           <div className="grid gap-4 md:grid-cols-3 mb-6">
             <Card className="border-[#E8DCC8]">
               <CardContent className="pt-6 text-center">
-                <p className="text-xs text-[#8B7355]">Total Trips</p>
-                <p className="text-3xl font-bold text-[#5C4033]">{data.totals.total_trips}</p>
+                <p className="text-xs text-[#5C4033]">Total Trips</p>
+                <p className="text-3xl font-bold text-[#2C1810]">{data.totals.total_trips}</p>
               </CardContent>
             </Card>
             <Card className="border-[#E8DCC8]">
               <CardContent className="pt-6 text-center">
-                <p className="text-xs text-[#8B7355]">Total Miles</p>
-                <p className="text-3xl font-bold text-[#5C4033]">{data.totals.total_miles.toLocaleString()}</p>
+                <p className="text-xs text-[#5C4033]">Total Miles</p>
+                <p className="text-3xl font-bold text-[#2C1810]">{data.totals.total_miles.toLocaleString()}</p>
               </CardContent>
             </Card>
             <Card className="border-[#E8DCC8]">
               <CardContent className="pt-6 text-center">
-                <p className="text-xs text-[#8B7355]">Total Deduction</p>
+                <p className="text-xs text-[#5C4033]">Total Deduction</p>
                 <p className="text-3xl font-bold text-[#2D6A4F]">{formatCurrency(data.totals.total_deduction)}</p>
               </CardContent>
             </Card>
           </div>
           <Card className="border-[#E8DCC8]">
-            <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Monthly Breakdown — {year}</CardTitle></CardHeader>
+            <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Monthly Breakdown — {year}</CardTitle></CardHeader>
             <CardContent className="pt-4">
               <Table>
                 <THead><TR><TH>Period</TH><TH className="text-right">Trips</TH><TH className="text-right">Miles</TH><TH className="text-right">Avg Rate</TH><TH className="text-right">Deduction</TH></TR></THead>
@@ -68,10 +68,10 @@ export default function MileageSummaryPage() {
                       <TD className="text-right font-mono font-medium">{formatCurrency(p.total_deduction)}</TD>
                     </TR>
                   ))}
-                  {!data.data.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No mileage data</TD></TR>}
+                  {!data.data.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No mileage data</TD></TR>}
                 </TBody>
               </Table>
-              <p className="mt-4 text-xs text-[#8B7355]">Report generated: {formatDate(new Date().toISOString())}</p>
+              <p className="mt-4 text-xs text-[#5C4033]">Report generated: {formatDate(new Date().toISOString())}</p>
             </CardContent>
           </Card>
         </>

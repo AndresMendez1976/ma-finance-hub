@@ -98,7 +98,7 @@ export default function InviteUserPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold" style={{ color: '#5C4033' }}>Invite User</h1>
+      <h1 className="mb-4 text-2xl font-bold" style={{ color: '#2C1810' }}>Invite User</h1>
 
       {result ? (
         <Card className="mx-auto max-w-lg">
@@ -106,15 +106,15 @@ export default function InviteUserPage() {
             <CardTitle className="text-lg" style={{ color: '#6B8F71' }}>Invitation Created</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm" style={{ color: '#5C4033' }}>
+            <p className="text-sm" style={{ color: '#2C1810' }}>
               An invitation has been created for <strong>{result.email}</strong> with the role <Badge variant="outline">{result.role}</Badge>.
             </p>
-            <p className="text-sm" style={{ color: '#8B7355' }}>
+            <p className="text-sm" style={{ color: '#5C4033' }}>
               Expires: {new Date(result.expires_at).toLocaleDateString()}
             </p>
 
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Invitation Link</label>
+              <label className="text-sm font-medium text-[#2C1810]">Invitation Link</label>
               <div className="mt-1 flex gap-2">
                 <Input value={inviteLink} readOnly className="bg-gray-50 text-xs" />
                 <Button size="sm" variant="outline" onClick={copyLink}>
@@ -124,7 +124,7 @@ export default function InviteUserPage() {
               </div>
             </div>
 
-            <p className="text-xs" style={{ color: '#8B7355' }}>Share this link with the invited user. They will use it to create their account.</p>
+            <p className="text-xs" style={{ color: '#5C4033' }}>Share this link with the invited user. They will use it to create their account.</p>
 
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1" onClick={() => { setResult(null); setForm({ email: '', role: 'viewer', user_type: 'internal', external_type: '', message: '', expires_in_days: 7, permissions: {} }); }}>
@@ -143,17 +143,17 @@ export default function InviteUserPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Email Address</label>
+              <label className="text-sm font-medium text-[#2C1810]">Email Address</label>
               <Input type="email" placeholder="user@example.com" value={form.email}
                 onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))} />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Role</label>
+              <label className="text-sm font-medium text-[#2C1810]">Role</label>
               <select
                 value={form.role}
                 onChange={(e) => setForm((prev) => ({ ...prev, role: e.target.value }))}
-                className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#5C4033] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
+                className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#2C1810] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
               >
                 {ROLES.map((r) => (
                   <option key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1)}</option>
@@ -162,7 +162,7 @@ export default function InviteUserPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">User Type</label>
+              <label className="text-sm font-medium text-[#2C1810]">User Type</label>
               <div className="mt-1 flex gap-2">
                 <Button size="sm" variant={form.user_type === 'internal' ? 'default' : 'outline'}
                   onClick={() => setForm((prev) => ({ ...prev, user_type: 'internal', external_type: '' }))}>
@@ -177,11 +177,11 @@ export default function InviteUserPage() {
 
             {form.user_type === 'external' && (
               <div>
-                <label className="text-sm font-medium text-[#5C4033]">External Type</label>
+                <label className="text-sm font-medium text-[#2C1810]">External Type</label>
                 <select
                   value={form.external_type}
                   onChange={(e) => setForm((prev) => ({ ...prev, external_type: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#5C4033] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
+                  className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#2C1810] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
                 >
                   <option value="">Select type...</option>
                   {EXTERNAL_TYPES.map((t) => (
@@ -193,10 +193,10 @@ export default function InviteUserPage() {
 
             {form.user_type === 'external' && (
               <div>
-                <label className="text-sm font-medium text-[#5C4033]">Permissions</label>
+                <label className="text-sm font-medium text-[#2C1810]">Permissions</label>
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   {PERMISSION_OPTIONS.map((p) => (
-                    <label key={p.key} className="flex items-center gap-2 text-sm text-[#5C4033]">
+                    <label key={p.key} className="flex items-center gap-2 text-sm text-[#2C1810]">
                       <input
                         type="checkbox"
                         checked={!!form.permissions[p.key]}
@@ -211,22 +211,22 @@ export default function InviteUserPage() {
             )}
 
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Personal Message (optional)</label>
+              <label className="text-sm font-medium text-[#2C1810]">Personal Message (optional)</label>
               <textarea
                 value={form.message}
                 onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
                 placeholder="Add a welcome message..."
                 rows={3}
-                className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#5C4033] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
+                className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#2C1810] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
               />
             </div>
 
             <div>
-              <label className="text-sm font-medium text-[#5C4033]">Expires In</label>
+              <label className="text-sm font-medium text-[#2C1810]">Expires In</label>
               <select
                 value={form.expires_in_days}
                 onChange={(e) => setForm((prev) => ({ ...prev, expires_in_days: Number(e.target.value) }))}
-                className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#5C4033] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
+                className="mt-1 block w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#2C1810] focus:border-[#8B5E3C] focus:outline-none focus:ring-1 focus:ring-[#8B5E3C]"
               >
                 {EXPIRY_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>

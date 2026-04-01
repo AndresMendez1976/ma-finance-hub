@@ -23,12 +23,12 @@ export default function BankAccountsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Bank Accounts</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Bank Accounts</h1>
         <Link href="/bank-accounts/new"><Button><Plus className="mr-2 h-4 w-4" />New Account</Button></Link>
       </div>
       <Card className="border-[#E8DCC8]">
         <CardContent className="pt-6">
-          {loading ? <p className="text-center text-[#8B7355]">Loading...</p> : (
+          {loading ? <p className="text-center text-[#5C4033]">Loading...</p> : (
             <Table>
               <THead><TR><TH>Account</TH><TH>Institution</TH><TH>Last 4</TH><TH className="text-right">Balance</TH><TH>Unreconciled</TH><TH>Status</TH><TH>Actions</TH></TR></THead>
               <TBody>
@@ -43,7 +43,7 @@ export default function BankAccountsPage() {
                     <TD><Link href={`/bank-accounts/${a.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
                   </TR>
                 ))}
-                {accounts.length === 0 && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No bank accounts configured</TD></TR>}
+                {accounts.length === 0 && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No bank accounts configured</TD></TR>}
               </TBody>
             </Table>
           )}

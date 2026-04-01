@@ -47,14 +47,14 @@ export default function OnboardingPage() {
   return (
     <Shell>
       <div className="mx-auto max-w-lg">
-        <h1 className="mb-2 text-center text-2xl font-bold text-[#5C4033]">Setup Your Account</h1>
-        <p className="mb-4 text-center text-sm text-[#8B7355]">Step {step} of 5</p>
+        <h1 className="mb-2 text-center text-2xl font-bold text-[#2C1810]">Setup Your Account</h1>
+        <p className="mb-4 text-center text-sm text-[#5C4033]">Step {step} of 5</p>
         <div className="mb-6 h-2 overflow-hidden rounded-full bg-[#E8DCC8]">
           <div className="h-full rounded-full bg-[#2D6A4F] transition-all" style={{ width: `${pct}%` }} />
         </div>
 
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">
+          <CardHeader><CardTitle className="text-[#2C1810]">
             {step === 1 && 'Company Information'}
             {step === 2 && 'Fiscal Year & Currency'}
             {step === 3 && 'Industry'}
@@ -64,24 +64,24 @@ export default function OnboardingPage() {
           <CardContent>
             {step === 1 && (
               <div className="space-y-4">
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Company Name</label>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Company Name</label>
                   <Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your company" /></div>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Address</label>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Address</label>
                   <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street address" /></div>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Phone</label>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Phone</label>
                   <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+1 (555) 000-0000" /></div>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Email</label>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Email</label>
                   <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="company@example.com" /></div>
               </div>
             )}
             {step === 2 && (
               <div className="space-y-4">
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Fiscal Year Start Month</label>
-                  <select value={fiscalStart} onChange={(e) => setFiscalStart(e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Fiscal Year Start Month</label>
+                  <select value={fiscalStart} onChange={(e) => setFiscalStart(e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                     {MONTHS.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
                   </select></div>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Base Currency</label>
-                  <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Base Currency</label>
+                  <select value={currency} onChange={(e) => setCurrency(e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                     {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select></div>
               </div>
@@ -90,7 +90,7 @@ export default function OnboardingPage() {
               <div className="grid grid-cols-2 gap-3">
                 {INDUSTRIES.map((ind) => (
                   <button key={ind} onClick={() => setIndustry(ind)}
-                    className={`rounded-lg border-2 p-4 text-center text-sm font-medium transition-colors ${industry === ind ? 'border-[#2D6A4F] bg-[#2D6A4F]/10 text-[#2D6A4F]' : 'border-[#E8DCC8] text-[#5C4033] hover:border-[#D4A854]'}`}>
+                    className={`rounded-lg border-2 p-4 text-center text-sm font-medium transition-colors ${industry === ind ? 'border-[#2D6A4F] bg-[#2D6A4F]/10 text-[#2D6A4F]' : 'border-[#E8DCC8] text-[#2C1810] hover:border-[#D4A854]'}`}>
                     {ind}
                   </button>
                 ))}
@@ -98,12 +98,12 @@ export default function OnboardingPage() {
             )}
             {step === 4 && (
               <div className="space-y-4">
-                <p className="text-sm text-[#8B7355]">You can skip this and add bank accounts later.</p>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Account Name</label>
+                <p className="text-sm text-[#5C4033]">You can skip this and add bank accounts later.</p>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Account Name</label>
                   <Input value={bankAccountName} onChange={(e) => setBankAccountName(e.target.value)} placeholder="e.g. Operating Account" /></div>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Account Number</label>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Account Number</label>
                   <Input value={bankAccountNumber} onChange={(e) => setBankAccountNumber(e.target.value)} placeholder="Account number" /></div>
-                <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Bank Name</label>
+                <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Bank Name</label>
                   <Input value={bankName} onChange={(e) => setBankName(e.target.value)} placeholder="Bank name" /></div>
               </div>
             )}
@@ -111,7 +111,7 @@ export default function OnboardingPage() {
               <div className="py-6 text-center">
                 <p className="mb-4 text-4xl text-[#2D6A4F]">&#10003;</p>
                 <p className="text-lg font-semibold text-[#2D6A4F]">Setup Complete!</p>
-                <p className="mt-2 text-sm text-[#8B7355]">Your account is ready. Head to the dashboard to get started.</p>
+                <p className="mt-2 text-sm text-[#5C4033]">Your account is ready. Head to the dashboard to get started.</p>
                 <Button className="mt-6" onClick={() => router.push('/dashboard')}>Go to Dashboard</Button>
               </div>
             )}

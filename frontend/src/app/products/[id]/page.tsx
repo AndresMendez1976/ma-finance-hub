@@ -39,7 +39,7 @@ export default function ProductDetailPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!product) return <Shell><p className="text-[#E07A5F]">{error || 'Product not found'}</p></Shell>;
 
   const isLowStock = product.product_type === 'inventory' && product.stock_on_hand <= product.reorder_point && product.reorder_point > 0;
@@ -48,7 +48,7 @@ export default function ProductDetailPage() {
     <Shell>
       <div className="mb-4 flex items-center gap-3">
         <Link href="/products"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-        <h1 className="text-2xl font-bold text-[#5C4033]">{product.name}</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">{product.name}</h1>
         <Badge variant={product.product_type === 'inventory' ? 'success' : product.product_type === 'service' ? 'info' : 'warning'}>{product.product_type}</Badge>
       </div>
 
@@ -61,31 +61,31 @@ export default function ProductDetailPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Product info */}
         <Card className="border-[#E8DCC8] lg:col-span-2">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Product Details</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Product Details</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <div className="grid gap-3 md:grid-cols-2">
-              <div><p className="text-xs text-[#8B7355]">SKU</p><p className="font-mono font-medium text-[#5C4033]">{product.sku}</p></div>
-              <div><p className="text-xs text-[#8B7355]">Category</p><p className="font-medium text-[#5C4033]">{product.category || '—'}</p></div>
-              <div><p className="text-xs text-[#8B7355]">Sale Price</p><p className="font-mono font-medium text-[#5C4033]">${Number(product.sale_price).toFixed(2)}</p></div>
-              <div><p className="text-xs text-[#8B7355]">Purchase Price</p><p className="font-mono font-medium text-[#5C4033]">{product.purchase_price ? `$${Number(product.purchase_price).toFixed(2)}` : '—'}</p></div>
-              <div><p className="text-xs text-[#8B7355]">Unit</p><p className="text-[#5C4033]">{product.unit_of_measure}</p></div>
-              {product.costing_method && <div><p className="text-xs text-[#8B7355]">Costing Method</p><p className="text-[#5C4033] uppercase">{product.costing_method}</p></div>}
+              <div><p className="text-xs text-[#5C4033]">SKU</p><p className="font-mono font-medium text-[#2C1810]">{product.sku}</p></div>
+              <div><p className="text-xs text-[#5C4033]">Category</p><p className="font-medium text-[#2C1810]">{product.category || '—'}</p></div>
+              <div><p className="text-xs text-[#5C4033]">Sale Price</p><p className="font-mono font-medium text-[#2C1810]">${Number(product.sale_price).toFixed(2)}</p></div>
+              <div><p className="text-xs text-[#5C4033]">Purchase Price</p><p className="font-mono font-medium text-[#2C1810]">{product.purchase_price ? `$${Number(product.purchase_price).toFixed(2)}` : '—'}</p></div>
+              <div><p className="text-xs text-[#5C4033]">Unit</p><p className="text-[#2C1810]">{product.unit_of_measure}</p></div>
+              {product.costing_method && <div><p className="text-xs text-[#5C4033]">Costing Method</p><p className="text-[#2C1810] uppercase">{product.costing_method}</p></div>}
               {product.track_lots && <div><Badge variant="info">Lot Tracked</Badge></div>}
               {product.track_serials && <div><Badge variant="info">Serial Tracked</Badge></div>}
             </div>
-            {product.description && <p className="mt-4 text-sm text-[#8B7355]">{product.description}</p>}
+            {product.description && <p className="mt-4 text-sm text-[#5C4033]">{product.description}</p>}
           </CardContent>
         </Card>
         {/* Summary sidebar */}
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Stock Summary</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Stock Summary</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="text-center">
-              <p className={`text-3xl font-bold ${isLowStock ? 'text-[#E07A5F]' : 'text-[#5C4033]'}`}>{product.stock_on_hand}</p>
-              <p className="text-xs text-[#8B7355]">total on hand</p>
+              <p className={`text-3xl font-bold ${isLowStock ? 'text-[#E07A5F]' : 'text-[#2C1810]'}`}>{product.stock_on_hand}</p>
+              <p className="text-xs text-[#5C4033]">total on hand</p>
             </div>
-            <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Reorder Point</span><span className="font-mono">{product.reorder_point || '—'}</span></div>
-            <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Reorder Qty</span><span className="font-mono">{product.reorder_quantity || '—'}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Reorder Point</span><span className="font-mono">{product.reorder_point || '—'}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Reorder Qty</span><span className="font-mono">{product.reorder_quantity || '—'}</span></div>
           </CardContent>
         </Card>
       </div>
@@ -93,7 +93,7 @@ export default function ProductDetailPage() {
       {/* Stock by location */}
       {stock.length > 0 && (
         <Card className="mt-4 border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Stock by Location</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Stock by Location</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <THead><TR><TH>Location</TH><TH className="text-right">On Hand</TH><TH className="text-right">Available</TH></TR></THead>
@@ -109,7 +109,7 @@ export default function ProductDetailPage() {
 
       {/* Transaction history */}
       <Card className="mt-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Transaction History</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Transaction History</CardTitle></CardHeader>
         <CardContent>
           <Table>
             <THead><TR><TH>Date</TH><TH>Type</TH><TH>Reference</TH><TH>Location</TH><TH className="text-right">Qty</TH><TH className="text-right">Unit Cost</TH><TH className="text-right">Total</TH></TR></THead>
@@ -121,7 +121,7 @@ export default function ProductDetailPage() {
                   <TD className="text-right font-mono">{t.quantity}</TD><TD className="text-right font-mono">${Number(t.unit_cost).toFixed(2)}</TD><TD className="text-right font-mono">${Number(t.total).toFixed(2)}</TD>
                 </TR>
               ))}
-              {!transactions.length && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No transactions yet</TD></TR>}
+              {!transactions.length && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No transactions yet</TD></TR>}
             </TBody>
           </Table>
         </CardContent>

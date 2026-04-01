@@ -35,7 +35,7 @@ export default function InventoryValuationPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Inventory Valuation</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Inventory Valuation</h1>
         <div className="flex items-center gap-2">
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && <Button size="sm" variant="outline" onClick={exportCsv}><Download className="mr-2 h-4 w-4" />CSV</Button>}
@@ -43,7 +43,7 @@ export default function InventoryValuationPage() {
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">As of {data.as_of}</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">As of {data.as_of}</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <Table>
               <THead><TR><TH>Product</TH><TH>SKU</TH><TH>Costing Method</TH><TH className="text-right">Quantity</TH><TH className="text-right">Unit Cost</TH><TH className="text-right">Total Value</TH></TR></THead>
@@ -58,7 +58,7 @@ export default function InventoryValuationPage() {
                     <TD className="text-right font-mono">${r.total_value.toFixed(2)}</TD>
                   </TR>
                 ))}
-                {data.rows.length === 0 && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No inventory items</TD></TR>}
+                {data.rows.length === 0 && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No inventory items</TD></TR>}
                 {data.rows.length > 0 && (
                   <TR className="border-t-2 bg-[#E8DCC8]/40 font-bold">
                     <TD colSpan={5}>Total</TD>
@@ -70,7 +70,7 @@ export default function InventoryValuationPage() {
           </CardContent>
         </Card>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Click Generate to load the inventory valuation report.</p>}
+      {!data && !loading && <p className="text-[#5C4033]">Click Generate to load the inventory valuation report.</p>}
     </Shell>
   );
 }

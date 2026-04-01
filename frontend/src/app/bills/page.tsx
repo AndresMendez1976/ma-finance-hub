@@ -15,7 +15,7 @@ interface Bill { id: number; bill_number: string; vendor_name: string; bill_date
 interface BillResponse { data: Bill[]; pagination: { page: number; total: number; pages: number } }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', received: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', received: 'bg-[#D4A854] text-[#2C1810]',
   approved: 'bg-[#2D6A4F]/70 text-white', paid: 'bg-[#2D6A4F] text-white',
   overdue: 'bg-[#E07A5F] text-white', voided: 'bg-[#8B7355] text-white',
 };
@@ -44,7 +44,7 @@ export default function BillsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Vendor Bills</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Vendor Bills</h1>
         <Link href="/bills/new"><Button><Plus className="mr-2 h-4 w-4" />New Bill</Button></Link>
       </div>
       <div className="mb-4 flex gap-2">
@@ -57,7 +57,7 @@ export default function BillsPage() {
           <Table>
             <THead><TR><TH>Bill #</TH><TH>Vendor</TH><TH>Date</TH><TH>Due Date</TH><TH className="text-right">Total</TH><TH className="text-right">Paid</TH><TH className="text-right">Balance</TH><TH>Status</TH><TH>Actions</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={9} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={9} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((b) => (
                 <TR key={b.id}>
                   <TD className="font-medium font-mono">{b.bill_number}</TD>
@@ -71,11 +71,11 @@ export default function BillsPage() {
                   <TD><Link href={`/bills/${b.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={9} className="text-center text-[#8B7355]">No bills found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={9} className="text-center text-[#5C4033]">No bills found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

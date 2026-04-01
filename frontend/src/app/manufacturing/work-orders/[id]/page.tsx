@@ -11,7 +11,7 @@ import { api } from '@/lib/api';
 import { ArrowLeft, Play, CheckCircle, XCircle, Package, Clock } from 'lucide-react';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', released: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', released: 'bg-[#D4A854] text-[#2C1810]',
   in_progress: 'bg-[#E07A5F] text-white', completed: 'bg-[#2D6A4F] text-white', cancelled: 'bg-[#8B7355] text-white',
 };
 
@@ -48,7 +48,7 @@ export default function WorkOrderDetailPage() {
     finally { setActionLoading(false); }
   };
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!wo) return <Shell><p className="text-[#E07A5F]">{error || 'Work order not found'}</p></Shell>;
 
   const pct = wo.qty_to_produce > 0 ? (wo.qty_produced / wo.qty_to_produce) * 100 : 0;
@@ -59,7 +59,7 @@ export default function WorkOrderDetailPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/manufacturing/work-orders"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold text-[#5C4033]">{wo.wo_number}</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">{wo.wo_number}</h1>
           <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[wo.status] || ''}`}>{wo.status.replace('_', ' ').toUpperCase()}</span>
         </div>
         <div className="flex gap-2">
@@ -80,21 +80,21 @@ export default function WorkOrderDetailPage() {
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="mb-4 grid gap-4 md:grid-cols-5">
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Product</p><p className="font-medium text-[#5C4033]">{wo.product_name}</p>
+          <p className="text-xs text-[#5C4033]">Product</p><p className="font-medium text-[#2C1810]">{wo.product_name}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Progress</p>
+          <p className="text-xs text-[#5C4033]">Progress</p>
           <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#E8DCC8]"><div className="h-full rounded-full bg-[#2D6A4F]" style={{ width: `${Math.min(pct, 100)}%` }} /></div>
           <p className="mt-1 text-sm font-mono">{wo.qty_produced}/{wo.qty_to_produce}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Estimated Cost</p><p className="font-mono font-bold text-[#5C4033]">${Number(wo.estimated_cost).toFixed(2)}</p>
+          <p className="text-xs text-[#5C4033]">Estimated Cost</p><p className="font-mono font-bold text-[#2C1810]">${Number(wo.estimated_cost).toFixed(2)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Actual Cost</p><p className="font-mono font-bold text-[#5C4033]">${Number(wo.actual_cost).toFixed(2)}</p>
+          <p className="text-xs text-[#5C4033]">Actual Cost</p><p className="font-mono font-bold text-[#2C1810]">${Number(wo.actual_cost).toFixed(2)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Variance</p>
+          <p className="text-xs text-[#5C4033]">Variance</p>
           <p className={`font-mono font-bold ${variance > 0 ? 'text-[#E07A5F]' : 'text-[#2D6A4F]'}`}>
             {variance > 0 ? '+' : ''}{variance.toFixed(2)}
           </p>
@@ -102,7 +102,7 @@ export default function WorkOrderDetailPage() {
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Material Usage</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Material Usage</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <THead><TR><TH>Material</TH><TH className="text-right">Planned</TH><TH className="text-right">Used</TH><TH className="text-right">Cost</TH></TR></THead>
@@ -113,13 +113,13 @@ export default function WorkOrderDetailPage() {
                     <TD className="text-right font-mono">{Number(m.qty_used).toFixed(2)}</TD><TD className="text-right font-mono">${Number(m.cost).toFixed(2)}</TD>
                   </TR>
                 ))}
-                {(!wo.materials || wo.materials.length === 0) && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No materials recorded</TD></TR>}
+                {(!wo.materials || wo.materials.length === 0) && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No materials recorded</TD></TR>}
               </TBody>
             </Table>
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Labor</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Labor</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <THead><TR><TH>Description</TH><TH className="text-right">Planned</TH><TH className="text-right">Actual</TH><TH className="text-right">Cost</TH></TR></THead>
@@ -130,7 +130,7 @@ export default function WorkOrderDetailPage() {
                     <TD className="text-right font-mono">{Number(l.hours_actual).toFixed(1)}h</TD><TD className="text-right font-mono">${Number(l.cost).toFixed(2)}</TD>
                   </TR>
                 ))}
-                {(!wo.labor || wo.labor.length === 0) && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No labor recorded</TD></TR>}
+                {(!wo.labor || wo.labor.length === 0) && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No labor recorded</TD></TR>}
               </TBody>
             </Table>
           </CardContent>

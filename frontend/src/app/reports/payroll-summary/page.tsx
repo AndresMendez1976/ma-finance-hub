@@ -35,10 +35,10 @@ export default function PayrollSummaryPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Payroll Summary Report</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Payroll Summary Report</h1>
         <div className="flex items-center gap-2">
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" />
-          <span className="text-[#8B7355]">to</span>
+          <span className="text-[#5C4033]">to</span>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && (
@@ -51,7 +51,7 @@ export default function PayrollSummaryPage() {
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30">
-            <CardTitle className="text-[#5C4033]">{data.period_start} to {data.period_end}</CardTitle>
+            <CardTitle className="text-[#2C1810]">{data.period_start} to {data.period_end}</CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             <Table>
@@ -60,11 +60,11 @@ export default function PayrollSummaryPage() {
               </THead>
               <TBody>
                 <TR><TD className="font-medium">Total Gross Pay</TD><TD className="text-right font-mono font-bold">{fmt(data.total_gross)}</TD></TR>
-                <TR><TD className="text-[#8B7355]">Federal Withholding</TD><TD className="text-right font-mono">{fmt(data.total_federal)}</TD></TR>
-                <TR><TD className="text-[#8B7355]">Social Security</TD><TD className="text-right font-mono">{fmt(data.total_social_security)}</TD></TR>
-                <TR><TD className="text-[#8B7355]">Medicare</TD><TD className="text-right font-mono">{fmt(data.total_medicare)}</TD></TR>
-                <TR><TD className="text-[#8B7355]">State Withholding</TD><TD className="text-right font-mono">{fmt(data.total_state)}</TD></TR>
-                <TR><TD className="text-[#8B7355]">Deductions</TD><TD className="text-right font-mono">{fmt(data.total_deductions)}</TD></TR>
+                <TR><TD className="text-[#5C4033]">Federal Withholding</TD><TD className="text-right font-mono">{fmt(data.total_federal)}</TD></TR>
+                <TR><TD className="text-[#5C4033]">Social Security</TD><TD className="text-right font-mono">{fmt(data.total_social_security)}</TD></TR>
+                <TR><TD className="text-[#5C4033]">Medicare</TD><TD className="text-right font-mono">{fmt(data.total_medicare)}</TD></TR>
+                <TR><TD className="text-[#5C4033]">State Withholding</TD><TD className="text-right font-mono">{fmt(data.total_state)}</TD></TR>
+                <TR><TD className="text-[#5C4033]">Deductions</TD><TD className="text-right font-mono">{fmt(data.total_deductions)}</TD></TR>
                 <TR className="border-t-2 border-[#E8DCC8]">
                   <TD className="font-bold text-[#2D6A4F]">Total Net Pay</TD>
                   <TD className="text-right font-mono font-bold text-[#2D6A4F]">{fmt(data.total_net)}</TD>
@@ -75,7 +75,7 @@ export default function PayrollSummaryPage() {
           </CardContent>
         </Card>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Select a date range and click Generate.</p>}
+      {!data && !loading && <p className="text-[#5C4033]">Select a date range and click Generate.</p>}
     </Shell>
   );
 }

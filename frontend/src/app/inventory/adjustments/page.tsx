@@ -39,7 +39,7 @@ export default function AdjustmentsPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Inventory Adjustments</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Inventory Adjustments</h1>
         <Link href="/inventory/adjustments/new"><Button><Plus className="mr-2 h-4 w-4" />New Adjustment</Button></Link>
       </div>
       <Card className="border-[#E8DCC8]">
@@ -47,7 +47,7 @@ export default function AdjustmentsPage() {
           <Table>
             <THead><TR><TH>#</TH><TH>Date</TH><TH>Reason</TH><TH>Status</TH><TH>Actions</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={5} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={5} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((adj) => (
                 <TR key={adj.id}>
                   <TD className="font-mono text-sm">{adj.adjustment_number}</TD>
@@ -57,11 +57,11 @@ export default function AdjustmentsPage() {
                   <TD><Link href={`/inventory/adjustments/${adj.id}`}><Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button></Link></TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No adjustments found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No adjustments found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {page} of {data.pagination.pages} ({data.pagination.total} total)</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

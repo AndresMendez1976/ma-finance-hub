@@ -27,8 +27,8 @@ const fmt = (n: number) =>
   `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#E8DCC8] text-[#5C4033]',
-  sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#E8DCC8] text-[#2C1810]',
+  sent: 'bg-[#D4A854] text-[#2C1810]',
   paid: 'bg-[#2D6A4F] text-white',
   overdue: 'bg-[#E07A5F] text-white',
   voided: 'bg-[#8B7355] text-white',
@@ -61,10 +61,10 @@ export default function PortalStatementPage() {
       {/* Header */}
       <header className="border-b border-[#E8DCC8] bg-white px-6 py-4">
         <div className="mx-auto flex max-w-5xl items-center gap-3">
-          <Building2 className="h-8 w-8 text-[#5C4033]" />
+          <Building2 className="h-8 w-8 text-[#2C1810]" />
           <div>
-            <h1 className="text-xl font-bold text-[#5C4033]">MA Finance Hub</h1>
-            <p className="text-xs text-[#8B7355]">Customer Portal</p>
+            <h1 className="text-xl font-bold text-[#2C1810]">MA Finance Hub</h1>
+            <p className="text-xs text-[#5C4033]">Customer Portal</p>
           </div>
         </div>
       </header>
@@ -73,7 +73,7 @@ export default function PortalStatementPage() {
         <div className="mb-6 flex items-center justify-between">
           <Link
             href={`/portal/${token}`}
-            className="flex items-center gap-1 text-sm text-[#8B7355] hover:text-[#5C4033] transition-colors"
+            className="flex items-center gap-1 text-sm text-[#5C4033] hover:text-[#2C1810] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to invoices
@@ -81,9 +81,9 @@ export default function PortalStatementPage() {
         </div>
 
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-[#5C4033]">Account Statement</h2>
+          <h2 className="text-2xl font-bold text-[#2C1810]">Account Statement</h2>
           {data?.customer_name && (
-            <p className="mt-1 text-[#8B7355]">{data.customer_name}</p>
+            <p className="mt-1 text-[#5C4033]">{data.customer_name}</p>
           )}
         </div>
 
@@ -94,7 +94,7 @@ export default function PortalStatementPage() {
         )}
 
         {loading && (
-          <div className="py-12 text-center text-[#8B7355]">Loading statement...</div>
+          <div className="py-12 text-center text-[#5C4033]">Loading statement...</div>
         )}
 
         {!loading && data && (
@@ -103,26 +103,26 @@ export default function PortalStatementPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[#E8DCC8] bg-[#E8DCC8]/30">
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase text-[#8B7355]">Invoice #</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase text-[#8B7355]">Issue Date</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium uppercase text-[#8B7355]">Due Date</th>
-                    <th className="px-4 py-3 text-center text-xs font-medium uppercase text-[#8B7355]">Status</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium uppercase text-[#8B7355]">Total</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium uppercase text-[#8B7355]">Paid</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium uppercase text-[#8B7355]">Balance</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase text-[#5C4033]">Invoice #</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase text-[#5C4033]">Issue Date</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium uppercase text-[#5C4033]">Due Date</th>
+                    <th className="px-4 py-3 text-center text-xs font-medium uppercase text-[#5C4033]">Status</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium uppercase text-[#5C4033]">Total</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium uppercase text-[#5C4033]">Paid</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium uppercase text-[#5C4033]">Balance</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.lines.length === 0 && (
                     <tr>
-                      <td colSpan={7} className="px-4 py-8 text-center text-[#8B7355]">
+                      <td colSpan={7} className="px-4 py-8 text-center text-[#5C4033]">
                         No transactions found
                       </td>
                     </tr>
                   )}
                   {data.lines.map((line) => (
                     <tr key={line.id} className="border-b border-[#E8DCC8]/50 hover:bg-[#E8DCC8]/10">
-                      <td className="px-4 py-3 text-sm font-medium text-[#5C4033]">
+                      <td className="px-4 py-3 text-sm font-medium text-[#2C1810]">
                         <Link
                           href={`/portal/${token}/invoices/${line.id}`}
                           className="hover:underline text-[#D4A854]"
@@ -130,25 +130,25 @@ export default function PortalStatementPage() {
                           {line.invoice_number}
                         </Link>
                       </td>
-                      <td className="px-4 py-3 text-sm text-[#5C4033]">{line.issue_date}</td>
-                      <td className="px-4 py-3 text-sm text-[#5C4033]">{line.due_date}</td>
+                      <td className="px-4 py-3 text-sm text-[#2C1810]">{line.issue_date}</td>
+                      <td className="px-4 py-3 text-sm text-[#2C1810]">{line.due_date}</td>
                       <td className="px-4 py-3 text-center">
                         <span
-                          className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[line.status] || 'bg-[#E8DCC8] text-[#5C4033]'}`}
+                          className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[line.status] || 'bg-[#E8DCC8] text-[#2C1810]'}`}
                         >
                           {line.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-right text-sm text-[#5C4033]">{fmt(Number(line.total))}</td>
+                      <td className="px-4 py-3 text-right text-sm text-[#2C1810]">{fmt(Number(line.total))}</td>
                       <td className="px-4 py-3 text-right text-sm text-[#2D6A4F]">{fmt(Number(line.paid_amount))}</td>
-                      <td className="px-4 py-3 text-right text-sm font-semibold text-[#5C4033]">{fmt(Number(line.balance))}</td>
+                      <td className="px-4 py-3 text-right text-sm font-semibold text-[#2C1810]">{fmt(Number(line.balance))}</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="border-t-2 border-[#5C4033] bg-[#E8DCC8]/20">
-                    <td colSpan={4} className="px-4 py-3 text-right text-sm font-bold text-[#5C4033]">Totals</td>
-                    <td className="px-4 py-3 text-right text-sm font-bold text-[#5C4033]">{fmt(data.total_invoiced)}</td>
+                    <td colSpan={4} className="px-4 py-3 text-right text-sm font-bold text-[#2C1810]">Totals</td>
+                    <td className="px-4 py-3 text-right text-sm font-bold text-[#2C1810]">{fmt(data.total_invoiced)}</td>
                     <td className="px-4 py-3 text-right text-sm font-bold text-[#2D6A4F]">{fmt(data.total_paid)}</td>
                     <td className="px-4 py-3 text-right text-sm font-bold text-[#E07A5F]">{fmt(data.total_balance)}</td>
                   </tr>
@@ -160,7 +160,7 @@ export default function PortalStatementPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#E8DCC8] py-6 text-center text-xs text-[#8B7355]">
+      <footer className="border-t border-[#E8DCC8] py-6 text-center text-xs text-[#5C4033]">
         Powered by MA Finance Hub &mdash; maishq.com
       </footer>
     </div>

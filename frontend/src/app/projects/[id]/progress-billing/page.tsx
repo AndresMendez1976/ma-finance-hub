@@ -33,21 +33,21 @@ export default function ProgressBillingPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!data) return <Shell><p className="text-[#E07A5F]">Progress billing not available</p></Shell>;
 
   return (
     <Shell>
       <div className="mb-4 flex items-center gap-3">
         <Link href={`/projects/${id}`}><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-        <h1 className="text-2xl font-bold text-[#5C4033]">{data.project_name} - Progress Billing</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">{data.project_name} - Progress Billing</h1>
       </div>
-      <div className="mb-4 flex gap-6 text-sm text-[#8B7355]">
+      <div className="mb-4 flex gap-6 text-sm text-[#5C4033]">
         <span>Application #{data.application_number}</span>
         <span>Period to: {formatDate(data.period_to)}</span>
       </div>
       <Card className="border-[#E8DCC8]">
-        <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">AIA G702 Schedule of Values</CardTitle></CardHeader>
+        <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">AIA G702 Schedule of Values</CardTitle></CardHeader>
         <CardContent className="pt-4 overflow-x-auto">
           <Table>
             <THead>
@@ -76,10 +76,10 @@ export default function ProgressBillingPage() {
             </TBody>
           </Table>
           <div className="mt-4 border-t border-[#E8DCC8] pt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div><p className="text-xs text-[#8B7355]">Total Contract</p><p className="text-lg font-bold font-mono text-[#5C4033]">{formatCurrency(data.total_contract)}</p></div>
-            <div><p className="text-xs text-[#8B7355]">Total Completed</p><p className="text-lg font-bold font-mono text-[#2D6A4F]">{formatCurrency(data.total_completed)}</p></div>
-            <div><p className="text-xs text-[#8B7355]">Retainage</p><p className="text-lg font-bold font-mono text-[#D4A854]">{formatCurrency(data.total_retainage)}</p></div>
-            <div><p className="text-xs text-[#8B7355]">Amount Due</p><p className="text-lg font-bold font-mono text-[#5C4033]">{formatCurrency(data.amount_due)}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Total Contract</p><p className="text-lg font-bold font-mono text-[#2C1810]">{formatCurrency(data.total_contract)}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Total Completed</p><p className="text-lg font-bold font-mono text-[#2D6A4F]">{formatCurrency(data.total_completed)}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Retainage</p><p className="text-lg font-bold font-mono text-[#D4A854]">{formatCurrency(data.total_retainage)}</p></div>
+            <div><p className="text-xs text-[#5C4033]">Amount Due</p><p className="text-lg font-bold font-mono text-[#2C1810]">{formatCurrency(data.amount_due)}</p></div>
           </div>
         </CardContent>
       </Card>

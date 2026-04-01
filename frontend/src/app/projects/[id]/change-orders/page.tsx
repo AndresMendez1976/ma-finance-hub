@@ -54,7 +54,7 @@ export default function ChangeOrdersPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href={`/projects/${id}`}><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold text-[#5C4033]">Change Orders</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">Change Orders</h1>
         </div>
         <Button onClick={() => setShowForm(!showForm)}><Plus className="mr-2 h-4 w-4" />New Change Order</Button>
       </div>
@@ -62,9 +62,9 @@ export default function ChangeOrdersPage() {
       {showForm && (
         <Card className="mb-4 border-[#D4A854]/30 bg-[#D4A854]/5">
           <CardContent className="flex items-end gap-3 pt-4">
-            <div><label className="text-xs font-medium text-[#5C4033]">CO #</label><Input value={coNumber} onChange={(e) => setCoNumber(e.target.value)} className="w-28" /></div>
-            <div className="flex-1"><label className="text-xs font-medium text-[#5C4033]">Description</label><Input value={description} onChange={(e) => setDescription(e.target.value)} /></div>
-            <div><label className="text-xs font-medium text-[#5C4033]">Amount</label><Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="0.01" className="w-36" /></div>
+            <div><label className="text-xs font-medium text-[#2C1810]">CO #</label><Input value={coNumber} onChange={(e) => setCoNumber(e.target.value)} className="w-28" /></div>
+            <div className="flex-1"><label className="text-xs font-medium text-[#2C1810]">Description</label><Input value={description} onChange={(e) => setDescription(e.target.value)} /></div>
+            <div><label className="text-xs font-medium text-[#2C1810]">Amount</label><Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} step="0.01" className="w-36" /></div>
             <Button onClick={save} disabled={saving}>{saving ? 'Saving...' : 'Submit'}</Button>
             <Button variant="ghost" onClick={() => setShowForm(false)}>Cancel</Button>
           </CardContent>
@@ -75,7 +75,7 @@ export default function ChangeOrdersPage() {
           <Table>
             <THead><TR><TH>CO #</TH><TH>Description</TH><TH className="text-right">Amount</TH><TH>Status</TH><TH>Submitted</TH><TH>Approved</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={6} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={6} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && orders.map((o) => (
                 <TR key={o.id}>
                   <TD className="font-mono font-medium">{o.co_number}</TD>
@@ -86,10 +86,10 @@ export default function ChangeOrdersPage() {
                   <TD>{formatDate(o.approved_date)}</TD>
                 </TR>
               ))}
-              {!loading && !orders.length && <TR><TD colSpan={6} className="text-center text-[#8B7355]">No change orders</TD></TR>}
+              {!loading && !orders.length && <TR><TD colSpan={6} className="text-center text-[#5C4033]">No change orders</TD></TR>}
             </TBody>
           </Table>
-          <div className="mt-4 border-t border-[#E8DCC8] pt-3 flex justify-between text-sm font-medium text-[#5C4033]">
+          <div className="mt-4 border-t border-[#E8DCC8] pt-3 flex justify-between text-sm font-medium text-[#2C1810]">
             <span>Total Approved</span><span className="font-mono">{formatCurrency(totalApproved)}</span>
           </div>
         </CardContent>

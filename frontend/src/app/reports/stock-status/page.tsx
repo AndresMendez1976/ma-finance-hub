@@ -36,12 +36,12 @@ export default function StockStatusPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Stock Status</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Stock Status</h1>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
       </div>
       {data && (
         <Card className="border-[#E8DCC8]">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Current Stock Status</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Current Stock Status</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <Table>
               <THead><TR><TH>Product</TH><TH>Location</TH><TH className="text-right">On Hand</TH><TH className="text-right">Reorder Point</TH><TH>Status</TH></TR></THead>
@@ -58,11 +58,11 @@ export default function StockStatusPage() {
                     </TR>
                   );
                 })}
-                {data.rows.length === 0 && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No inventory items</TD></TR>}
+                {data.rows.length === 0 && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No inventory items</TD></TR>}
               </TBody>
             </Table>
             {data.rows.length > 0 && (
-              <div className="mt-4 flex gap-4 text-xs text-[#8B7355]">
+              <div className="mt-4 flex gap-4 text-xs text-[#5C4033]">
                 <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded-full bg-[#2D6A4F]" />OK - Stock above reorder point</span>
                 <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded-full bg-[#D4A854]" />Low - At or below reorder point</span>
                 <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded-full bg-[#E07A5F]" />Out - Zero stock</span>
@@ -71,7 +71,7 @@ export default function StockStatusPage() {
           </CardContent>
         </Card>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Click Generate to load the stock status report.</p>}
+      {!data && !loading && <p className="text-[#5C4033]">Click Generate to load the stock status report.</p>}
     </Shell>
   );
 }

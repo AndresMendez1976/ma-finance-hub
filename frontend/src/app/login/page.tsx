@@ -101,7 +101,7 @@ function LoginForm() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-xl">MA Finance Hub</CardTitle>
-          <p className="text-sm" style={{ color: '#8B7355' }}>Powered by MAiSHQ</p>
+          <p className="text-sm" style={{ color: '#5C4033' }}>Powered by MAiSHQ</p>
         </CardHeader>
         <CardContent className="space-y-4">
           {expired && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">Session expired. Please sign in again.</div>}
@@ -109,10 +109,10 @@ function LoginForm() {
           {/* MFA verification step */}
           {mfaRequired ? (
             <div className="space-y-3">
-              <p className="text-sm font-medium text-[#5C4033]">Two-Factor Authentication</p>
+              <p className="text-sm font-medium text-[#2C1810]">Two-Factor Authentication</p>
               {!useBackupCode ? (
                 <div>
-                  <label className="text-sm font-medium text-[#5C4033]">Enter 6-digit code</label>
+                  <label className="text-sm font-medium text-[#2C1810]">Enter 6-digit code</label>
                   <Input
                     type="text"
                     inputMode="numeric"
@@ -127,7 +127,7 @@ function LoginForm() {
                 </div>
               ) : (
                 <div>
-                  <label className="text-sm font-medium text-[#5C4033]">Backup Code</label>
+                  <label className="text-sm font-medium text-[#2C1810]">Backup Code</label>
                   <Input
                     type="text"
                     placeholder="Enter backup code"
@@ -145,14 +145,14 @@ function LoginForm() {
               <div className="flex items-center justify-between">
                 <button
                   type="button"
-                  className="text-xs text-[#8B7355] underline hover:text-[#5C4033]"
+                  className="text-xs text-[#5C4033] underline hover:text-[#2C1810]"
                   onClick={() => { setUseBackupCode(!useBackupCode); setError(''); }}
                 >
                   {useBackupCode ? 'Use authenticator code' : 'Use backup code instead'}
                 </button>
                 <button
                   type="button"
-                  className="text-xs text-[#8B7355] underline hover:text-[#5C4033]"
+                  className="text-xs text-[#5C4033] underline hover:text-[#2C1810]"
                   onClick={cancelMfa}
                 >
                   Back to login
@@ -169,16 +169,16 @@ function LoginForm() {
               {mode === 'credentials' ? (
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-[#5C4033]">Email</label>
+                    <label className="text-sm font-medium text-[#2C1810]">Email</label>
                     <Input type="email" placeholder="admin@demo.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-[#5C4033]">Password</label>
+                    <label className="text-sm font-medium text-[#2C1810]">Password</label>
                     <Input type="password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && loginWithCredentials()} />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-[#5C4033]">Tenant ID</label>
+                    <label className="text-sm font-medium text-[#2C1810]">Tenant ID</label>
                     <Input type="number" placeholder="1" value={tenantId} onChange={(e) => setTenantId(e.target.value)} />
                   </div>
                   <Button className="w-full" onClick={loginWithCredentials} disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</Button>
@@ -186,10 +186,10 @@ function LoginForm() {
               ) : (
                 <div className="space-y-3">
                   <div>
-                    <label className="text-sm font-medium text-[#5C4033]">JWT Token</label>
+                    <label className="text-sm font-medium text-[#2C1810]">JWT Token</label>
                     <Input placeholder="Paste JWT token" value={token} onChange={(e) => setToken(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && loginWithToken()} />
-                    <p className="mt-1 text-xs" style={{ color: '#8B7355' }}>node scripts/generate-test-jwt.js &lt;tenant_id&gt; ma-finance-hub-dev &lt;subject&gt;</p>
+                    <p className="mt-1 text-xs" style={{ color: '#5C4033' }}>node scripts/generate-test-jwt.js &lt;tenant_id&gt; ma-finance-hub-dev &lt;subject&gt;</p>
                   </div>
                   <Button className="w-full" variant="outline" onClick={loginWithToken} disabled={loading}>{loading ? 'Verifying...' : 'Sign In with Token'}</Button>
                 </div>
@@ -199,7 +199,7 @@ function LoginForm() {
 
           {error && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
-          <p className="text-center text-sm" style={{ color: '#8B7355' }}>
+          <p className="text-center text-sm" style={{ color: '#5C4033' }}>
             Don&apos;t have an account?{' '}
             <Link href="/register" className="font-medium underline" style={{ color: '#8B5E3C' }}>Create one</Link>
           </p>

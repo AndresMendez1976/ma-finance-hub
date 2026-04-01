@@ -12,7 +12,7 @@ import { ArrowLeft, Download, Send, CheckCircle, Ban } from 'lucide-react';
 import Link from 'next/link';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', issued: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', issued: 'bg-[#D4A854] text-[#2C1810]',
   applied: 'bg-[#2D6A4F] text-white', voided: 'bg-[#8B7355] text-white',
 };
 
@@ -47,7 +47,7 @@ export default function CreditNoteDetailPage() {
     finally { setActionLoading(false); }
   };
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!cn) return <Shell><p className="text-[#E07A5F]">{error || 'Credit note not found'}</p></Shell>;
 
   return (
@@ -55,7 +55,7 @@ export default function CreditNoteDetailPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/credit-notes"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-          <h1 className="text-2xl font-bold text-[#5C4033]">{cn.credit_note_number}</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">{cn.credit_note_number}</h1>
           <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[cn.status] || ''}`}>{cn.status.toUpperCase()}</span>
         </div>
         <div className="flex items-center gap-2">
@@ -68,14 +68,14 @@ export default function CreditNoteDetailPage() {
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="border-[#E8DCC8] lg:col-span-2">
-          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#5C4033]">Credit Note Details</CardTitle></CardHeader>
+          <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Credit Note Details</CardTitle></CardHeader>
           <CardContent className="pt-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <div><p className="text-xs text-[#8B7355]">Customer</p><p className="font-medium text-[#5C4033]">{cn.customer_name}</p></div>
+              <div><p className="text-xs text-[#5C4033]">Customer</p><p className="font-medium text-[#2C1810]">{cn.customer_name}</p></div>
               <div className="space-y-2">
-                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Issue Date</span><span className="text-sm font-medium">{formatDate(cn.issue_date)}</span></div>
-                <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Reason</span><span className="text-sm font-medium">{cn.reason}</span></div>
-                {cn.invoice_id && <div className="flex justify-between"><span className="text-sm text-[#8B7355]">Invoice</span><span className="text-sm font-medium">#{cn.invoice_id}</span></div>}
+                <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Issue Date</span><span className="text-sm font-medium">{formatDate(cn.issue_date)}</span></div>
+                <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Reason</span><span className="text-sm font-medium">{cn.reason}</span></div>
+                {cn.invoice_id && <div className="flex justify-between"><span className="text-sm text-[#5C4033]">Invoice</span><span className="text-sm font-medium">#{cn.invoice_id}</span></div>}
               </div>
             </div>
             <div className="mt-6">
@@ -95,20 +95,20 @@ export default function CreditNoteDetailPage() {
             </div>
             <div className="mt-4 border-t border-[#E8DCC8] pt-4">
               <div className="ml-auto w-64 space-y-1">
-                <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Subtotal</span><span className="font-mono">{formatCurrency(cn.subtotal)}</span></div>
-                {Number(cn.tax_rate) > 0 && <div className="flex justify-between text-sm"><span className="text-[#8B7355]">Tax ({Number(cn.tax_rate)}%)</span><span className="font-mono">{formatCurrency(cn.tax_amount)}</span></div>}
-                <div className="flex justify-between border-t border-[#E8DCC8] pt-1 text-lg font-bold"><span className="text-[#5C4033]">Total</span><span className="font-mono">{formatCurrency(cn.total)}</span></div>
+                <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Subtotal</span><span className="font-mono">{formatCurrency(cn.subtotal)}</span></div>
+                {Number(cn.tax_rate) > 0 && <div className="flex justify-between text-sm"><span className="text-[#5C4033]">Tax ({Number(cn.tax_rate)}%)</span><span className="font-mono">{formatCurrency(cn.tax_amount)}</span></div>}
+                <div className="flex justify-between border-t border-[#E8DCC8] pt-1 text-lg font-bold"><span className="text-[#2C1810]">Total</span><span className="font-mono">{formatCurrency(cn.total)}</span></div>
               </div>
             </div>
-            {cn.notes && <div className="mt-4 rounded-md bg-[#E8DCC8]/30 p-3"><p className="text-xs font-medium text-[#8B7355]">Notes</p><p className="mt-1 text-sm text-[#5C4033]">{cn.notes}</p></div>}
+            {cn.notes && <div className="mt-4 rounded-md bg-[#E8DCC8]/30 p-3"><p className="text-xs font-medium text-[#5C4033]">Notes</p><p className="mt-1 text-sm text-[#2C1810]">{cn.notes}</p></div>}
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Summary</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Summary</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             <div className="text-center">
-              <p className="text-3xl font-bold text-[#5C4033]">{formatCurrency(cn.total)}</p>
-              <p className="text-xs text-[#8B7355]">{cn.lines.length} line item{cn.lines.length !== 1 ? 's' : ''}</p>
+              <p className="text-3xl font-bold text-[#2C1810]">{formatCurrency(cn.total)}</p>
+              <p className="text-xs text-[#5C4033]">{cn.lines.length} line item{cn.lines.length !== 1 ? 's' : ''}</p>
             </div>
             <div className="rounded-md bg-[#E8DCC8]/40 p-3 text-center">
               <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${STATUS_COLORS[cn.status] || ''}`}>{cn.status.toUpperCase()}</span>

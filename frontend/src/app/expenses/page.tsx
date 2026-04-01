@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-[#B4D4E7] text-[#5C4033]', approved: 'bg-[#D4A854] text-[#5C4033]',
+  pending: 'bg-[#B4D4E7] text-[#2C1810]', approved: 'bg-[#D4A854] text-[#2C1810]',
   posted: 'bg-[#2D6A4F] text-white', voided: 'bg-[#8B7355] text-white',
 };
 
@@ -58,7 +58,7 @@ export default function ExpensesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Expenses</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Expenses</h1>
         <Link href="/expenses/new"><Button><Plus className="mr-2 h-4 w-4" />New Expense</Button></Link>
       </div>
 
@@ -66,8 +66,8 @@ export default function ExpensesPage() {
 
       <div className="mb-4 flex flex-wrap items-end gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">Status</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
             <option value="">All</option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
@@ -76,15 +76,15 @@ export default function ExpensesPage() {
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">Vendor</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">Vendor</label>
           <Input value={vendor} onChange={(e) => setVendor(e.target.value)} placeholder="Search vendor" className="w-40" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">From</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">From</label>
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-[#8B7355]">To</label>
+          <label className="mb-1 block text-xs font-medium text-[#5C4033]">To</label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" />
         </div>
         <Button variant="outline" onClick={() => load(1)}>Filter</Button>
@@ -95,7 +95,7 @@ export default function ExpensesPage() {
           <Table>
             <THead><TR><TH>#</TH><TH>Date</TH><TH>Vendor</TH><TH>Category</TH><TH className="text-right">Amount</TH><TH>Status</TH><TH>Actions</TH></TR></THead>
             <TBody>
-              {loading && <TR><TD colSpan={7} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={7} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data?.data.map((exp) => (
                 <TR key={exp.id}>
                   <TD className="font-mono text-sm">{exp.expense_number}</TD>
@@ -111,11 +111,11 @@ export default function ExpensesPage() {
                   </TD>
                 </TR>
               ))}
-              {!loading && !data?.data.length && <TR><TD colSpan={7} className="text-center text-[#8B7355]">No expenses found</TD></TR>}
+              {!loading && !data?.data.length && <TR><TD colSpan={7} className="text-center text-[#5C4033]">No expenses found</TD></TR>}
             </TBody>
           </Table>
           {data && data.pagination.pages > 1 && (
-            <div className="mt-4 flex items-center justify-between text-sm text-[#8B7355]">
+            <div className="mt-4 flex items-center justify-between text-sm text-[#5C4033]">
               <span>Page {data.pagination.page} of {data.pagination.pages}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => load(page - 1)}>Prev</Button>

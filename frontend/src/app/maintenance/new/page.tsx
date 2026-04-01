@@ -33,19 +33,19 @@ export default function NewMaintenancePage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Maintenance Record</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Maintenance Record</h1>
       {error && <div className="mb-3 rounded-md bg-[#E07A5F]/10 p-2 text-sm text-[#E07A5F]">{error}</div>}
       <Card>
         <CardHeader><CardTitle>Maintenance Details</CardTitle></CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Asset ID</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Asset ID</label>
               <Input type="number" value={form.asset_id} onChange={(e) => set('asset_id', e.target.value)} placeholder="Asset ID" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Type</label>
-              <select value={form.type} onChange={(e) => set('type', e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#5C4033]">
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Type</label>
+              <select value={form.type} onChange={(e) => set('type', e.target.value)} className="h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 text-sm text-[#2C1810]">
                 <option value="preventive">Preventive</option>
                 <option value="corrective">Corrective</option>
                 <option value="inspection">Inspection</option>
@@ -53,25 +53,25 @@ export default function NewMaintenancePage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Title</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Title</label>
               <Input value={form.title} onChange={(e) => set('title', e.target.value)} placeholder="Maintenance title" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Scheduled Date</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Scheduled Date</label>
               <Input type="date" value={form.scheduled_date} onChange={(e) => set('scheduled_date', e.target.value)} />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Cost</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Cost</label>
               <Input type="number" value={form.cost} onChange={(e) => set('cost', e.target.value)} placeholder="0.00" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-[#8B7355]">Assigned To</label>
+              <label className="mb-1 block text-xs font-medium text-[#5C4033]">Assigned To</label>
               <Input value={form.assigned_to} onChange={(e) => set('assigned_to', e.target.value)} placeholder="Person or team" />
             </div>
           </div>
           <div className="mt-4">
-            <label className="mb-1 block text-xs font-medium text-[#8B7355]">Description</label>
-            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className="w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]" />
+            <label className="mb-1 block text-xs font-medium text-[#5C4033]">Description</label>
+            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className="w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]" />
           </div>
           <div className="mt-6 flex gap-3">
             <Button onClick={save} disabled={saving}>{saving ? 'Saving...' : 'Save Record'}</Button>

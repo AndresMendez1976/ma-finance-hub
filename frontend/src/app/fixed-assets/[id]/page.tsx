@@ -39,11 +39,11 @@ export default function AssetDetailPage() {
     } catch (e: unknown) { setMsg((e as Error).message); }
   };
 
-  if (!asset) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (!asset) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">{asset.name} ({asset.asset_number})</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">{asset.name} ({asset.asset_number})</h1>
       {msg && <div className="mb-3 rounded-md bg-[#2D6A4F]/10 p-2 text-sm text-[#2D6A4F]">{msg}</div>}
 
       <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -51,16 +51,16 @@ export default function AssetDetailPage() {
           <CardHeader><CardTitle>Asset Info</CardTitle></CardHeader>
           <CardContent>
             <dl className="grid grid-cols-2 gap-2 text-sm">
-              <dt className="text-[#8B7355]">Category</dt><dd>{asset.category}</dd>
-              <dt className="text-[#8B7355]">Status</dt><dd>{asset.status}</dd>
-              <dt className="text-[#8B7355]">Purchase Date</dt><dd>{formatDate(asset.purchase_date)}</dd>
-              <dt className="text-[#8B7355]">Purchase Price</dt><dd className="font-mono">{formatCurrency(asset.purchase_price)}</dd>
-              <dt className="text-[#8B7355]">Book Value</dt><dd className="font-mono">{formatCurrency(asset.book_value)}</dd>
-              <dt className="text-[#8B7355]">Salvage Value</dt><dd className="font-mono">{formatCurrency(asset.salvage_value)}</dd>
-              <dt className="text-[#8B7355]">Method</dt><dd>{asset.depreciation_method}</dd>
-              <dt className="text-[#8B7355]">Useful Life</dt><dd>{asset.useful_life_months} months</dd>
-              <dt className="text-[#8B7355]">Location</dt><dd>{asset.location}</dd>
-              <dt className="text-[#8B7355]">Serial#</dt><dd>{asset.serial_number}</dd>
+              <dt className="text-[#5C4033]">Category</dt><dd>{asset.category}</dd>
+              <dt className="text-[#5C4033]">Status</dt><dd>{asset.status}</dd>
+              <dt className="text-[#5C4033]">Purchase Date</dt><dd>{formatDate(asset.purchase_date)}</dd>
+              <dt className="text-[#5C4033]">Purchase Price</dt><dd className="font-mono">{formatCurrency(asset.purchase_price)}</dd>
+              <dt className="text-[#5C4033]">Book Value</dt><dd className="font-mono">{formatCurrency(asset.book_value)}</dd>
+              <dt className="text-[#5C4033]">Salvage Value</dt><dd className="font-mono">{formatCurrency(asset.salvage_value)}</dd>
+              <dt className="text-[#5C4033]">Method</dt><dd>{asset.depreciation_method}</dd>
+              <dt className="text-[#5C4033]">Useful Life</dt><dd>{asset.useful_life_months} months</dd>
+              <dt className="text-[#5C4033]">Location</dt><dd>{asset.location}</dd>
+              <dt className="text-[#5C4033]">Serial#</dt><dd>{asset.serial_number}</dd>
             </dl>
             <div className="mt-4 flex gap-2">
               <Button size="sm" onClick={() => action('run-depreciation')}>Run Depreciation</Button>
@@ -82,7 +82,7 @@ export default function AssetDetailPage() {
                   <Line type="monotone" dataKey="book_value" stroke="#2D6A4F" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <p className="text-sm text-[#8B7355]">No schedule data</p>}
+            ) : <p className="text-sm text-[#5C4033]">No schedule data</p>}
           </CardContent>
         </Card>
       </div>
@@ -96,7 +96,7 @@ export default function AssetDetailPage() {
               {schedule.map((s, i) => (
                 <TR key={i}><TD>{s.period}</TD><TD className="text-right font-mono">{formatCurrency(s.depreciation)}</TD><TD className="text-right font-mono">{formatCurrency(s.accumulated)}</TD><TD className="text-right font-mono">{formatCurrency(s.book_value)}</TD></TR>
               ))}
-              {!schedule.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No schedule</TD></TR>}
+              {!schedule.length && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No schedule</TD></TR>}
             </TBody>
           </Table>
         </CardContent>
@@ -111,7 +111,7 @@ export default function AssetDetailPage() {
               {maint.map((m) => (
                 <TR key={m.id}><TD>{m.title}</TD><TD>{m.type}</TD><TD>{formatDate(m.scheduled_date)}</TD><TD>{m.status}</TD><TD className="text-right font-mono">{formatCurrency(m.cost)}</TD></TR>
               ))}
-              {!maint.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No maintenance records</TD></TR>}
+              {!maint.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No maintenance records</TD></TR>}
             </TBody>
           </Table>
         </CardContent>

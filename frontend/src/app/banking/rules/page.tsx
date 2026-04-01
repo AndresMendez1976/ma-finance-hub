@@ -34,7 +34,7 @@ export default function BankRulesPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Bank Rules</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Bank Rules</h1>
         <Link href="/banking/rules/new"><Button><Plus className="mr-2 h-4 w-4" />New Rule</Button></Link>
       </div>
 
@@ -45,22 +45,22 @@ export default function BankRulesPage() {
               <TR><TH>Name</TH><TH className="text-center">Priority</TH><TH>Conditions</TH><TH>Account</TH><TH className="text-center">Auto-Approve</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={5} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={5} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data.map((rule) => (
                 <TR key={rule.id}>
                   <TD className="font-medium">{rule.name}</TD>
                   <TD className="text-center">{rule.priority}</TD>
-                  <TD className="text-sm text-[#8B7355] max-w-xs truncate">{conditionsSummary(rule.conditions)}</TD>
+                  <TD className="text-sm text-[#5C4033] max-w-xs truncate">{conditionsSummary(rule.conditions)}</TD>
                   <TD>{rule.account_name}</TD>
                   <TD className="text-center">
                     {rule.auto_approve
                       ? <span className="inline-flex items-center rounded-full bg-[#2D6A4F] px-2.5 py-0.5 text-xs font-semibold text-white">Auto</span>
-                      : <span className="inline-flex items-center rounded-full bg-[#E8DCC8] px-2.5 py-0.5 text-xs font-semibold text-[#8B7355]">Manual</span>}
+                      : <span className="inline-flex items-center rounded-full bg-[#E8DCC8] px-2.5 py-0.5 text-xs font-semibold text-[#5C4033]">Manual</span>}
                   </TD>
                 </TR>
               ))}
               {!loading && data.length === 0 && (
-                <TR><TD colSpan={5} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={5} className="text-center text-[#5C4033]">
                   <Settings2 className="mx-auto mb-2 h-8 w-8 opacity-40" />No bank rules configured
                 </TD></TR>
               )}

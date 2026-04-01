@@ -41,14 +41,14 @@ export default function FinancialRatiosPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">Financial Ratios</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">Financial Ratios</h1>
       <div className="mb-6 flex gap-3 items-end">
-        <div><label className="text-xs font-medium text-[#5C4033]">As of Date</label><Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-40" /></div>
+        <div><label className="text-xs font-medium text-[#2C1810]">As of Date</label><Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-40" /></div>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Calculate Ratios'}</Button>
       </div>
       {data && (
         <>
-          <p className="mb-4 text-sm text-[#8B7355]">As of {formatDate(data.as_of)}</p>
+          <p className="mb-4 text-sm text-[#5C4033]">As of {formatDate(data.as_of)}</p>
           <div className="space-y-6">
             {data.sections.map((section) => (
               <div key={section.title}>
@@ -61,9 +61,9 @@ export default function FinancialRatiosPage() {
                       <Card key={ratio.name} className="border-[#E8DCC8] relative">
                         <CardContent className="pt-6">
                           <div className="flex items-start justify-between mb-2">
-                            <p className="text-xs font-medium text-[#8B7355] leading-tight pr-2">{ratio.name}</p>
+                            <p className="text-xs font-medium text-[#5C4033] leading-tight pr-2">{ratio.name}</p>
                             <button
-                              className="text-[#D4C4A8] hover:text-[#8B7355] flex-shrink-0"
+                              className="text-[#D4C4A8] hover:text-[#5C4033] flex-shrink-0"
                               onMouseEnter={() => setHoveredTip(ratio.name)}
                               onMouseLeave={() => setHoveredTip(null)}
                             >
@@ -76,7 +76,7 @@ export default function FinancialRatiosPage() {
                             </div>
                           )}
                           <div className="flex items-center gap-2">
-                            <p className="text-2xl font-bold text-[#5C4033]">{formatRatioValue(ratio.value, ratio.format)}</p>
+                            <p className="text-2xl font-bold text-[#2C1810]">{formatRatioValue(ratio.value, ratio.format)}</p>
                             {ratio.prior_value !== null && (
                               trendUp
                                 ? <TrendingUp className="h-5 w-5 text-[#2D6A4F]" />
@@ -84,7 +84,7 @@ export default function FinancialRatiosPage() {
                             )}
                           </div>
                           {ratio.prior_value !== null && (
-                            <p className="text-xs text-[#8B7355] mt-1">
+                            <p className="text-xs text-[#5C4033] mt-1">
                               Prior: {formatRatioValue(ratio.prior_value, ratio.format)}
                               <span className={`ml-1 ${trendUp ? 'text-[#2D6A4F]' : 'text-[#E07A5F]'}`}>
                                 ({trendUp ? '+' : ''}{formatRatioValue(trend, ratio.format)})
@@ -99,7 +99,7 @@ export default function FinancialRatiosPage() {
               </div>
             ))}
           </div>
-          <p className="mt-6 text-xs text-[#8B7355]">Amounts in {formatCurrency(0).charAt(0)} | Generated {formatDate(new Date().toISOString())}</p>
+          <p className="mt-6 text-xs text-[#5C4033]">Amounts in {formatCurrency(0).charAt(0)} | Generated {formatDate(new Date().toISOString())}</p>
         </>
       )}
     </Shell>

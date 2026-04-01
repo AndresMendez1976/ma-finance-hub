@@ -51,18 +51,18 @@ export default function TimeSummaryReportPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Time Summary Report</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Time Summary Report</h1>
         {data.length > 0 && <Button variant="outline" onClick={exportCsv}><Download className="mr-2 h-4 w-4" />Export CSV</Button>}
       </div>
 
       <div className="mb-4 flex flex-wrap items-end gap-3">
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">From</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">From</label>
           <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="w-40" /></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">To</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">To</label>
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" /></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Project ID</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Project ID</label>
           <Input value={projectId} onChange={(e) => setProjectId(e.target.value)} className="w-32" placeholder="All" /></div>
-        <div><label className="mb-1 block text-xs font-medium text-[#8B7355]">Employee ID</label>
+        <div><label className="mb-1 block text-xs font-medium text-[#5C4033]">Employee ID</label>
           <Input value={employeeId} onChange={(e) => setEmployeeId(e.target.value)} className="w-32" placeholder="All" /></div>
         <Button onClick={load}>Run Report</Button>
       </div>
@@ -74,7 +74,7 @@ export default function TimeSummaryReportPage() {
               <TR><TH>Project</TH><TH>Employee</TH><TH className="text-right">Hours</TH><TH className="text-right">Amount</TH></TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={4} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={4} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && data.map((r, i) => (
                 <TR key={i}>
                   <TD className="font-medium">{r.project_name}</TD>
@@ -91,7 +91,7 @@ export default function TimeSummaryReportPage() {
                 </TR>
               )}
               {!loading && data.length === 0 && (
-                <TR><TD colSpan={4} className="text-center text-[#8B7355]">
+                <TR><TD colSpan={4} className="text-center text-[#5C4033]">
                   <Clock className="mx-auto mb-2 h-8 w-8 opacity-40" />Run report to see data
                 </TD></TR>
               )}

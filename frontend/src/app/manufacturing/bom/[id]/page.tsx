@@ -35,7 +35,7 @@ export default function BOMDetailPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  if (loading) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
   if (!bom) return <Shell><p className="text-[#E07A5F]">{error || 'BOM not found'}</p></Shell>;
 
   const mat = Number(bom.material_cost);
@@ -48,27 +48,27 @@ export default function BOMDetailPage() {
     <Shell>
       <div className="mb-4 flex items-center gap-3">
         <Link href="/manufacturing/bom"><Button size="icon" variant="ghost"><ArrowLeft className="h-4 w-4" /></Button></Link>
-        <h1 className="text-2xl font-bold text-[#5C4033]">{bom.name}</h1>
-        <span className="font-mono text-sm text-[#8B7355]">v{bom.version}</span>
+        <h1 className="text-2xl font-bold text-[#2C1810]">{bom.name}</h1>
+        <span className="font-mono text-sm text-[#5C4033]">v{bom.version}</span>
       </div>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="mb-4 grid gap-4 md:grid-cols-4">
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Product</p><p className="font-medium text-[#5C4033]">{bom.product_name}</p>
+          <p className="text-xs text-[#5C4033]">Product</p><p className="font-medium text-[#2C1810]">{bom.product_name}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Yield</p><p className="font-medium text-[#5C4033]">{bom.yield_quantity} units</p>
+          <p className="text-xs text-[#5C4033]">Yield</p><p className="font-medium text-[#2C1810]">{bom.yield_quantity} units</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Total Cost</p><p className="text-xl font-bold font-mono text-[#5C4033]">${total.toFixed(2)}</p>
+          <p className="text-xs text-[#5C4033]">Total Cost</p><p className="text-xl font-bold font-mono text-[#2C1810]">${total.toFixed(2)}</p>
         </CardContent></Card>
         <Card className="border-[#E8DCC8]"><CardContent className="pt-4 text-center">
-          <p className="text-xs text-[#8B7355]">Cost per Unit</p><p className="text-xl font-bold font-mono text-[#2D6A4F]">${(total / (bom.yield_quantity || 1)).toFixed(2)}</p>
+          <p className="text-xs text-[#5C4033]">Cost per Unit</p><p className="text-xl font-bold font-mono text-[#2D6A4F]">${(total / (bom.yield_quantity || 1)).toFixed(2)}</p>
         </CardContent></Card>
       </div>
       {/* Cost breakdown bar */}
       <Card className="mb-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Cost Breakdown</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Cost Breakdown</CardTitle></CardHeader>
         <CardContent>
           <div className="mb-2 flex h-8 overflow-hidden rounded-full">
             <div style={{ width: `${pcts[0]}%` }} className="bg-[#D4A854]" title={`Material: ${pcts[0].toFixed(1)}%`} />
@@ -83,7 +83,7 @@ export default function BOMDetailPage() {
         </CardContent>
       </Card>
       <Card className="mb-4 border-[#E8DCC8]">
-        <CardHeader><CardTitle className="text-[#5C4033]">Components</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-[#2C1810]">Components</CardTitle></CardHeader>
         <CardContent>
           <Table>
             <THead><TR><TH>Product</TH><TH className="text-right">Qty</TH><TH className="text-right">Waste%</TH><TH className="text-right">Cost/Unit</TH><TH className="text-right">Total</TH></TR></THead>
@@ -96,14 +96,14 @@ export default function BOMDetailPage() {
                   <TD className="text-right font-mono font-bold">${Number(c.total_cost).toFixed(2)}</TD>
                 </TR>
               ))}
-              {!bom.components.length && <TR><TD colSpan={5} className="text-center text-[#8B7355]">No components</TD></TR>}
+              {!bom.components.length && <TR><TD colSpan={5} className="text-center text-[#5C4033]">No components</TD></TR>}
             </TBody>
           </Table>
         </CardContent>
       </Card>
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Labor</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Labor</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <THead><TR><TH>Description</TH><TH className="text-right">Hours</TH><TH className="text-right">Rate</TH><TH className="text-right">Total</TH></TR></THead>
@@ -111,13 +111,13 @@ export default function BOMDetailPage() {
                 {bom.labor.map((l) => (
                   <TR key={l.id}><TD>{l.description}</TD><TD className="text-right font-mono">{Number(l.hours).toFixed(1)}</TD><TD className="text-right font-mono">${Number(l.rate).toFixed(2)}</TD><TD className="text-right font-mono font-bold">${Number(l.total_cost).toFixed(2)}</TD></TR>
                 ))}
-                {!bom.labor.length && <TR><TD colSpan={4} className="text-center text-[#8B7355]">No labor</TD></TR>}
+                {!bom.labor.length && <TR><TD colSpan={4} className="text-center text-[#5C4033]">No labor</TD></TR>}
               </TBody>
             </Table>
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Overhead</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Overhead</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <THead><TR><TH>Description</TH><TH>Type</TH><TH className="text-right">Amount</TH></TR></THead>
@@ -125,7 +125,7 @@ export default function BOMDetailPage() {
                 {bom.overhead.map((o) => (
                   <TR key={o.id}><TD>{o.description}</TD><TD className="capitalize">{o.type}</TD><TD className="text-right font-mono font-bold">${Number(o.amount).toFixed(2)}</TD></TR>
                 ))}
-                {!bom.overhead.length && <TR><TD colSpan={3} className="text-center text-[#8B7355]">No overhead</TD></TR>}
+                {!bom.overhead.length && <TR><TD colSpan={3} className="text-center text-[#5C4033]">No overhead</TD></TR>}
               </TBody>
             </Table>
           </CardContent>

@@ -12,7 +12,7 @@ import { Send, Check, X, FileText, Download } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: 'bg-[#B4D4E7] text-[#5C4033]', sent: 'bg-[#D4A854] text-[#5C4033]',
+  draft: 'bg-[#B4D4E7] text-[#2C1810]', sent: 'bg-[#D4A854] text-[#2C1810]',
   accepted: 'bg-[#2D6A4F] text-white', rejected: 'bg-[#E07A5F] text-white',
   expired: 'bg-[#8B7355] text-white', converted: 'bg-[#2D6A4F] text-white',
 };
@@ -45,13 +45,13 @@ export default function EstimateDetailPage() {
     finally { setActionLoading(''); }
   };
 
-  if (loading || !est) return <Shell><p className="text-[#8B7355]">Loading...</p></Shell>;
+  if (loading || !est) return <Shell><p className="text-[#5C4033]">Loading...</p></Shell>;
 
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#5C4033]">Estimate {est.estimate_number}</h1>
+          <h1 className="text-2xl font-bold text-[#2C1810]">Estimate {est.estimate_number}</h1>
           <span className={`mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLORS[est.status] || ''}`}>{est.status}</span>
         </div>
         <div className="flex gap-2">
@@ -69,18 +69,18 @@ export default function EstimateDetailPage() {
         <Card className="border-[#E8DCC8]">
           <CardHeader><CardTitle>Customer</CardTitle></CardHeader>
           <CardContent className="space-y-1 text-sm">
-            <p className="font-medium text-[#5C4033]">{est.customer_name}</p>
-            {est.customer_email && <p className="text-[#8B7355]">{est.customer_email}</p>}
-            {est.customer_address && <p className="text-[#8B7355] whitespace-pre-line">{est.customer_address}</p>}
+            <p className="font-medium text-[#2C1810]">{est.customer_name}</p>
+            {est.customer_email && <p className="text-[#5C4033]">{est.customer_email}</p>}
+            {est.customer_address && <p className="text-[#5C4033] whitespace-pre-line">{est.customer_address}</p>}
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8]">
           <CardHeader><CardTitle>Details</CardTitle></CardHeader>
           <CardContent className="space-y-1 text-sm">
-            <div className="flex justify-between"><span className="text-[#8B7355]">Issue Date</span><span>{formatDate(est.issue_date)}</span></div>
-            <div className="flex justify-between"><span className="text-[#8B7355]">Expiration</span><span>{formatDate(est.expiration_date)}</span></div>
-            <div className="flex justify-between"><span className="text-[#8B7355]">Tax Rate</span><span>{est.tax_rate}%</span></div>
-            {est.notes && <div className="mt-2 rounded bg-[#E8DCC8]/30 p-2 text-[#8B7355]">{est.notes}</div>}
+            <div className="flex justify-between"><span className="text-[#5C4033]">Issue Date</span><span>{formatDate(est.issue_date)}</span></div>
+            <div className="flex justify-between"><span className="text-[#5C4033]">Expiration</span><span>{formatDate(est.expiration_date)}</span></div>
+            <div className="flex justify-between"><span className="text-[#5C4033]">Tax Rate</span><span>{est.tax_rate}%</span></div>
+            {est.notes && <div className="mt-2 rounded bg-[#E8DCC8]/30 p-2 text-[#5C4033]">{est.notes}</div>}
           </CardContent>
         </Card>
       </div>
@@ -102,9 +102,9 @@ export default function EstimateDetailPage() {
             </TBody>
           </Table>
           <div className="mt-4 border-t border-[#E8DCC8] pt-4 text-right">
-            <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Subtotal:</span><span className="w-28 font-mono">{formatCurrency(est.subtotal)}</span></div>
-            {Number(est.tax_amount) > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#8B7355]">Tax:</span><span className="w-28 font-mono">{formatCurrency(est.tax_amount)}</span></div>}
-            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#5C4033]">Total:</span><span className="w-28 font-mono">{formatCurrency(est.total)}</span></div>
+            <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Subtotal:</span><span className="w-28 font-mono">{formatCurrency(est.subtotal)}</span></div>
+            {Number(est.tax_amount) > 0 && <div className="flex justify-end gap-8 text-sm"><span className="text-[#5C4033]">Tax:</span><span className="w-28 font-mono">{formatCurrency(est.tax_amount)}</span></div>}
+            <div className="flex justify-end gap-8 text-lg font-bold"><span className="text-[#2C1810]">Total:</span><span className="w-28 font-mono">{formatCurrency(est.total)}</span></div>
           </div>
         </CardContent>
       </Card>

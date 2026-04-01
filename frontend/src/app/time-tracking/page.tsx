@@ -70,7 +70,7 @@ export default function TimeTrackingPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Time Tracking</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Time Tracking</h1>
         <div className="flex gap-2">
           <Button size="lg" onClick={startTimer} disabled={timerRunning}
             className="bg-[#2D6A4F] text-white hover:bg-[#40916C]">
@@ -84,7 +84,7 @@ export default function TimeTrackingPage() {
         <Button size="sm" variant="outline" onClick={() => { setWeekOffset(weekOffset - 1); setInitialLoad(true); }}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <span className="text-sm font-medium text-[#5C4033]">{formatDate(weekDates[0])} to {formatDate(weekDates[6])}</span>
+        <span className="text-sm font-medium text-[#2C1810]">{formatDate(weekDates[0])} to {formatDate(weekDates[6])}</span>
         <Button size="sm" variant="outline" onClick={() => { setWeekOffset(weekOffset + 1); setInitialLoad(true); }}>
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -102,7 +102,7 @@ export default function TimeTrackingPage() {
               </TR>
             </THead>
             <TBody>
-              {loading && <TR><TD colSpan={9} className="text-center text-[#8B7355]">Loading...</TD></TR>}
+              {loading && <TR><TD colSpan={9} className="text-center text-[#5C4033]">Loading...</TD></TR>}
               {!loading && projects.map((p) => {
                 const total = weekDates.reduce((s, d) => s + (p.days[d] || 0), 0);
                 return (
@@ -110,7 +110,7 @@ export default function TimeTrackingPage() {
                     <TD className="font-medium">{p.name}</TD>
                     {weekDates.map((d) => (
                       <TD key={d} className="text-center font-mono text-sm">
-                        {p.days[d] ? (p.days[d] / 60).toFixed(1) : <span className="text-[#8B7355]/40">-</span>}
+                        {p.days[d] ? (p.days[d] / 60).toFixed(1) : <span className="text-[#5C4033]/40">-</span>}
                       </TD>
                     ))}
                     <TD className="text-right font-mono font-bold">{(total / 60).toFixed(1)}h</TD>
@@ -118,7 +118,7 @@ export default function TimeTrackingPage() {
                 );
               })}
               {!loading && projects.length === 0 && (
-                <TR><TD colSpan={9} className="text-center text-[#8B7355]">No time entries this week</TD></TR>
+                <TR><TD colSpan={9} className="text-center text-[#5C4033]">No time entries this week</TD></TR>
               )}
               {!loading && projects.length > 0 && (
                 <TR className="bg-[#E8DCC8]/20 font-bold">

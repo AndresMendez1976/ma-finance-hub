@@ -45,40 +45,40 @@ export default function NewEquipmentPage() {
 
   return (
     <Shell>
-      <h1 className="mb-4 text-2xl font-bold text-[#5C4033]">New Equipment</h1>
+      <h1 className="mb-4 text-2xl font-bold text-[#2C1810]">New Equipment</h1>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Equipment Info</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Equipment Info</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Name *</label><Input value={name} onChange={(e) => setName(e.target.value)} /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Category</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]">
+            <div><label className="text-sm font-medium text-[#2C1810]">Name *</label><Input value={name} onChange={(e) => setName(e.target.value)} /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Category</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]">
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div><label className="text-sm font-medium text-[#5C4033]">Make</label><Input value={make} onChange={(e) => setMake(e.target.value)} /></div>
-              <div><label className="text-sm font-medium text-[#5C4033]">Model</label><Input value={model} onChange={(e) => setModel(e.target.value)} /></div>
+              <div><label className="text-sm font-medium text-[#2C1810]">Make</label><Input value={make} onChange={(e) => setMake(e.target.value)} /></div>
+              <div><label className="text-sm font-medium text-[#2C1810]">Model</label><Input value={model} onChange={(e) => setModel(e.target.value)} /></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div><label className="text-sm font-medium text-[#5C4033]">Serial #</label><Input value={serial} onChange={(e) => setSerial(e.target.value)} /></div>
-              <div><label className="text-sm font-medium text-[#5C4033]">Year</label><Input type="number" value={year} onChange={(e) => setYear(e.target.value)} /></div>
+              <div><label className="text-sm font-medium text-[#2C1810]">Serial #</label><Input value={serial} onChange={(e) => setSerial(e.target.value)} /></div>
+              <div><label className="text-sm font-medium text-[#2C1810]">Year</label><Input type="number" value={year} onChange={(e) => setYear(e.target.value)} /></div>
             </div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Status</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#5C4033]">
+            <div><label className="text-sm font-medium text-[#2C1810]">Status</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value)} className="flex h-10 w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]">
                 {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
           </CardContent>
         </Card>
         <Card className="border-[#E8DCC8]">
-          <CardHeader><CardTitle className="text-[#5C4033]">Rates</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-[#2C1810]">Rates</CardTitle></CardHeader>
           <CardContent className="space-y-3">
-            <div><label className="text-sm font-medium text-[#5C4033]">Hourly Rate</label><Input type="number" value={hourlyRate} onChange={(e) => setHourlyRate(e.target.value)} step="0.01" /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Daily Rate</label><Input type="number" value={dailyRate} onChange={(e) => setDailyRate(e.target.value)} step="0.01" /></div>
-            <div><label className="text-sm font-medium text-[#5C4033]">Monthly Rate</label><Input type="number" value={monthlyRate} onChange={(e) => setMonthlyRate(e.target.value)} step="0.01" /></div>
-            {hourlyRate && <p className="text-xs text-[#8B7355]">Rate: {formatCurrency(hourlyRate)}/hr | Created: {formatDate(new Date().toISOString())}</p>}
+            <div><label className="text-sm font-medium text-[#2C1810]">Hourly Rate</label><Input type="number" value={hourlyRate} onChange={(e) => setHourlyRate(e.target.value)} step="0.01" /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Daily Rate</label><Input type="number" value={dailyRate} onChange={(e) => setDailyRate(e.target.value)} step="0.01" /></div>
+            <div><label className="text-sm font-medium text-[#2C1810]">Monthly Rate</label><Input type="number" value={monthlyRate} onChange={(e) => setMonthlyRate(e.target.value)} step="0.01" /></div>
+            {hourlyRate && <p className="text-xs text-[#5C4033]">Rate: {formatCurrency(hourlyRate)}/hr | Created: {formatDate(new Date().toISOString())}</p>}
             <Button onClick={save} disabled={loading} className="w-full">{loading ? 'Saving...' : 'Create Equipment'}</Button>
           </CardContent>
         </Card>

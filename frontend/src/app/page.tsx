@@ -55,10 +55,10 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="bg-gradient-to-b from-[#F5F0E8] to-white px-6 py-20 text-center">
-        <h1 className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight text-[#5C4033] md:text-5xl">
+        <h1 className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight text-[#2C1810] md:text-5xl">
           The ERP That Grows With Your Business
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-[#8B7355]">
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-[#5C4033]">
           Accounting, Invoicing, Inventory, Payroll, Manufacturing, CRM — all in one platform.
         </p>
         <div className="mt-8 flex items-center justify-center gap-4">
@@ -79,7 +79,7 @@ export default function HomePage() {
 
       {/* Features */}
       <section id="features" className="mx-auto max-w-7xl px-6 py-16">
-        <h2 className="mb-10 text-center text-3xl font-bold text-[#5C4033]">
+        <h2 className="mb-10 text-center text-3xl font-bold text-[#2C1810]">
           Everything You Need to Run Your Business
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -89,8 +89,8 @@ export default function HomePage() {
               className="rounded-xl border border-[#E8DCC8] bg-white p-6 shadow-sm"
             >
               <f.icon className="mb-3 h-8 w-8 text-[#2D6A4F]" />
-              <h3 className="mb-2 text-lg font-semibold text-[#5C4033]">{f.title}</h3>
-              <p className="text-sm text-[#8B7355]">{f.desc}</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#2C1810]">{f.title}</h3>
+              <p className="text-sm text-[#5C4033]">{f.desc}</p>
             </div>
           ))}
         </div>
@@ -99,7 +99,7 @@ export default function HomePage() {
       {/* Why MA Finance Hub */}
       <section className="bg-white px-6 py-16">
         <div className="mx-auto max-w-5xl">
-          <h2 className="mb-10 text-center text-3xl font-bold text-[#5C4033]">
+          <h2 className="mb-10 text-center text-3xl font-bold text-[#2C1810]">
             Why MA Finance Hub?
           </h2>
           <div className="grid gap-6 sm:grid-cols-2">
@@ -107,8 +107,8 @@ export default function HomePage() {
               <div key={w.title} className="flex gap-3">
                 <CheckCircle className="mt-0.5 h-6 w-6 flex-shrink-0 text-[#2D6A4F]" />
                 <div>
-                  <h3 className="font-semibold text-[#5C4033]">{w.title}</h3>
-                  <p className="mt-1 text-sm text-[#8B7355]">{w.desc}</p>
+                  <h3 className="font-semibold text-[#2C1810]">{w.title}</h3>
+                  <p className="mt-1 text-sm text-[#5C4033]">{w.desc}</p>
                 </div>
               </div>
             ))}
@@ -118,7 +118,7 @@ export default function HomePage() {
 
       {/* Pricing Preview */}
       <section id="pricing" className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="mb-10 text-center text-3xl font-bold text-[#5C4033]">
+        <h2 className="mb-10 text-center text-3xl font-bold text-[#2C1810]">
           Simple, Transparent Pricing
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -134,9 +134,9 @@ export default function HomePage() {
                   MOST POPULAR
                 </span>
               )}
-              <h3 className="text-lg font-semibold text-[#5C4033]">{p.name}</h3>
-              <p className="mt-2 text-3xl font-bold text-[#5C4033]">
-                ${p.price}<span className="text-base font-normal text-[#8B7355]">/mo</span>
+              <h3 className="text-lg font-semibold text-[#2C1810]">{p.name}</h3>
+              <p className="mt-2 text-3xl font-bold text-[#2C1810]">
+                ${p.price}<span className="text-base font-normal text-[#5C4033]">/mo</span>
               </p>
               <Link
                 href="/register"

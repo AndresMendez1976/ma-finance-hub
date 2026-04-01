@@ -37,18 +37,18 @@ export default function BalanceSheetPage() {
 
   const renderSection = (title: string, section: Section) => (
     <Card className="border-[#E8DCC8]">
-      <CardHeader className="bg-[#E8DCC8]/50"><CardTitle className="text-[#5C4033]">{title}</CardTitle></CardHeader>
+      <CardHeader className="bg-[#E8DCC8]/50"><CardTitle className="text-[#2C1810]">{title}</CardTitle></CardHeader>
       <CardContent className="pt-4">
         <Table>
           <THead><TR><TH>Code</TH><TH>Account</TH><TH className="text-right">Amount</TH></TR></THead>
           <TBody>
             {section.groups.map((g) => (
               <>
-                <TR key={g.category} className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#5C4033]">{g.category}</TD><TD></TD></TR>
+                <TR key={g.category} className="bg-[#E8DCC8]/30"><TD colSpan={2} className="font-semibold text-[#2C1810]">{g.category}</TD><TD></TD></TR>
                 {g.accounts.map((a) => (
                   <TR key={a.account_code}><TD className="pl-6 font-mono text-sm">{a.account_code}</TD><TD>{a.account_name}</TD><TD className="text-right font-mono">{a.amount.toFixed(2)}</TD></TR>
                 ))}
-                <TR className="border-t"><TD colSpan={2} className="font-medium text-[#8B7355]">{g.category} Subtotal</TD><TD className="text-right font-mono font-semibold">{g.total.toFixed(2)}</TD></TR>
+                <TR className="border-t"><TD colSpan={2} className="font-medium text-[#5C4033]">{g.category} Subtotal</TD><TD className="text-right font-mono font-semibold">{g.total.toFixed(2)}</TD></TR>
               </>
             ))}
             <TR className="border-t-2 bg-[#E8DCC8]/40 font-bold"><TD colSpan={2}>Total {title}</TD><TD className="text-right font-mono">{section.total.toFixed(2)}</TD></TR>
@@ -61,7 +61,7 @@ export default function BalanceSheetPage() {
   return (
     <Shell>
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#5C4033]">Balance Sheet</h1>
+        <h1 className="text-2xl font-bold text-[#2C1810]">Balance Sheet</h1>
         <div className="flex items-center gap-2">
           <Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-44 border-[#D4C4A8]" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
@@ -80,7 +80,7 @@ export default function BalanceSheetPage() {
           {renderSection('Equity', data.equity)}
           <Card className="border-[#E8DCC8]">
             <CardContent className="flex items-center justify-between py-4">
-              <span className="text-lg font-bold text-[#5C4033]">Total Liabilities & Equity</span>
+              <span className="text-lg font-bold text-[#2C1810]">Total Liabilities & Equity</span>
               <span className="text-lg font-bold font-mono">{data.total_liabilities_and_equity.toFixed(2)}</span>
             </CardContent>
           </Card>
@@ -89,8 +89,8 @@ export default function BalanceSheetPage() {
           </div>
         </div>
       )}
-      {!data && !loading && <p className="text-[#8B7355]">Select an as-of date and click Generate.</p>}
-      <p className="mt-6 text-center text-xs text-[#8B7355]">
+      {!data && !loading && <p className="text-[#5C4033]">Select an as-of date and click Generate.</p>}
+      <p className="mt-6 text-center text-xs text-[#5C4033]">
         Financial reports are generated based on data entered by the user. These reports have not been audited by a CPA.
       </p>
     </Shell>
