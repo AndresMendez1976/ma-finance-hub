@@ -200,7 +200,7 @@ function LoginForm() {
           {error && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
           <p className="text-center text-sm" style={{ color: '#8B7355' }}>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" className="font-medium underline" style={{ color: '#8B5E3C' }}>Create one</Link>
           </p>
         </CardContent>

@@ -135,7 +135,7 @@ export default function InviteAcceptPage() {
           )}
           {info.message && (
             <div className="mt-3 rounded-md p-3 text-left text-sm" style={{ backgroundColor: '#F5F0E8', color: '#5C4033' }}>
-              "{info.message}"
+              &quot;{info.message}&quot;
             </div>
           )}
         </CardHeader>
