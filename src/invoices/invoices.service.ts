@@ -1,6 +1,7 @@
-// Invoices service — CRUD, lifecycle transitions, journal entry creation on payment
+// Invoices service — CRUD, lifecycle transitions, journal entry creation on payment, Stripe payment links
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Knex } from 'knex';
+import { SettingsService } from '../settings/settings.service';
 
 export interface CreateInvoiceInput {
   tenant_id: number;
@@ -35,6 +36,7 @@ export interface PayInvoiceInput {
 
 @Injectable()
 export class InvoicesService {
+  constructor(private readonly settingsService: SettingsService) {}
   // Generate next invoice number for a tenant
   private async nextInvoiceNumber(trx: Knex.Transaction, tenantId: number): Promise<string> {
     const last = await trx('invoices')
@@ -539,5 +541,111 @@ export class InvoicesService {
 
       doc.end();
     });
+  }
+
+  // ── Stripe Payment Link ──
+
+  async generatePaymentLink(
+    trx: Knex.Transaction,
+    tenantId: number,
+    invoiceId: number,
+  ): Promise<{ payment_url: string }> {
+    const invoice = await trx('invoices').where({ id: invoiceId }).first() as Record<string, unknown> | undefined;
+    if (!invoice) throw new NotFoundException('Invoice not found');
+    if (invoice.status === 'paid') throw new BadRequestException('Invoice is already paid');
+    if (invoice.status === 'voided') throw new BadRequestException('Cannot create payment link for voided invoice');
+
+    // Get Stripe settings
+    const settings = await trx('tenant_settings')
+      .where({ tenant_id: tenantId })
+      .first() as Record<string, unknown> | undefined;
+
+    if (!settings || !settings.payment_enabled) {
+      throw new BadRequestException('Online payments are not enabled. Configure Stripe in Settings.');
+    }
+
+    const secretKey = await this.settingsService.getStripeSecretKey(trx, tenantId);
+    if (!secretKey) {
+      throw new BadRequestException('Stripe secret key is not configured');
+    }
+
+    // Create Stripe Checkout Session via fetch
+    const totalCents = Math.round(Number(invoice.total) * 100);
+    const params = new URLSearchParams();
+    params.append('mode', 'payment');
+    params.append('success_url', `${process.env.FRONTEND_URL || 'https://app.maishq.com'}/invoices/${invoiceId}?payment=success`);
+    params.append('cancel_url', `${process.env.FRONTEND_URL || 'https://app.maishq.com'}/invoices/${invoiceId}?payment=cancelled`);
+    params.append('line_items[0][price_data][currency]', String(settings.default_currency || 'usd').toLowerCase());
+    params.append('line_items[0][price_data][unit_amount]', String(totalCents));
+    params.append('line_items[0][price_data][product_data][name]', `Invoice ${String(invoice.invoice_number)}`);
+    params.append('line_items[0][price_data][product_data][description]', `Payment for invoice ${String(invoice.invoice_number)} - ${String(invoice.customer_name)}`);
+    params.append('line_items[0][quantity]', '1');
+    params.append('customer_email', String(invoice.customer_email || ''));
+    params.append('metadata[invoice_id]', String(invoiceId));
+    params.append('metadata[tenant_id]', String(tenantId));
+
+    const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${secretKey}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: params.toString(),
+    });
+
+    if (!response.ok) {
+      const error = await response.json() as Record<string, unknown>;
+      const errorObj = error.error as Record<string, unknown> | undefined;
+      throw new BadRequestException(`Stripe error: ${String(errorObj?.message ?? 'Unknown error')}`);
+    }
+
+    const session = await response.json() as Record<string, unknown>;
+
+    // Save payment URL and session ID to invoice
+    await trx('invoices').where({ id: invoiceId }).update({
+      payment_url: session.url,
+      stripe_session_id: session.id,
+    });
+
+    return { payment_url: String(session.url) };
+  }
+
+  // Check payment status via Stripe
+  async getPaymentStatus(
+    trx: Knex.Transaction,
+    tenantId: number,
+    invoiceId: number,
+  ): Promise<{ status: string; stripe_payment_status?: string; payment_url?: string }> {
+    const invoice = await trx('invoices').where({ id: invoiceId }).first() as Record<string, unknown> | undefined;
+    if (!invoice) throw new NotFoundException('Invoice not found');
+
+    if (!invoice.stripe_session_id) {
+      return { status: String(invoice.status) };
+    }
+
+    const secretKey = await this.settingsService.getStripeSecretKey(trx, tenantId);
+    if (!secretKey) {
+      return { status: String(invoice.status), payment_url: invoice.payment_url as string | undefined };
+    }
+
+    // Retrieve session from Stripe
+    const response = await fetch(
+      `https://api.stripe.com/v1/checkout/sessions/${String(invoice.stripe_session_id)}`,
+      {
+        headers: { 'Authorization': `Bearer ${secretKey}` },
+      },
+    );
+
+    if (!response.ok) {
+      return { status: String(invoice.status), payment_url: invoice.payment_url as string | undefined };
+    }
+
+    const session = await response.json() as Record<string, unknown>;
+
+    return {
+      status: String(invoice.status),
+      stripe_payment_status: String(session.payment_status || 'unknown'),
+      payment_url: invoice.payment_url as string | undefined,
+    };
   }
 }

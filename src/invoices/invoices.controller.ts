@@ -221,6 +221,40 @@ export class InvoicesController {
     });
   }
 
+  // Generate Stripe payment link
+  @Post(':id/payment-link')
+  @Roles('owner', 'admin', 'manager')
+  @ApiOperation({ summary: 'Generate Stripe payment link for invoice' })
+  async generatePaymentLink(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
+      const result = await this.service.generatePaymentLink(trx, p.tenantId, id);
+      await this.audit.log(trx, {
+        tenant_id: p.tenantId,
+        actor_subject: p.sub,
+        action: 'generate_payment_link',
+        entity: 'invoices',
+        entity_id: String(id),
+      });
+      return result;
+    });
+  }
+
+  // Check payment status via Stripe
+  @Get(':id/payment-status')
+  @Roles('owner', 'admin', 'manager', 'analyst')
+  @ApiOperation({ summary: 'Check Stripe payment status for invoice' })
+  async getPaymentStatus(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.getPaymentStatus(trx, p.tenantId, id),
+    );
+  }
+
   // Generate and download PDF
   @Get(':id/pdf')
   @Roles('owner', 'admin', 'manager', 'analyst')
