@@ -4,7 +4,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
@@ -18,8 +18,8 @@ export default function MaintenanceSchedulesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<{ data: Schedule[] }>('/maintenance/schedules')
-      .then((r) => setSchedules(r.data))
+    api.get<unknown>('/maintenance/schedules')
+      .then((r) => setSchedules(extractArray<Schedule>(r)))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);

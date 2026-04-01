@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { formatDate, formatCurrency } from '@/lib/format';
 import { Plus, Eye } from 'lucide-react';
 

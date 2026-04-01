@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Eye, FolderOpen } from 'lucide-react';
 import { formatCurrency } from '@/lib/format';
 
@@ -29,7 +29,7 @@ export default function ProjectsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    try { const res = await api.get<Project[]>('/projects'); setData(res); setInitialLoad(false); }
+    try { const res = await api.get<Project[]>('/projects'); setData(extractArray(res)); setInitialLoad(false); }
     catch { /* handled */ } finally { setLoading(false); }
   }, []);
 

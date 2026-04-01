@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Download } from 'lucide-react';
 
 interface AuditEntry {
@@ -33,7 +33,7 @@ export default function AuditLogPage() {
     if (entityFilter) params.set('entity', entityFilter);
     if (dateFrom) params.set('from', dateFrom);
     if (dateTo) params.set('to', dateTo);
-    try { setEntries(await api.get<AuditEntry[]>(`/admin/audit-log?${params}`)); }
+    try { setEntries(extractArray(await api.get<unknown>(`/admin/audit-log?${params}`))); }
     catch { /* */ }
     finally { setLoading(false); }
   };

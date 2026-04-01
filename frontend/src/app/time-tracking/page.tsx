@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Timer, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 
@@ -42,8 +42,8 @@ export default function TimeTrackingPage() {
     setLoading(true);
     try {
       const params = new URLSearchParams({ from: weekDates[0], to: weekDates[6] });
-      const res = await api.get<TimeEntry[]>(`/time-entries?${params}`);
-      setEntries(res); setInitialLoad(false);
+      const res = await api.get<unknown>(`/time-entries?${params}`);
+      setEntries(extractArray<TimeEntry>(res)); setInitialLoad(false);
     } catch { /* handled */ }
     finally { setLoading(false); }
   }, [weekDates]);

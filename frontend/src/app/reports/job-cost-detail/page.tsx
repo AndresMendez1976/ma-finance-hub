@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { formatDate, formatCurrency } from '@/lib/format';
 
 interface CostDetail { project_name: string; cost_code: string; cost_code_name: string; category: string; date: string; description: string; amount: string; source: string }

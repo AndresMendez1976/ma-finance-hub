@@ -37,4 +37,14 @@ export const api = {
   put: <T>(path: string, body?: unknown) => request<T>(path, { method: 'PUT', body: body ? JSON.stringify(body) : undefined }),
 };
 
+// Helper to safely extract array from API response (handles both array and { data: [...] } responses)
+export function extractArray<T>(res: unknown): T[] {
+  if (Array.isArray(res)) return res as T[];
+  if (res && typeof res === 'object' && 'data' in (res as Record<string, unknown>)) {
+    const data = (res as Record<string, unknown>).data;
+    if (Array.isArray(data)) return data as T[];
+  }
+  return [];
+}
+
 export { ApiError };

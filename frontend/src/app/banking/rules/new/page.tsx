@@ -5,7 +5,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -39,7 +39,7 @@ export default function NewBankRulePage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    api.get<Account[]>('/accounts').then(setAccounts).catch(() => {});
+    api.get<Account[]>('/accounts').then((r: unknown) => setAccounts(extractArray(r))).catch(() => {});
   }, []);
 
   const addCondition = () => {

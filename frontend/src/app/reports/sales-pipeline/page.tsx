@@ -4,7 +4,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 
 interface PipelineRow {
   id: number; title: string; contact_name: string; stage_name: string;
@@ -16,7 +16,7 @@ export default function SalesPipelineReportPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<{ data: PipelineRow[] }>('/reports/sales-pipeline').then((r) => setRows(r.data)).catch(() => {}).finally(() => setLoading(false));
+    api.get<unknown>('/reports/sales-pipeline').then((r) => setRows(extractArray<PipelineRow>(r))).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   const exportCsv = () => {

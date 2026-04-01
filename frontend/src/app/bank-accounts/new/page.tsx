@@ -6,7 +6,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 
 interface Account { id: number; account_code: string; name: string; account_type: string }
 
@@ -20,7 +20,7 @@ export default function NewBankAccountPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => { api.get<Account[]>('/accounts').then(setAccounts).catch(() => {}); }, []);
+  useEffect(() => { api.get<Account[]>('/accounts').then((r: unknown) => setAccounts(extractArray(r))).catch(() => {}); }, []);
   const assetAccounts = accounts.filter((a) => a.account_type === 'asset' && parseInt(a.account_code) < 1500);
 
   const save = async () => {

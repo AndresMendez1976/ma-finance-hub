@@ -5,7 +5,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Download } from 'lucide-react';
 
 interface BOMComponent { name: string; quantity: number; cost_per_unit: number; total: number }
@@ -21,7 +21,7 @@ export default function BOMCostAnalysisPage() {
 
   const load = async () => {
     setLoading(true);
-    try { setData(await api.get<BOMAnalysis[]>('/reports/bom-cost-analysis')); }
+    try { setData(extractArray(await api.get<unknown>('/reports/bom-cost-analysis'))); }
     catch { /* */ }
     finally { setLoading(false); }
   };

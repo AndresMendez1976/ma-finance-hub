@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Download, Clock } from 'lucide-react';
 
 const fmt = (n: number) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -31,7 +31,7 @@ export default function TimeSummaryReportPage() {
       if (projectId) params.set('project_id', projectId);
       if (employeeId) params.set('employee_id', employeeId);
       const res = await api.get<TimeSummaryRow[]>(`/reports/time-summary?${params}`);
-      setData(res);
+      setData(extractArray(res));
     } catch { /* handled */ }
     finally { setLoading(false); }
   }, [from, to, projectId, employeeId]);

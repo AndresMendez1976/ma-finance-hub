@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useApi } from '@/hooks/use-api';
-import { api, ApiError } from '@/lib/api';
+import { api, ApiError, extractArray } from '@/lib/api';
 import { Plus, Download, Eye } from 'lucide-react';
 
 interface JournalEntry { id: string; entry_number: number; reference: string | null; memo: string | null; status: string; posted_at: string | null; fiscal_period_id: string; created_at: string; lines?: { account_id: string; debit: string; credit: string; description: string | null }[] }

@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useApi } from '@/hooks/use-api';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Pencil, Check, X } from 'lucide-react';
 
 interface Chart { id: string; name: string; description: string | null; is_active: boolean }

@@ -7,7 +7,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus } from 'lucide-react';
 
 interface Location { id: number; name: string; address: string | null; is_default: boolean }
@@ -24,7 +24,7 @@ export default function LocationsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    try { setLocations(await api.get<Location[]>('/inventory/locations')); setInit(false); }
+    try { setLocations(extractArray(await api.get<unknown>('/inventory/locations'))); setInit(false); }
     catch { /* */ }
     finally { setLoading(false); }
   }, []);

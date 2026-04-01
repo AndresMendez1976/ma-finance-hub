@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { formatDate, formatCurrency } from '@/lib/format';
 import { Plus } from 'lucide-react';
 
@@ -24,8 +24,8 @@ export default function CostCodesPage() {
     try {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
-      const res = await api.get<{ data: CostCode[] }>(`/cost-codes?${params}`);
-      setData(res.data); setInit(false);
+      const res = await api.get<unknown>(`/cost-codes?${params}`);
+      setData(extractArray<CostCode>(res)); setInit(false);
     } catch { /* */ }
     finally { setLoading(false); }
   }, [search]);

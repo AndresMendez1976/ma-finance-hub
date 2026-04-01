@@ -7,7 +7,7 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { formatDate, formatCurrency } from '@/lib/format';
 import { Plus, Trash2, Building2 } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export default function CompaniesSettingsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    try { const res = await api.get<{ data: CompanyGroup[] }>('/settings/company-groups'); setGroups(res.data); }
+    try { const res = await api.get<unknown>('/settings/company-groups'); setGroups(extractArray<CompanyGroup>(res)); }
     catch { /* */ }
     finally { setLoading(false); }
   }, []);

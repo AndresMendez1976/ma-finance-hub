@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useApi } from '@/hooks/use-api';
-import { api, ApiError } from '@/lib/api';
+import { api, ApiError, extractArray } from '@/lib/api';
 import { Zap } from 'lucide-react';
 
 interface Rule { id: string; event_type: string; name: string; description: string | null; is_active: boolean }

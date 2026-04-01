@@ -5,7 +5,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Pause, Play, Zap } from 'lucide-react';
 import { formatDate, formatCurrency } from '@/lib/format';
 
@@ -33,8 +33,8 @@ export default function RecurringInvoicesPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api.get<RecurringInvoice[]>('/recurring-invoices');
-      setData(res);
+      const res = await api.get<unknown>('/recurring-invoices');
+      setData(extractArray<RecurringInvoice>(res));
       setInitialLoad(false);
     } catch { /* handled */ }
     finally { setLoading(false); }

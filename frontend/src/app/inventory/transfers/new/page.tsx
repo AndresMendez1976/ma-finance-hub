@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Trash2 } from 'lucide-react';
 
 interface Product { id: number; sku: string; name: string }
@@ -26,7 +26,7 @@ export default function NewTransferPage() {
 
   useEffect(() => {
     api.get<Product[]>('/products?limit=500').then(r => setProducts(Array.isArray(r) ? r : (r as { data: Product[] }).data || [])).catch(() => {});
-    api.get<Location[]>('/inventory/locations').then(setLocations).catch(() => {});
+    api.get<Location[]>('/inventory/locations').then((r: unknown) => setLocations(extractArray(r))).catch(() => {});
   }, []);
 
   const updateLine = (i: number, field: keyof Line, value: string) => {

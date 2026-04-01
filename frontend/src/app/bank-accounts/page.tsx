@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Eye } from 'lucide-react';
 
 interface BankAccount { id: number; name: string; institution: string | null; account_number_last4: string | null; currency: string; current_balance: string; status: string; unreconciled_count: number }
@@ -17,7 +17,7 @@ export default function BankAccountsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<BankAccount[]>('/bank-accounts').then(setAccounts).catch(() => {}).finally(() => setLoading(false));
+    api.get<BankAccount[]>('/bank-accounts').then((r: unknown) => setAccounts(extractArray(r))).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   return (

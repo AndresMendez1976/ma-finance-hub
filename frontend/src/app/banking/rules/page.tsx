@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Settings2 } from 'lucide-react';
 
 interface Condition { field: string; operator: string; value: string; }
@@ -22,7 +22,7 @@ export default function BankRulesPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    try { const res = await api.get<BankRule[]>('/banking/rules'); setData(res); setInitialLoad(false); }
+    try { const res = await api.get<BankRule[]>('/banking/rules'); setData(extractArray(res)); setInitialLoad(false); }
     catch { /* handled */ } finally { setLoading(false); }
   }, []);
 

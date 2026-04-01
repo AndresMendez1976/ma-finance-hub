@@ -5,7 +5,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { formatDate, formatCurrency } from '@/lib/format';
 import { TrendingUp, TrendingDown, Info } from 'lucide-react';
 

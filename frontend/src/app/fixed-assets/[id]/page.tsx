@@ -4,7 +4,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { useParams } from 'next/navigation';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatDate, formatCurrency } from '@/lib/format';
@@ -26,7 +26,7 @@ export default function AssetDetailPage() {
 
   useEffect(() => {
     api.get<Asset>(`/fixed-assets/${id}`).then(setAsset).catch(() => {});
-    api.get<DepEntry[]>(`/fixed-assets/${id}/depreciation-schedule`).then(setSchedule).catch(() => {});
+    api.get<DepEntry[]>(`/fixed-assets/${id}/depreciation-schedule`).then((r: unknown) => setSchedule(extractArray(r))).catch(() => {});
     api.get<{ data: Maintenance[] }>(`/fixed-assets/${id}/maintenance`).then((r) => setMaint(r.data)).catch(() => {});
   }, [id]);
 

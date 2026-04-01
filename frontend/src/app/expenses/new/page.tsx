@@ -6,7 +6,7 @@ import { Shell } from '@/components/shell';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 
 // Expense categories mapping to typical account codes
 const CATEGORIES = [
@@ -33,7 +33,7 @@ export default function NewExpensePage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
-    api.get<Account[]>('/accounts').then(setAccounts).catch(() => {});
+    api.get<Account[]>('/accounts').then((r: unknown) => setAccounts(extractArray(r))).catch(() => {});
   }, []);
 
   const expenseAccounts = accounts.filter((a) => a.account_type === 'expense');

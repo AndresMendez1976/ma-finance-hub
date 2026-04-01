@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useApi } from '@/hooks/use-api';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { Plus, Pencil, Check, X } from 'lucide-react';
 
 interface Account { id: string; account_code: string; name: string; account_type: string; chart_id: string; parent_account_id: string | null; is_active: boolean }

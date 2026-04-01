@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { api } from '@/lib/api';
+import { api, extractArray } from '@/lib/api';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
 
 interface Product { id: number; sku: string; name: string; product_type: string; description: string | null; category: string | null; unit_of_measure: string; sale_price: string; purchase_price: string | null; costing_method: string | null; track_lots: boolean; track_serials: boolean; reorder_point: number; reorder_quantity: number; stock_on_hand: number }
