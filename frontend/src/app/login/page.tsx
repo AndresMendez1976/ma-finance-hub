@@ -4,26 +4,19 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
-
-interface TenantOption {
-  id: number;
-  company_name: string;
-}
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 function LoginForm() {
+  const [mode, setMode] = useState<'credentials' | 'token'>('credentials');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [tenantId, setTenantId] = useState('');
+  const [token, setToken] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const params = useSearchParams();
   const expired = params.get('expired');
-
-  // Tenant selection state
-  const [tenants, setTenants] = useState<TenantOption[]>([]);
-  const [selectedTenantId, setSelectedTenantId] = useState<number | null>(null);
-  const [showTenantSelection, setShowTenantSelection] = useState(false);
 
   // MFA state
   const [mfaRequired, setMfaRequired] = useState(false);
@@ -32,29 +25,17 @@ function LoginForm() {
   const [useBackupCode, setUseBackupCode] = useState(false);
   const [backupCode, setBackupCode] = useState('');
 
-  const doLogin = async (tenantId?: number) => {
-    if (!email || !password) { setError('Email and password are required'); return; }
+  const loginWithCredentials = async () => {
+    if (!email || !password || !tenantId) { setError('All fields required'); return; }
     setLoading(true); setError('');
     try {
-      const body: Record<string, unknown> = { email, password };
-      if (tenantId) body.tenant_id = tenantId;
-
       const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ email, password, tenant_id: Number(tenantId) }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.message || 'Login failed'); return; }
-
-      if (data.requires_tenant_selection) {
-        setTenants(data.tenants || []);
-        setShowTenantSelection(true);
-        if (data.tenants?.length === 1) {
-          setSelectedTenantId(data.tenants[0].id);
-        }
-        return;
-      }
 
       if (data.requires_mfa) {
         setMfaSessionToken(data.mfa_session_token);
@@ -66,14 +47,6 @@ function LoginForm() {
       router.push('/dashboard');
     } catch { setError('Connection failed'); }
     finally { setLoading(false); }
-  };
-
-  const handleLogin = () => doLogin();
-
-  const handleTenantSelect = () => {
-    if (!selectedTenantId) { setError('Please select a company'); return; }
-    setShowTenantSelection(false);
-    doLogin(selectedTenantId);
   };
 
   const submitMfa = async () => {
@@ -111,23 +84,27 @@ function LoginForm() {
     setError('');
   };
 
-  const backToLogin = () => {
-    setShowTenantSelection(false);
-    setTenants([]);
-    setSelectedTenantId(null);
-    setError('');
+  const loginWithToken = async () => {
+    if (!token.trim()) { setError('Token required'); return; }
+    setLoading(true); setError('');
+    localStorage.setItem('token', token.trim());
+    try {
+      const res = await fetch('/api/v1/auth/context', { headers: { Authorization: `Bearer ${token.trim()}` } });
+      if (!res.ok) { setError('Invalid token'); localStorage.removeItem('token'); return; }
+      router.push('/dashboard');
+    } catch { setError('Connection failed'); localStorage.removeItem('token'); }
+    finally { setLoading(false); }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F5F0E8]">
-      <Card className="w-full max-w-md border-[#E8DCC8]">
-        <CardHeader className="text-center">
-          <h1 className="text-2xl font-bold text-[#2C1810]">MA Finance Hub</h1>
-          <p className="text-sm text-[#5C4033]">Sign in to your account</p>
+    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#F5F0E8' }}>
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-xl">MA Finance Hub</CardTitle>
+          <p className="text-sm" style={{ color: '#5C4033' }}>Powered by MAiSHQ</p>
         </CardHeader>
         <CardContent className="space-y-4">
           {expired && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">Session expired. Please sign in again.</div>}
-          {error && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
 
           {/* MFA verification step */}
           {mfaRequired ? (
@@ -162,7 +139,7 @@ function LoginForm() {
                   />
                 </div>
               )}
-              <Button className="w-full bg-[#2D6A4F] hover:bg-[#245a42]" onClick={submitMfa} disabled={loading}>
+              <Button className="w-full" onClick={submitMfa} disabled={loading}>
                 {loading ? 'Verifying...' : 'Verify'}
               </Button>
               <div className="flex items-center justify-between">
@@ -182,59 +159,49 @@ function LoginForm() {
                 </button>
               </div>
             </div>
-
-          /* Tenant selection step */
-          ) : showTenantSelection ? (
-            <div className="space-y-3">
-              <p className="text-sm font-medium text-[#2C1810]">Select a company</p>
-              <select
-                className="w-full rounded-md border border-[#E8DCC8] bg-white px-3 py-2 text-sm text-[#2C1810] focus:border-[#2D6A4F] focus:outline-none focus:ring-1 focus:ring-[#2D6A4F]"
-                value={selectedTenantId ?? ''}
-                onChange={(e) => setSelectedTenantId(Number(e.target.value))}
-              >
-                <option value="" disabled>Choose a company...</option>
-                {tenants.map((t) => (
-                  <option key={t.id} value={t.id}>{t.company_name}</option>
-                ))}
-              </select>
-              <Button className="w-full bg-[#2D6A4F] hover:bg-[#245a42]" onClick={handleTenantSelect} disabled={loading}>
-                {loading ? 'Signing in...' : 'Continue'}
-              </Button>
-              <button
-                type="button"
-                className="w-full text-center text-xs text-[#5C4033] underline hover:text-[#2C1810]"
-                onClick={backToLogin}
-              >
-                Back to login
-              </button>
-            </div>
-
-          /* Login form */
           ) : (
-            <div className="space-y-3">
-              <div>
-                <label className="text-sm font-medium text-[#2C1810]">Email</label>
-                <Input type="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <>
+              <div className="flex gap-2">
+                <Button size="sm" variant={mode === 'credentials' ? 'default' : 'outline'} onClick={() => setMode('credentials')}>Email & Password</Button>
+                <Button size="sm" variant={mode === 'token' ? 'default' : 'outline'} onClick={() => setMode('token')}>Dev Token</Button>
               </div>
-              <div>
-                <label className="text-sm font-medium text-[#2C1810]">Password</label>
-                <Input type="password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleLogin()} />
-              </div>
-              <Button className="w-full bg-[#2D6A4F] hover:bg-[#245a42]" onClick={handleLogin} disabled={loading}>
-                {loading ? 'Signing in...' : 'Sign In'}
-              </Button>
-              <div className="text-center">
-                <a href="mailto:support@maishq.com" className="text-xs text-[#5C4033] underline hover:text-[#2C1810]">
-                  Forgot password?
-                </a>
-              </div>
-            </div>
+
+              {mode === 'credentials' ? (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-[#2C1810]">Email</label>
+                    <Input type="email" placeholder="admin@demo.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-[#2C1810]">Password</label>
+                    <Input type="password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && loginWithCredentials()} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-[#2C1810]">Tenant ID</label>
+                    <Input type="number" placeholder="1" value={tenantId} onChange={(e) => setTenantId(e.target.value)} />
+                  </div>
+                  <Button className="w-full" onClick={loginWithCredentials} disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</Button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-sm font-medium text-[#2C1810]">JWT Token</label>
+                    <Input placeholder="Paste JWT token" value={token} onChange={(e) => setToken(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && loginWithToken()} />
+                    <p className="mt-1 text-xs" style={{ color: '#5C4033' }}>node scripts/generate-test-jwt.js &lt;tenant_id&gt; ma-finance-hub-dev &lt;subject&gt;</p>
+                  </div>
+                  <Button className="w-full" variant="outline" onClick={loginWithToken} disabled={loading}>{loading ? 'Verifying...' : 'Sign In with Token'}</Button>
+                </div>
+              )}
+            </>
           )}
 
-          <p className="text-center text-sm text-[#5C4033]">
+          {error && <div className="rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
+
+          <p className="text-center text-sm" style={{ color: '#5C4033' }}>
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="font-medium text-[#2C1810] underline hover:text-[#5C4033]">Create one</Link>
+            <Link href="/register" className="font-medium underline" style={{ color: '#8B5E3C' }}>Create one</Link>
           </p>
         </CardContent>
       </Card>
@@ -243,5 +210,5 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
-  return <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[#F5F0E8]">Loading...</div>}><LoginForm /></Suspense>;
+  return <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}><LoginForm /></Suspense>;
 }
