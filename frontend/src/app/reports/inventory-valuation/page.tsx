@@ -6,7 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
-import { Download } from 'lucide-react';
+import { Download, Printer } from 'lucide-react';
+import { ReportHeader } from '@/components/report-header';
 
 interface ValuationRow { product_id: number; product_name: string; sku: string; costing_method: string; quantity: number; unit_cost: number; total_value: number }
 interface ValuationData { as_of: string; rows: ValuationRow[]; total_value: number }
@@ -38,9 +39,15 @@ export default function InventoryValuationPage() {
         <h1 className="text-2xl font-bold text-[#2C1810]">Inventory Valuation</h1>
         <div className="flex items-center gap-2">
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
-          {data && <Button size="sm" variant="outline" onClick={exportCsv}><Download className="mr-2 h-4 w-4" />CSV</Button>}
+          {data && (
+            <>
+              <Button size="sm" variant="outline" onClick={exportCsv}><Download className="mr-2 h-4 w-4" />CSV</Button>
+              <Button className="no-print" variant="outline" size="sm" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4" />Print</Button>
+            </>
+          )}
         </div>
       </div>
+      <ReportHeader title="Inventory Valuation" asOf={data?.as_of} />
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">As of {data.as_of}</CardTitle></CardHeader>

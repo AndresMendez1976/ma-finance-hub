@@ -223,6 +223,106 @@ export class ContactsService {
     return csvLines.join('\n');
   }
 
+  // Get statement for a contact — invoices, payments, credit notes
+  async getStatement(trx: Knex.Transaction, contactId: number, from?: string, to?: string) {
+    const contact = await trx('contacts').where({ id: contactId }).first() as Record<string, unknown> | undefined;
+    if (!contact) throw new NotFoundException('Contact not found');
+
+    // Invoices
+    const invoicesQuery = trx('invoices')
+      .where({ contact_id: contactId })
+      .select('id', 'invoice_number', 'date', 'due_date', 'total', 'paid_amount', 'status')
+      .orderBy('date', 'asc');
+    if (from) void invoicesQuery.where('date', '>=', from);
+    if (to) void invoicesQuery.where('date', '<=', to);
+    const invoices = await invoicesQuery as Record<string, unknown>[];
+
+    // Credit notes (if table exists)
+    let creditNotes: Record<string, unknown>[] = [];
+    try {
+      const cnQuery = trx('credit_notes')
+        .where({ contact_id: contactId })
+        .select('id', 'credit_note_number', 'date', 'total', 'status')
+        .orderBy('date', 'asc');
+      if (from) void cnQuery.where('date', '>=', from);
+      if (to) void cnQuery.where('date', '<=', to);
+      creditNotes = await cnQuery as Record<string, unknown>[];
+    } catch {
+      // credit_notes table may not exist
+    }
+
+    // Build unified transaction list
+    const transactions: Record<string, unknown>[] = [];
+
+    for (const inv of invoices) {
+      transactions.push({
+        type: 'invoice',
+        date: inv.date,
+        reference: inv.invoice_number,
+        description: `Invoice ${String(inv.invoice_number)}`,
+        debit: Number(inv.total),
+        credit: 0,
+        status: inv.status,
+      });
+
+      const paidAmount = Number(inv.paid_amount || 0);
+      if (paidAmount > 0) {
+        transactions.push({
+          type: 'payment',
+          date: inv.due_date || inv.date,
+          reference: `PMT-${String(inv.invoice_number)}`,
+          description: `Payment for Invoice ${String(inv.invoice_number)}`,
+          debit: 0,
+          credit: paidAmount,
+          status: 'applied',
+        });
+      }
+    }
+
+    for (const cn of creditNotes) {
+      transactions.push({
+        type: 'credit_note',
+        date: cn.date,
+        reference: cn.credit_note_number,
+        description: `Credit Note ${String(cn.credit_note_number)}`,
+        debit: 0,
+        credit: Number(cn.total),
+        status: cn.status,
+      });
+    }
+
+    // Sort by date
+    transactions.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+
+    // Calculate running balance
+    let balance = 0;
+    for (const txn of transactions) {
+      balance += Number(txn.debit) - Number(txn.credit);
+      txn.balance = Math.round(balance * 100) / 100;
+    }
+
+    const totalDebit = transactions.reduce((sum, t) => sum + Number(t.debit), 0);
+    const totalCredit = transactions.reduce((sum, t) => sum + Number(t.credit), 0);
+
+    return {
+      contact: {
+        id: contact.id,
+        first_name: contact.first_name,
+        last_name: contact.last_name,
+        company_name: contact.company_name,
+        type: contact.type,
+      },
+      from: from || null,
+      to: to || null,
+      transactions,
+      totals: {
+        debit: Math.round(totalDebit * 100) / 100,
+        credit: Math.round(totalCredit * 100) / 100,
+        balance: Math.round(balance * 100) / 100,
+      },
+    };
+  }
+
   // Soft delete — set status to inactive
   async softDelete(trx: Knex.Transaction, id: number) {
     const contact = await trx('contacts').where({ id }).first() as Record<string, unknown> | undefined;

@@ -7,7 +7,8 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
-import { Download } from 'lucide-react';
+import { Download, Printer } from 'lucide-react';
+import { ReportHeader } from '@/components/report-header';
 
 interface AgingRow { customer: string; current: number; d31_60: number; d61_90: number; d90plus: number; total: number }
 interface AgedData { as_of: string; rows: AgingRow[]; totals: { current: number; d31_60: number; d61_90: number; d90plus: number; total: number } }
@@ -31,9 +32,15 @@ export default function AgedReceivablesPage() {
         <div className="flex items-center gap-2">
           <Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-44" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
-          {data && <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/reports/aged-receivables/export?as_of=${asOf}`, '_blank')}><Download className="mr-2 h-4 w-4" />CSV</Button>}
+          {data && (
+            <>
+              <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/reports/aged-receivables/export?as_of=${asOf}`, '_blank')}><Download className="mr-2 h-4 w-4" />CSV</Button>
+              <Button className="no-print" variant="outline" size="sm" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4" />Print</Button>
+            </>
+          )}
         </div>
       </div>
+      <ReportHeader title="Aged Receivables" asOf={asOf} />
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">As of {data.as_of}</CardTitle></CardHeader>

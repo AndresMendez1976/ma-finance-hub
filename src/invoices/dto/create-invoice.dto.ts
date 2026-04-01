@@ -1,5 +1,5 @@
 // DTO for creating a new invoice with line items
-import { IsString, IsOptional, IsNumber, IsArray, ValidateNested, IsDateString, Min, MaxLength, ArrayMinSize } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsArray, ValidateNested, IsDateString, Min, MaxLength, ArrayMinSize, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class InvoiceLineDto {
@@ -18,6 +18,10 @@ export class InvoiceLineDto {
   @IsOptional()
   @IsNumber()
   account_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  product_id?: number;
 }
 
 export class CreateInvoiceDto {
@@ -50,6 +54,48 @@ export class CreateInvoiceDto {
   @IsString()
   @MaxLength(5000)
   notes?: string;
+
+  @IsOptional()
+  @IsNumber()
+  contact_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  tax_rate_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  project_id?: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(5000)
+  internal_memo?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  po_number?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  payment_terms?: string;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  shipping_amount?: number;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['none', 'percentage', 'fixed'])
+  discount_type?: string;
+
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  discount_value?: number;
 
   @IsArray()
   @ArrayMinSize(1)

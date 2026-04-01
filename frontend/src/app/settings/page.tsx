@@ -32,6 +32,18 @@ interface Settings {
   stripe_webhook_secret_set: boolean;
   payment_enabled: boolean;
   accepted_payment_methods: string[];
+  // Payment methods
+  payment_instructions: string | null;
+  bank_name: string | null;
+  bank_routing_last4: string | null;
+  bank_account_last4: string | null;
+  paypal_email: string | null;
+  venmo_handle: string | null;
+  zelle_phone: string | null;
+  // Plaid
+  plaid_client_id: string | null;
+  plaid_secret: string | null;
+  plaid_environment: string;
 }
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -53,6 +65,14 @@ export default function SettingsPage() {
   const [stripePublishableKey, setStripePublishableKey] = useState('');
   const [stripeSecretKey, setStripeSecretKey] = useState('');
   const [stripeWebhookSecret, setStripeWebhookSecret] = useState('');
+  const [paymentMethodSaving, setPaymentMethodSaving] = useState(false);
+  const [plaidSaving, setPlaidSaving] = useState(false);
+  const [plaidClientId, setPlaidClientId] = useState('');
+  const [plaidSecret, setPlaidSecret] = useState('');
+  const [showBank, setShowBank] = useState(false);
+  const [showPaypal, setShowPaypal] = useState(false);
+  const [showVenmo, setShowVenmo] = useState(false);
+  const [showZelle, setShowZelle] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { api.get<Settings>('/settings').then(setS).catch(() => {}).finally(() => setLoading(false)); }, []);
@@ -147,6 +167,47 @@ export default function SettingsPage() {
       setMsg('Stripe settings saved successfully');
     } catch (e: unknown) { setMsg((e as Error).message); }
     finally { setStripeSaving(false); }
+  };
+
+  // ── Payment methods save ──
+
+  const savePaymentMethods = async () => {
+    if (!s) return;
+    setPaymentMethodSaving(true); setMsg('');
+    try {
+      const res = await api.put<Settings>('/settings', {
+        payment_instructions: s.payment_instructions,
+        bank_name: s.bank_name,
+        bank_routing_last4: s.bank_routing_last4,
+        bank_account_last4: s.bank_account_last4,
+        paypal_email: s.paypal_email,
+        venmo_handle: s.venmo_handle,
+        zelle_phone: s.zelle_phone,
+      });
+      setS(res); setMsg('Payment methods saved successfully');
+    } catch (e: unknown) { setMsg((e as Error).message); }
+    finally { setPaymentMethodSaving(false); }
+  };
+
+  // ── Plaid save ──
+
+  const savePlaid = async () => {
+    if (!s) return;
+    setPlaidSaving(true); setMsg('');
+    try {
+      const payload: Record<string, unknown> = {
+        plaid_environment: s.plaid_environment,
+      };
+      if (plaidClientId) payload.plaid_client_id = plaidClientId;
+      if (plaidSecret) payload.plaid_secret = plaidSecret;
+
+      const res = await api.put<Settings>('/settings', payload);
+      setS(res);
+      setPlaidClientId('');
+      setPlaidSecret('');
+      setMsg('Plaid settings saved successfully');
+    } catch (e: unknown) { setMsg((e as Error).message); }
+    finally { setPlaidSaving(false); }
   };
 
   if (loading) return <Shell><p className="text-[#5C4033]">Loading settings...</p></Shell>;
@@ -451,6 +512,132 @@ export default function SettingsPage() {
 
             <Button onClick={saveStripe} disabled={stripeSaving}>
               {stripeSaving ? 'Saving...' : 'Save Stripe Settings'}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* ── Payment Methods ── */}
+        <Card className="border-[#E8DCC8]">
+          <CardHeader><CardTitle className="text-[#2C1810]">Payment Methods</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-[#8B7355]">
+              Configure payment methods displayed on invoices and statements.
+            </p>
+
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 text-sm text-[#2C1810]">
+                <input type="checkbox" checked={showBank || !!s.bank_name} onChange={(e) => setShowBank(e.target.checked)}
+                  className="h-4 w-4 rounded border-[#D4C4A8] text-[#2D6A4F]" />
+                Bank Transfer / ACH
+              </label>
+              {(showBank || !!s.bank_name) && (
+                <div className="ml-7 grid gap-3 md:grid-cols-3">
+                  <div><label className="text-xs text-[#5C4033]">Bank Name</label><Input value={s.bank_name || ''} onChange={(e) => update('bank_name', e.target.value)} placeholder="Chase, Wells Fargo..." /></div>
+                  <div><label className="text-xs text-[#5C4033]">Routing # (last 4)</label><Input value={s.bank_routing_last4 || ''} onChange={(e) => update('bank_routing_last4', e.target.value)} maxLength={4} placeholder="1234" /></div>
+                  <div><label className="text-xs text-[#5C4033]">Account # (last 4)</label><Input value={s.bank_account_last4 || ''} onChange={(e) => update('bank_account_last4', e.target.value)} maxLength={4} placeholder="5678" /></div>
+                </div>
+              )}
+
+              <label className="flex items-center gap-3 text-sm text-[#2C1810]">
+                <input type="checkbox" checked={showPaypal || !!s.paypal_email} onChange={(e) => setShowPaypal(e.target.checked)}
+                  className="h-4 w-4 rounded border-[#D4C4A8] text-[#2D6A4F]" />
+                PayPal
+              </label>
+              {(showPaypal || !!s.paypal_email) && (
+                <div className="ml-7">
+                  <label className="text-xs text-[#5C4033]">PayPal Email</label>
+                  <Input value={s.paypal_email || ''} onChange={(e) => update('paypal_email', e.target.value)} placeholder="payments@company.com" className="max-w-sm" />
+                </div>
+              )}
+
+              <label className="flex items-center gap-3 text-sm text-[#2C1810]">
+                <input type="checkbox" checked={showVenmo || !!s.venmo_handle} onChange={(e) => setShowVenmo(e.target.checked)}
+                  className="h-4 w-4 rounded border-[#D4C4A8] text-[#2D6A4F]" />
+                Venmo
+              </label>
+              {(showVenmo || !!s.venmo_handle) && (
+                <div className="ml-7">
+                  <label className="text-xs text-[#5C4033]">Venmo Handle</label>
+                  <Input value={s.venmo_handle || ''} onChange={(e) => update('venmo_handle', e.target.value)} placeholder="@company-name" className="max-w-sm" />
+                </div>
+              )}
+
+              <label className="flex items-center gap-3 text-sm text-[#2C1810]">
+                <input type="checkbox" checked={showZelle || !!s.zelle_phone} onChange={(e) => setShowZelle(e.target.checked)}
+                  className="h-4 w-4 rounded border-[#D4C4A8] text-[#2D6A4F]" />
+                Zelle
+              </label>
+              {(showZelle || !!s.zelle_phone) && (
+                <div className="ml-7">
+                  <label className="text-xs text-[#5C4033]">Zelle Phone or Email</label>
+                  <Input value={s.zelle_phone || ''} onChange={(e) => update('zelle_phone', e.target.value)} placeholder="(555) 123-4567" className="max-w-sm" />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-[#2C1810]">Payment Instructions</label>
+              <textarea
+                value={s.payment_instructions || ''}
+                onChange={(e) => update('payment_instructions', e.target.value)}
+                rows={3}
+                placeholder="Custom payment instructions shown on invoices..."
+                className="mt-1 flex w-full rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810] placeholder:text-[#B5A48B]"
+              />
+            </div>
+
+            <Button onClick={savePaymentMethods} disabled={paymentMethodSaving}>
+              {paymentMethodSaving ? 'Saving...' : 'Save Payment Methods'}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* ── Bank Connections (Plaid) ── */}
+        <Card className="border-[#E8DCC8]">
+          <CardHeader><CardTitle className="text-[#2C1810]">Bank Connections (Plaid)</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-[#8B7355]">
+              Connect bank accounts via Plaid to automatically import transactions.
+              Get your credentials from the{' '}
+              <a href="https://dashboard.plaid.com/" target="_blank" rel="noopener noreferrer" className="text-[#2D6A4F] underline hover:text-[#245A42]">
+                Plaid Dashboard
+              </a>.
+            </p>
+
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm font-medium text-[#2C1810]">Client ID</label>
+                <Input
+                  type="password"
+                  value={plaidClientId || (s.plaid_client_id ? '********' : '')}
+                  onChange={(e) => setPlaidClientId(e.target.value)}
+                  placeholder="Enter Plaid Client ID"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-[#2C1810]">Secret</label>
+                <Input
+                  type="password"
+                  value={plaidSecret || (s.plaid_secret ? '********' : '')}
+                  onChange={(e) => setPlaidSecret(e.target.value)}
+                  placeholder="Enter Plaid Secret"
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-[#2C1810]">Environment</label>
+                <select
+                  value={s.plaid_environment || 'sandbox'}
+                  onChange={(e) => update('plaid_environment', e.target.value)}
+                  className="flex h-10 w-full max-w-xs rounded-md border border-[#D4C4A8] bg-white px-3 py-2 text-sm text-[#2C1810]"
+                >
+                  <option value="sandbox">Sandbox (Testing)</option>
+                  <option value="production">Production</option>
+                </select>
+              </div>
+            </div>
+
+            <Button onClick={savePlaid} disabled={plaidSaving}>
+              {plaidSaving ? 'Saving...' : 'Save Plaid Settings'}
             </Button>
           </CardContent>
         </Card>

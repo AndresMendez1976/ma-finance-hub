@@ -7,6 +7,8 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { api } from '@/lib/api';
+import { Printer } from 'lucide-react';
+import { ReportHeader } from '@/components/report-header';
 
 interface StockRow { product_id: number; product_name: string; location_name: string; on_hand: number; reorder_point: number; status: string }
 interface StockData { rows: StockRow[] }
@@ -37,8 +39,12 @@ export default function StockStatusPage() {
     <Shell>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[#2C1810]">Stock Status</h1>
-        <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
+        <div className="flex items-center gap-2">
+          <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
+          {data && <Button className="no-print" variant="outline" size="sm" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4" />Print</Button>}
+        </div>
       </div>
+      <ReportHeader title="Stock Status" />
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30"><CardTitle className="text-[#2C1810]">Current Stock Status</CardTitle></CardHeader>

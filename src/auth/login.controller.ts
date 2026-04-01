@@ -13,9 +13,10 @@ class LoginDto {
   @MaxLength(128)
   password!: string;
 
+  @IsOptional()
   @IsInt()
   @Min(1)
-  tenant_id!: number;
+  tenant_id?: number;
 }
 
 class MfaValidateDto {

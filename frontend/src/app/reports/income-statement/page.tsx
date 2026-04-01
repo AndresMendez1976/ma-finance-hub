@@ -6,7 +6,8 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
-import { Download } from 'lucide-react';
+import { Download, Printer } from 'lucide-react';
+import { ReportHeader } from '@/components/report-header';
 
 interface Account { account_code: string; account_name: string; amount: number }
 interface Group { category: string; accounts: Account[]; total: number }
@@ -63,12 +64,18 @@ export default function IncomeStatementPage() {
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40 border-[#D4C4A8]" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && (
-            <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/reports/income-statement/export?from=${from}&to=${to}`, '_blank')}>
-              <Download className="mr-2 h-4 w-4" />CSV
-            </Button>
+            <>
+              <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/reports/income-statement/export?from=${from}&to=${to}`, '_blank')}>
+                <Download className="mr-2 h-4 w-4" />CSV
+              </Button>
+              <Button className="no-print" variant="outline" size="sm" onClick={() => window.print()}>
+                <Printer className="mr-2 h-4 w-4" />Print
+              </Button>
+            </>
           )}
         </div>
       </div>
+      <ReportHeader title="Income Statement" dateRange={`${from} to ${to}`} />
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}
       {data && (
         <Card className="border-[#E8DCC8]">

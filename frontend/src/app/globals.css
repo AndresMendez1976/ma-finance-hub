@@ -12,3 +12,10 @@ body {
   outline: 2px solid #2D6A4F;
   outline-offset: 2px;
 }
+
+/* Print styles for reports */
+@media print {
+  .sidebar, .topbar, .no-print, button:not(.print-btn), nav { display: none !important; }
+  body { background: white !important; }
+  .print-only { display: block !important; }
+}

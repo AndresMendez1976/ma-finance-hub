@@ -269,6 +269,198 @@ export class BankingService {
     return updated;
   }
 
+  // ── Plaid integration ──
+
+  async createPlaidLinkToken(trx: Knex.Transaction, tenantId: number) {
+    const settings = await trx('tenant_settings').where({ tenant_id: tenantId }).first() as Record<string, unknown> | undefined;
+    if (!settings?.plaid_client_id || !settings?.plaid_secret) {
+      throw new BadRequestException('Plaid credentials not configured. Set Client ID and Secret in Settings.');
+    }
+
+    const env = settings.plaid_environment === 'production' ? 'production' : 'sandbox';
+    const baseUrl = `https://${env}.plaid.com`;
+
+    const res = await fetch(`${baseUrl}/link/token/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: settings.plaid_client_id,
+        secret: settings.plaid_secret,
+        user: { client_user_id: String(tenantId) },
+        client_name: String(settings.company_name || 'MA Finance Hub'),
+        products: ['transactions'],
+        country_codes: ['US'],
+        language: 'en',
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await (res.json() as Promise<Record<string, unknown>>).catch(() => ({ error_message: 'Failed to create link token' }));
+      throw new BadRequestException(String(err.error_message || 'Plaid API error'));
+    }
+
+    const data = await res.json() as Record<string, unknown>;
+    return { link_token: String(data.link_token), expiration: String(data.expiration) };
+  }
+
+  async exchangePlaidToken(trx: Knex.Transaction, tenantId: number, publicToken: string, accountId: string) {
+    const settings = await trx('tenant_settings').where({ tenant_id: tenantId }).first() as Record<string, unknown> | undefined;
+    if (!settings?.plaid_client_id || !settings?.plaid_secret) {
+      throw new BadRequestException('Plaid credentials not configured');
+    }
+
+    const env = settings.plaid_environment === 'production' ? 'production' : 'sandbox';
+    const baseUrl = `https://${env}.plaid.com`;
+
+    // Exchange public token for access token
+    const tokenRes = await fetch(`${baseUrl}/item/public_token/exchange`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: settings.plaid_client_id,
+        secret: settings.plaid_secret,
+        public_token: publicToken,
+      }),
+    });
+
+    if (!tokenRes.ok) {
+      const err = await (tokenRes.json() as Promise<Record<string, unknown>>).catch(() => ({ error_message: 'Token exchange failed' }));
+      throw new BadRequestException(String(err.error_message || 'Plaid token exchange failed'));
+    }
+
+    const tokenData = await tokenRes.json() as Record<string, unknown>;
+    const accessToken = String(tokenData.access_token);
+    const itemId = String(tokenData.item_id);
+
+    // Get account details
+    const acctRes = await fetch(`${baseUrl}/accounts/get`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: settings.plaid_client_id,
+        secret: settings.plaid_secret,
+        access_token: accessToken,
+      }),
+    });
+
+    let institutionName = '';
+    let accountName = 'Plaid Account';
+    let last4 = '';
+
+    if (acctRes.ok) {
+      const acctData = await acctRes.json() as Record<string, unknown>;
+      const accounts = Array.isArray(acctData.accounts) ? acctData.accounts as Record<string, unknown>[] : [];
+      const matchedAccount = accounts.find((a) => a.account_id === accountId) || accounts[0];
+      if (matchedAccount) {
+        accountName = String(matchedAccount.name || 'Plaid Account');
+        last4 = String(matchedAccount.mask || '');
+      }
+      const item = acctData.item as Record<string, unknown> | undefined;
+      institutionName = String(item?.institution_id || '');
+    }
+
+    // Create or update bank account with Plaid info
+    const [bankAccount] = await trx('bank_accounts').insert({
+      tenant_id: tenantId,
+      name: accountName,
+      institution: institutionName,
+      account_number_last4: last4,
+      currency: 'USD',
+      current_balance: 0,
+      plaid_access_token: accessToken,
+      plaid_item_id: itemId,
+      plaid_account_id: accountId,
+      plaid_institution_name: institutionName,
+      sync_enabled: true,
+    }).returning('*') as Record<string, unknown>[];
+
+    return bankAccount;
+  }
+
+  async syncPlaidTransactions(trx: Knex.Transaction, tenantId: number, bankAccountId: number) {
+    const account = await trx('bank_accounts').where({ id: bankAccountId }).first() as Record<string, unknown> | undefined;
+    if (!account) throw new NotFoundException('Bank account not found');
+    if (!account.plaid_access_token) throw new BadRequestException('Bank account is not linked to Plaid');
+
+    const settings = await trx('tenant_settings').where({ tenant_id: tenantId }).first() as Record<string, unknown> | undefined;
+    if (!settings?.plaid_client_id || !settings?.plaid_secret) {
+      throw new BadRequestException('Plaid credentials not configured');
+    }
+
+    const env = settings.plaid_environment === 'production' ? 'production' : 'sandbox';
+    const baseUrl = `https://${env}.plaid.com`;
+
+    // Fetch transactions from the last 30 days (or since last sync)
+    const now = new Date();
+    const startDate = account.plaid_last_sync
+      ? new Date(account.plaid_last_sync as string).toISOString().slice(0, 10)
+      : new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const endDate = now.toISOString().slice(0, 10);
+
+    const res = await fetch(`${baseUrl}/transactions/get`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: settings.plaid_client_id,
+        secret: settings.plaid_secret,
+        access_token: account.plaid_access_token,
+        start_date: startDate,
+        end_date: endDate,
+        options: { account_ids: [account.plaid_account_id] },
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await (res.json() as Promise<Record<string, unknown>>).catch(() => ({ error_message: 'Failed to sync transactions' }));
+      throw new BadRequestException(String(err.error_message || 'Plaid sync failed'));
+    }
+
+    const data = await res.json() as Record<string, unknown>;
+    const transactions = Array.isArray(data.transactions) ? data.transactions as Record<string, unknown>[] : [];
+    let imported = 0;
+    let balanceAdjustment = 0;
+
+    for (const txn of transactions) {
+      // Plaid amounts: positive = debit (spending), negative = credit (income)
+      // We invert: positive = deposit, negative = withdrawal
+      const amount = -Number(txn.amount);
+      const type = amount >= 0 ? 'deposit' : 'withdrawal';
+
+      // Check for duplicates by reference (plaid transaction_id)
+      const existing = await trx('bank_transactions')
+        .where({ bank_account_id: bankAccountId, reference: String(txn.transaction_id) })
+        .first() as Record<string, unknown> | undefined;
+      if (existing) continue;
+
+      await trx('bank_transactions').insert({
+        tenant_id: tenantId,
+        bank_account_id: bankAccountId,
+        date: String(txn.date),
+        description: String(txn.name || txn.merchant_name || 'Plaid Transaction'),
+        amount,
+        type,
+        reference: String(txn.transaction_id),
+        reconciled: false,
+      });
+
+      balanceAdjustment += amount;
+      imported++;
+    }
+
+    // Update balance and last sync timestamp
+    if (balanceAdjustment !== 0) {
+      await trx('bank_accounts').where({ id: bankAccountId }).update({
+        current_balance: trx.raw('current_balance + ?', [balanceAdjustment]),
+      });
+    }
+
+    await trx('bank_accounts').where({ id: bankAccountId }).update({
+      plaid_last_sync: trx.fn.now(),
+    });
+
+    return { imported, total_fetched: transactions.length };
+  }
+
   async reconciliationSummary(trx: Knex.Transaction, bankAccountId: number) {
     const account = await trx('bank_accounts').where({ id: bankAccountId }).first() as Record<string, unknown> | undefined;
     if (!account) throw new NotFoundException('Bank account not found');

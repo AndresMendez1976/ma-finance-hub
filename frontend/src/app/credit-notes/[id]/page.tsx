@@ -62,7 +62,22 @@ export default function CreditNoteDetailPage() {
           {cn.status === 'draft' && <Button onClick={() => doAction('issue')} disabled={actionLoading}><Send className="mr-2 h-4 w-4" />Issue</Button>}
           {cn.status === 'issued' && <Button onClick={() => doAction('apply')} disabled={actionLoading}><CheckCircle className="mr-2 h-4 w-4" />Apply</Button>}
           {cn.status !== 'voided' && <Button variant="destructive" onClick={() => doAction('void')} disabled={actionLoading}><Ban className="mr-2 h-4 w-4" />Void</Button>}
-          <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/credit-notes/${id}/pdf`, '_blank')}><Download className="mr-2 h-4 w-4" />PDF</Button>
+          <Button size="sm" variant="outline" onClick={async () => {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/v1/credit-notes/${id}/pdf`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) return;
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `credit-note-${id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }}><Download className="mr-2 h-4 w-4" />PDF</Button>
         </div>
       </div>
       {error && <div className="mb-4 rounded-md bg-[#E07A5F]/10 p-3 text-sm text-[#E07A5F]">{error}</div>}

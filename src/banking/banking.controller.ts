@@ -132,6 +132,53 @@ export class BankAccountsController {
 
 @ApiTags('Banking')
 @ApiBearerAuth()
+@Controller('banking/plaid')
+@UseGuards(JwtAuthGuard, IdentityGuard, RolesGuard, EntitlementGuard)
+@RequiresEntitlement('feature.accounts')
+export class PlaidController {
+  constructor(
+    private readonly tenantContext: TenantContextService,
+    private readonly service: BankingService,
+    private readonly audit: AuditService,
+  ) {}
+
+  @Post('create-link-token')
+  @Roles('owner', 'admin', 'manager')
+  async createLinkToken(@CurrentPrincipal() p: AuthenticatedPrincipal) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.createPlaidLinkToken(trx, p.tenantId),
+    );
+  }
+
+  @Post('exchange-token')
+  @Roles('owner', 'admin', 'manager')
+  async exchangeToken(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Body() dto: { public_token: string; account_id: string },
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
+      const account = await this.service.exchangePlaidToken(trx, p.tenantId, dto.public_token, dto.account_id);
+      await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'plaid_link', entity: 'bank_accounts', entity_id: String(account.id) });
+      return account;
+    });
+  }
+
+  @Post('sync/:bankAccountId')
+  @Roles('owner', 'admin', 'manager')
+  async sync(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Param('bankAccountId', ParseIntPipe) bankAccountId: number,
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, async (trx) => {
+      const result = await this.service.syncPlaidTransactions(trx, p.tenantId, bankAccountId);
+      await this.audit.log(trx, { tenant_id: p.tenantId, actor_subject: p.sub, action: 'plaid_sync', entity: 'bank_accounts', entity_id: String(bankAccountId), metadata: { imported: String(result.imported) } });
+      return result;
+    });
+  }
+}
+
+@ApiTags('Banking')
+@ApiBearerAuth()
 @Controller('bank-transactions')
 @UseGuards(JwtAuthGuard, IdentityGuard, RolesGuard, EntitlementGuard)
 @RequiresEntitlement('feature.accounts')

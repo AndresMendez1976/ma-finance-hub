@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api, extractArray } from '@/lib/api';
 import { formatDate, formatCurrency } from '@/lib/format';
-import { TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { TrendingUp, TrendingDown, Info, Printer } from 'lucide-react';
+import { ReportHeader } from '@/components/report-header';
 
 interface Ratio { name: string; value: number; prior_value: number | null; format: 'decimal' | 'percent' | 'currency' | 'days'; tooltip: string }
 interface RatioSection { title: string; ratios: Ratio[] }
@@ -45,7 +46,9 @@ export default function FinancialRatiosPage() {
       <div className="mb-6 flex gap-3 items-end">
         <div><label className="text-xs font-medium text-[#2C1810]">As of Date</label><Input type="date" value={asOf} onChange={(e) => setAsOf(e.target.value)} className="w-40" /></div>
         <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Calculate Ratios'}</Button>
+        {data && <Button className="no-print" variant="outline" size="sm" onClick={() => window.print()}><Printer className="mr-2 h-4 w-4" />Print</Button>}
       </div>
+      <ReportHeader title="Financial Ratios" asOf={asOf} />
       {data && (
         <>
           <p className="mb-4 text-sm text-[#5C4033]">As of {formatDate(data.as_of)}</p>

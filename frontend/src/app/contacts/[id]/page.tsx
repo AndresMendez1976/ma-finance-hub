@@ -7,7 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
 
 interface Contact {
@@ -45,6 +45,7 @@ export default function ContactDetailPage() {
         <h1 className="text-2xl font-bold text-[#2C1810]">{contact.first_name} {contact.last_name || ''}</h1>
         <Badge variant={contact.type === 'customer' ? 'success' : contact.type === 'vendor' ? 'warning' : 'info'}>{contact.type}</Badge>
         <Badge variant={contact.status === 'active' ? 'success' : 'secondary'}>{contact.status}</Badge>
+        <Link href={`/contacts/${id}/statement`}><Button size="sm" variant="outline"><FileText className="mr-2 h-4 w-4" />Statement</Button></Link>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">

@@ -169,7 +169,14 @@ const sections: NavSection[] = [
     items: [
       { href: '/admin', label: 'Admin', icon: Users },
       { href: '/plans', label: 'Plans', icon: ClipboardList },
-      { href: '/settings', label: 'Settings', icon: Settings },
+      {
+        label: 'Settings', icon: Settings, key: 'settings', children: [
+          { href: '/settings', label: 'General', icon: Settings },
+          { href: '/settings/templates', label: 'Templates', icon: FileText },
+          { href: '/settings/companies', label: 'Companies', icon: Building },
+          { href: '/settings/security', label: 'Security', icon: Users },
+        ],
+      },
     ],
   },
 ];

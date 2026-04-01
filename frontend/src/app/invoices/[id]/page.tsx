@@ -116,7 +116,22 @@ export default function InvoiceDetailPage() {
               <Ban className="mr-2 h-4 w-4" />Void
             </Button>
           )}
-          <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/invoices/${id}/pdf`, '_blank')}>
+          <Button size="sm" variant="outline" onClick={async () => {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/v1/invoices/${id}/pdf`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) return;
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `invoice-${id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }}>
             <Download className="mr-2 h-4 w-4" />PDF
           </Button>
         </div>

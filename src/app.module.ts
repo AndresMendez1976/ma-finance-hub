@@ -46,6 +46,7 @@ import { JobCostingModule } from './job-costing';
 import { EquipmentModule } from './equipment';
 import { MileageModule } from './mileage';
 import { CompanyGroupsModule } from './company-groups';
+import { DocumentTemplatesModule } from './document-templates';
 import { RequestIdMiddleware } from './common/request-id.middleware';
 import { RequestLoggerMiddleware } from './common/request-logger.middleware';
 import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
@@ -97,6 +98,7 @@ import { TenantThrottlerGuard } from './common/tenant-throttler.guard';
     EquipmentModule,
     MileageModule,
     CompanyGroupsModule,
+    DocumentTemplatesModule,
   ],
   providers: [
     RedisThrottlerStorage,

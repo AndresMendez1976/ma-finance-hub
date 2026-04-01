@@ -61,7 +61,22 @@ export default function EstimateDetailPage() {
             <Button size="sm" variant="destructive" onClick={() => doAction('reject')} disabled={!!actionLoading}><X className="mr-1 h-4 w-4" />Reject</Button>
           </>}
           {(est.status === 'accepted') && <Button size="sm" onClick={() => doAction('convert')} disabled={!!actionLoading}><FileText className="mr-1 h-4 w-4" />Convert to Invoice</Button>}
-          <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/estimates/${id}/pdf`, '_blank')}><Download className="mr-1 h-4 w-4" />PDF</Button>
+          <Button size="sm" variant="outline" onClick={async () => {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/v1/estimates/${id}/pdf`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!res.ok) return;
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `estimate-${id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }}><Download className="mr-1 h-4 w-4" />PDF</Button>
         </div>
       </div>
 

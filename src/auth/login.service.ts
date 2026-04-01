@@ -1,4 +1,4 @@
-import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Inject, UnauthorizedException, HttpException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Knex } from 'knex';
 import * as bcrypt from 'bcryptjs';
@@ -13,6 +13,8 @@ export interface LoginResult {
   token?: string;
   requires_mfa?: boolean;
   mfa_session_token?: string;
+  requires_tenant_selection?: boolean;
+  tenants?: { id: number; company_name: string }[];
 }
 
 @Injectable()
@@ -41,10 +43,20 @@ export class LoginService {
     this.keyId = config.get<string>('JWT_DEV_KID', 'dev-key-001');
   }
 
-  private static readonly MAX_FAILED_ATTEMPTS = 5;
-  private static readonly LOCKOUT_DURATION_MINUTES = 15;
+  /**
+   * Compute lockout duration based on cumulative failed attempts.
+   * 5+ failures  → 15 min
+   * 10+ failures → 1 hr
+   * 20+ failures → 24 hr
+   */
+  private static lockoutMinutes(attempts: number): number {
+    if (attempts >= 20) return 24 * 60;
+    if (attempts >= 10) return 60;
+    if (attempts >= 5) return 15;
+    return 0;
+  }
 
-  async login(email: string, password: string, tenantId: number): Promise<LoginResult> {
+  async login(email: string, password: string, tenantId?: number): Promise<LoginResult> {
     const userResult: { rows: Record<string, unknown>[] } = await this.db.raw('SELECT * FROM find_user_for_login(?)', [email]);
     const user = userResult.rows[0];
     if (!user) throw new UnauthorizedException('Invalid credentials');
@@ -54,7 +66,7 @@ export class LoginService {
     if (user.locked_until) {
       const lockedUntil = new Date(String(user.locked_until));
       if (lockedUntil > new Date()) {
-        throw new UnauthorizedException('Account temporarily locked. Try again later.');
+        throw new HttpException('Account locked. Try again later.', 423);
       }
       // Lock expired, reset
       await this.db('users').where({ id: user.id as number }).update({
@@ -65,12 +77,13 @@ export class LoginService {
 
     const valid = await bcrypt.compare(password, String(user.password_hash));
     if (!valid) {
-      // Increment failed attempts
+      // Increment failed attempts and apply tiered lockout
       const attempts = ((user.failed_login_attempts as number) || 0) + 1;
       const updates: Record<string, unknown> = { failed_login_attempts: attempts };
-      if (attempts >= LoginService.MAX_FAILED_ATTEMPTS) {
+      const lockMinutes = LoginService.lockoutMinutes(attempts);
+      if (lockMinutes > 0) {
         const lockUntil = new Date();
-        lockUntil.setMinutes(lockUntil.getMinutes() + LoginService.LOCKOUT_DURATION_MINUTES);
+        lockUntil.setMinutes(lockUntil.getMinutes() + lockMinutes);
         updates.locked_until = lockUntil;
       }
       await this.db('users').where({ id: user.id as number }).update(updates);
@@ -85,7 +98,37 @@ export class LoginService {
       });
     }
 
-    const memberResult: { rows: Record<string, unknown>[] } = await this.db.raw('SELECT * FROM find_membership_for_login(?, ?)', [user.id as number, tenantId]);
+    // Resolve tenant_id if not provided
+    let resolvedTenantId = tenantId;
+    if (!resolvedTenantId) {
+      // Find all active memberships for this user
+      const membershipsResult: { rows: Record<string, unknown>[] } = await this.db.raw(
+        `SELECT tm.tenant_id, t.company_name
+         FROM tenant_memberships tm
+         JOIN tenants t ON t.id = tm.tenant_id
+         WHERE tm.user_id = ? AND tm.is_active = true
+         ORDER BY t.company_name`,
+        [user.id as number],
+      );
+      const memberships = membershipsResult.rows;
+
+      if (memberships.length === 0) {
+        throw new UnauthorizedException('No active memberships found');
+      }
+      if (memberships.length > 1) {
+        return {
+          requires_tenant_selection: true,
+          tenants: memberships.map((m) => ({
+            id: m.tenant_id as number,
+            company_name: m.company_name as string,
+          })),
+        };
+      }
+      // Single membership — use it automatically
+      resolvedTenantId = memberships[0].tenant_id as number;
+    }
+
+    const memberResult: { rows: Record<string, unknown>[] } = await this.db.raw('SELECT * FROM find_membership_for_login(?, ?)', [user.id as number, resolvedTenantId]);
     const membership = memberResult.rows[0];
     if (!membership || !membership.is_active) throw new UnauthorizedException('Invalid credentials');
 
@@ -95,7 +138,7 @@ export class LoginService {
       const mfaSessionToken = jwt.sign(
         {
           sub: user.external_subject as string,
-          tenant_id: tenantId,
+          tenant_id: resolvedTenantId,
           user_id: user.id as number,
           roles: [membership.role as string],
           purpose: 'mfa',
@@ -108,7 +151,7 @@ export class LoginService {
 
     // No MFA — issue full JWT
     const token = jwt.sign(
-      { sub: user.external_subject as string, tenant_id: tenantId, roles: [membership.role as string] },
+      { sub: user.external_subject as string, tenant_id: resolvedTenantId, roles: [membership.role as string] },
       this.privateKey,
       { algorithm: 'RS256', expiresIn: '8h', issuer: this.issuer, audience: this.audience, keyid: this.keyId, jwtid: crypto.randomUUID() },
     );

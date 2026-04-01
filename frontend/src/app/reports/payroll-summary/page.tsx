@@ -7,7 +7,8 @@ import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/api';
-import { Download } from 'lucide-react';
+import { Download, Printer } from 'lucide-react';
+import { ReportHeader } from '@/components/report-header';
 
 interface PayrollSummary {
   period_start: string; period_end: string;
@@ -42,12 +43,18 @@ export default function PayrollSummaryPage() {
           <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="w-40" />
           <Button onClick={load} disabled={loading}>{loading ? 'Loading...' : 'Generate'}</Button>
           {data && (
-            <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/reports/payroll-summary/export?from=${from}&to=${to}`, '_blank')}>
-              <Download className="mr-2 h-4 w-4" />CSV
-            </Button>
+            <>
+              <Button size="sm" variant="outline" onClick={() => window.open(`/api/v1/reports/payroll-summary/export?from=${from}&to=${to}`, '_blank')}>
+                <Download className="mr-2 h-4 w-4" />CSV
+              </Button>
+              <Button className="no-print" variant="outline" size="sm" onClick={() => window.print()}>
+                <Printer className="mr-2 h-4 w-4" />Print
+              </Button>
+            </>
           )}
         </div>
       </div>
+      <ReportHeader title="Payroll Summary Report" dateRange={from && to ? `${from} to ${to}` : undefined} />
       {data && (
         <Card className="border-[#E8DCC8]">
           <CardHeader className="bg-[#E8DCC8]/30">

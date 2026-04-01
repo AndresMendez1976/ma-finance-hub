@@ -13,7 +13,16 @@ export interface CreateInvoiceInput {
   due_date: string;
   tax_rate?: number;
   notes?: string;
-  lines: { description: string; quantity: number; unit_price: number; account_id?: number }[];
+  contact_id?: number;
+  tax_rate_id?: number;
+  project_id?: number;
+  internal_memo?: string;
+  po_number?: string;
+  payment_terms?: string;
+  shipping_amount?: number;
+  discount_type?: string;
+  discount_value?: number;
+  lines: { description: string; quantity: number; unit_price: number; account_id?: number; product_id?: number }[];
 }
 
 export interface UpdateInvoiceInput {
@@ -24,7 +33,16 @@ export interface UpdateInvoiceInput {
   due_date?: string;
   tax_rate?: number;
   notes?: string;
-  lines?: { description: string; quantity: number; unit_price: number; account_id?: number }[];
+  contact_id?: number;
+  tax_rate_id?: number;
+  project_id?: number;
+  internal_memo?: string;
+  po_number?: string;
+  payment_terms?: string;
+  shipping_amount?: number;
+  discount_type?: string;
+  discount_value?: number;
+  lines?: { description: string; quantity: number; unit_price: number; account_id?: number; product_id?: number }[];
 }
 
 export interface PayInvoiceInput {
@@ -50,25 +68,50 @@ export class InvoicesService {
     return `INV-${String(num + 1).padStart(4, '0')}`;
   }
 
-  // Compute line amounts and totals
-  private computeTotals(lines: { description: string; quantity: number; unit_price: number; account_id?: number }[], taxRate: number) {
+  // Compute line amounts and totals with discount, tax, and shipping
+  private computeTotals(
+    lines: { description: string; quantity: number; unit_price: number; account_id?: number; product_id?: number }[],
+    taxRate: number,
+    options?: { discount_type?: string; discount_value?: number; shipping_amount?: number },
+  ) {
     const lineAmounts = lines.map((l) => ({
       description: l.description,
       quantity: l.quantity,
       unit_price: l.unit_price,
       account_id: l.account_id,
+      product_id: l.product_id,
       amount: Math.round(l.quantity * l.unit_price * 100) / 100,
     }));
     const subtotal = lineAmounts.reduce((s, l) => s + l.amount, 0);
-    const taxAmount = Math.round(subtotal * (taxRate / 100) * 100) / 100;
-    const total = Math.round((subtotal + taxAmount) * 100) / 100;
-    return { lineAmounts, subtotal, taxAmount, total };
+
+    const discountType = options?.discount_type ?? 'none';
+    const discountValue = options?.discount_value ?? 0;
+    const shippingAmount = options?.shipping_amount ?? 0;
+
+    let discountAmount = 0;
+    if (discountType === 'percentage') {
+      discountAmount = Math.round(subtotal * discountValue / 100 * 100) / 100;
+    } else if (discountType === 'fixed') {
+      discountAmount = Math.round(discountValue * 100) / 100;
+    }
+
+    const taxable = Math.round((subtotal - discountAmount) * 100) / 100;
+    const taxAmount = Math.round(taxable * (taxRate / 100) * 100) / 100;
+    const total = Math.round((taxable + taxAmount + shippingAmount) * 100) / 100;
+    return { lineAmounts, subtotal, discountAmount, taxAmount, total };
   }
 
   // Create a new draft invoice
   async create(trx: Knex.Transaction, input: CreateInvoiceInput) {
     const taxRate = input.tax_rate ?? 0;
-    const { lineAmounts, subtotal, taxAmount, total } = this.computeTotals(input.lines, taxRate);
+    const discountType = input.discount_type ?? 'none';
+    const discountValue = input.discount_value ?? 0;
+    const shippingAmount = input.shipping_amount ?? 0;
+
+    const { lineAmounts, subtotal, discountAmount, taxAmount, total } = this.computeTotals(
+      input.lines, taxRate,
+      { discount_type: discountType, discount_value: discountValue, shipping_amount: shippingAmount },
+    );
     const invoiceNumber = await this.nextInvoiceNumber(trx, input.tenant_id);
 
     // Resolve created_by user id from external_subject
@@ -94,6 +137,16 @@ export class InvoicesService {
         total,
         notes: input.notes ?? null,
         created_by: user.id,
+        contact_id: input.contact_id ?? null,
+        tax_rate_id: input.tax_rate_id ?? null,
+        project_id: input.project_id ?? null,
+        internal_memo: input.internal_memo ?? null,
+        po_number: input.po_number ?? null,
+        payment_terms: input.payment_terms ?? null,
+        shipping_amount: shippingAmount,
+        discount_type: discountType,
+        discount_value: discountValue,
+        discount_amount: discountAmount,
       })
       .returning('*') as Record<string, unknown>[];
 
@@ -163,16 +216,34 @@ export class InvoicesService {
     if (input.issue_date !== undefined) updates.issue_date = input.issue_date;
     if (input.due_date !== undefined) updates.due_date = input.due_date;
     if (input.notes !== undefined) updates.notes = input.notes;
+    if (input.contact_id !== undefined) updates.contact_id = input.contact_id;
+    if (input.tax_rate_id !== undefined) updates.tax_rate_id = input.tax_rate_id;
+    if (input.project_id !== undefined) updates.project_id = input.project_id;
+    if (input.internal_memo !== undefined) updates.internal_memo = input.internal_memo;
+    if (input.po_number !== undefined) updates.po_number = input.po_number;
+    if (input.payment_terms !== undefined) updates.payment_terms = input.payment_terms;
+    if (input.shipping_amount !== undefined) updates.shipping_amount = input.shipping_amount;
+    if (input.discount_type !== undefined) updates.discount_type = input.discount_type;
+    if (input.discount_value !== undefined) updates.discount_value = input.discount_value;
 
-    // Recalculate totals if lines or tax_rate changed
-    if (input.lines || input.tax_rate !== undefined) {
+    // Recalculate totals if lines, tax_rate, discount, or shipping changed
+    const needsRecalc = input.lines || input.tax_rate !== undefined || input.discount_type !== undefined
+      || input.discount_value !== undefined || input.shipping_amount !== undefined;
+
+    if (needsRecalc) {
       const taxRate = input.tax_rate ?? Number(invoice.tax_rate);
+      const discountType = input.discount_type ?? String(invoice.discount_type || 'none');
+      const discountValue = input.discount_value ?? Number(invoice.discount_value || 0);
+      const shippingAmount = input.shipping_amount ?? Number(invoice.shipping_amount || 0);
+      const discountOpts = { discount_type: discountType, discount_value: discountValue, shipping_amount: shippingAmount };
+
       if (input.lines) {
-        const { lineAmounts, subtotal, taxAmount, total } = this.computeTotals(input.lines, taxRate);
+        const { lineAmounts, subtotal, discountAmount, taxAmount, total } = this.computeTotals(input.lines, taxRate, discountOpts);
         updates.subtotal = subtotal;
         updates.tax_rate = taxRate;
         updates.tax_amount = taxAmount;
         updates.total = total;
+        updates.discount_amount = discountAmount;
 
         // Replace lines
         await trx('invoice_lines').where({ invoice_id: id }).del();
@@ -188,12 +259,20 @@ export class InvoicesService {
         }));
         await trx('invoice_lines').insert(lineRows);
       } else {
-        // Only tax_rate changed, recalculate from existing subtotal
+        // Recalculate from existing subtotal
         const subtotal = Number(invoice.subtotal);
-        const taxAmount = Math.round(subtotal * (taxRate / 100) * 100) / 100;
+        let discountAmount = 0;
+        if (discountType === 'percentage') {
+          discountAmount = Math.round(subtotal * discountValue / 100 * 100) / 100;
+        } else if (discountType === 'fixed') {
+          discountAmount = Math.round(discountValue * 100) / 100;
+        }
+        const taxable = Math.round((subtotal - discountAmount) * 100) / 100;
+        const taxAmount = Math.round(taxable * (taxRate / 100) * 100) / 100;
         updates.tax_rate = taxRate;
         updates.tax_amount = taxAmount;
-        updates.total = Math.round((subtotal + taxAmount) * 100) / 100;
+        updates.discount_amount = discountAmount;
+        updates.total = Math.round((taxable + taxAmount + shippingAmount) * 100) / 100;
       }
     }
 

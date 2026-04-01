@@ -88,6 +88,23 @@ export class ContactsController {
     res.send(csv);
   }
 
+  // Get statement for a contact
+  @Get(':id/statement')
+  @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
+  @ApiQuery({ name: 'from', required: false })
+  @ApiQuery({ name: 'to', required: false })
+  @ApiOperation({ summary: 'Get statement for a contact' })
+  async getStatement(
+    @CurrentPrincipal() p: AuthenticatedPrincipal,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('from') from?: string,
+    @Query('to') to?: string,
+  ) {
+    return this.tenantContext.runInTenantContext(p.tenantId, p.sub, (trx) =>
+      this.service.getStatement(trx, id, from, to),
+    );
+  }
+
   // Get single contact with financial summary
   @Get(':id')
   @Roles('owner', 'admin', 'manager', 'analyst', 'viewer')
